@@ -129,8 +129,7 @@ function sendOTP(e) {
   const scriptURL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
   fetch(scriptURL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
 
-  // Show OTP section on same page (hide the generated OTP display for production)
-  document.getElementById('generatedOTP').textContent = '******';
+  // Show OTP section
   document.getElementById('otpNote').textContent = 'OTP sent to +91 ' + mobile.slice(-4) + ' via SMS';
   document.getElementById('otpSection').classList.remove('hidden');
 
