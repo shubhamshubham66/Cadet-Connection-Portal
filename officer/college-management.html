@@ -3,14 +3,236 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>College Management | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Officer Panel</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="college-management.html" class="active"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificates</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div><h2>College Management</h2><div class="breadcrumb"><a href="co-dashboard.html">Dashboard</a> / <span>Colleges</span></div></div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-notification"><i class="fas fa-bell"></i><span class="notif-badge">2</span></div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Stats -->
+        <div class="grid grid-4 mb-4">
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-school"></i></div><div class="stat-number">12</div><div class="stat-label">Total Colleges</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number">450</div><div class="stat-label">Total Cadets</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-star"></i></div><div class="stat-number">Tripura Univ.</div><div class="stat-label">Best Performing</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-number">Ramthakur</div><div class="stat-label">Needs Attention</div></div>
+        </div>
+
+        <!-- Actions Bar -->
+        <div class="flex-between mb-3" style="flex-wrap:wrap;gap:1rem;">
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+            <input type="text" id="collegeSearch" placeholder="Search college..." style="max-width:250px;" oninput="filterColleges()">
+            <select id="districtFilter" onchange="filterColleges()" style="max-width:180px;"><option value="">All Districts</option><option value="West Tripura">West Tripura</option><option value="South Tripura">South Tripura</option></select>
+          </div>
+          <button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Add College</button>
+        </div>
+
+        <!-- College Table -->
+        <div class="table-container mb-4">
+          <table id="collegeTable">
+            <thead>
+              <tr><th>#</th><th>College Name</th><th>District</th><th>ANO</th><th>Cadets</th><th>Boys</th><th>Girls</th><th>Attendance</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="collegeBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-2">
+          <div class="card"><div class="card-header"><h4><i class="fas fa-chart-pie"></i> Cadet Distribution</h4></div><canvas id="cadetPieChart" height="250"></canvas></div>
+          <div class="card"><div class="card-header"><h4><i class="fas fa-chart-line"></i> Attendance Trend (6 Months)</h4></div><canvas id="attendLineChart" height="250"></canvas></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="collegeModal">
+    <div class="modal" style="max-width:650px;">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 id="modalTitle"><i class="fas fa-school"></i> Add New College</h3>
+      <form id="collegeForm" onsubmit="saveCollege(event)" style="margin-top:1.5rem;">
+        <div class="grid grid-2" style="gap:1rem;">
+          <div class="form-group"><label>College Name *</label><input type="text" id="cName" required></div>
+          <div class="form-group"><label>District *</label><input type="text" id="cDistrict" required></div>
+          <div class="form-group"><label>State *</label><input type="text" id="cState" value="Tripura" required></div>
+          <div class="form-group"><label>Principal Name</label><input type="text" id="cPrincipal"></div>
+          <div class="form-group"><label>ANO Name *</label><input type="text" id="cAno" required></div>
+          <div class="form-group"><label>ANO Contact *</label><input type="text" id="cAnoContact" required></div>
+          <div class="form-group"><label>ANO Email</label><input type="email" id="cAnoEmail"></div>
+          <div class="form-group"><label>Wing</label><select id="cWing"><option>Army</option><option>Navy</option><option>Air Force</option></select></div>
+          <div class="form-group"><label>Total Boys</label><input type="number" id="cBoys" value="0"></div>
+          <div class="form-group"><label>Total Girls</label><input type="number" id="cGirls" value="0"></div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save College</button>
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    requireAuth(['CO','ANO']);
+    initSidebarToggle();
+
+    // Mock college data
+    let colleges = [
+      { id:1, name:'Tripura University', district:'West Tripura', state:'Tripura', ano:'Capt. Anil Deb', anoContact:'+91 98XXX', boys:32, girls:28, attendance:93 },
+      { id:2, name:'MBB College', district:'West Tripura', state:'Tripura', ano:'Lt. Suresh Roy', anoContact:'+91 97XXX', boys:20, girls:18, attendance:88 },
+      { id:3, name:"Women's College, Agartala", district:'West Tripura', state:'Tripura', ano:'Capt. Mita Devi', anoContact:'+91 96XXX', boys:0, girls:45, attendance:91 },
+      { id:4, name:'Ramthakur College', district:'South Tripura', state:'Tripura', ano:'Lt. Bikash Dhar', anoContact:'+91 95XXX', boys:15, girls:12, attendance:68 },
+      { id:5, name:'Maharaja Bir Bikram College', district:'West Tripura', state:'Tripura', ano:'Capt. Ratan Das', anoContact:'+91 94XXX', boys:28, girls:22, attendance:85 },
+      { id:6, name:'Holy Cross College', district:'West Tripura', state:'Tripura', ano:'Lt. Mary Joseph', anoContact:'+91 93XXX', boys:0, girls:35, attendance:79 }
+    ];
+
+    let editingId = null;
+
+    function renderTable(data) {
+      const body = document.getElementById('collegeBody');
+      body.innerHTML = data.map(function(c, i) {
+        const total = c.boys + c.girls;
+        const badge = c.attendance >= 85 ? 'badge-green' : c.attendance >= 70 ? 'badge-gold' : 'badge-red';
+        return '<tr>' +
+          '<td>' + (i+1) + '</td>' +
+          '<td><strong>' + c.name + '</strong></td>' +
+          '<td>' + c.district + '</td>' +
+          '<td>' + c.ano + '</td>' +
+          '<td>' + total + '</td>' +
+          '<td>' + c.boys + '</td>' +
+          '<td>' + c.girls + '</td>' +
+          '<td><span class="badge ' + badge + '">' + c.attendance + '%</span></td>' +
+          '<td><button class="btn btn-sm btn-outline" onclick="editCollege(' + c.id + ')" style="margin-right:0.25rem;padding:0.3rem 0.6rem;"><i class="fas fa-edit"></i></button>' +
+          '<button class="btn btn-sm" style="padding:0.3rem 0.6rem;background:#dc3545;color:#fff;" onclick="deleteCollege(' + c.id + ')"><i class="fas fa-trash"></i></button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function filterColleges() {
+      const q = document.getElementById('collegeSearch').value.toLowerCase();
+      const d = document.getElementById('districtFilter').value;
+      let filtered = colleges.filter(function(c) {
+        const matchName = c.name.toLowerCase().includes(q) || c.ano.toLowerCase().includes(q);
+        const matchDist = !d || c.district === d;
+        return matchName && matchDist;
+      });
+      renderTable(filtered);
+    }
+
+    function openAddModal() {
+      editingId = null;
+      document.getElementById('modalTitle').innerHTML = '<i class="fas fa-school"></i> Add New College';
+      document.getElementById('collegeForm').reset();
+      document.getElementById('collegeModal').classList.add('active');
+    }
+
+    function editCollege(id) {
+      const c = colleges.find(function(x){return x.id===id;});
+      if (!c) return;
+      editingId = id;
+      document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit College';
+      document.getElementById('cName').value = c.name;
+      document.getElementById('cDistrict').value = c.district;
+      document.getElementById('cState').value = c.state;
+      document.getElementById('cAno').value = c.ano;
+      document.getElementById('cAnoContact').value = c.anoContact;
+      document.getElementById('cBoys').value = c.boys;
+      document.getElementById('cGirls').value = c.girls;
+      document.getElementById('collegeModal').classList.add('active');
+    }
+
+    function deleteCollege(id) {
+      if (confirm('Are you sure you want to delete this college?')) {
+        colleges = colleges.filter(function(c){return c.id !== id;});
+        renderTable(colleges);
+      }
+    }
+
+    function saveCollege(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('cName').value,
+        district: document.getElementById('cDistrict').value,
+        state: document.getElementById('cState').value,
+        ano: document.getElementById('cAno').value,
+        anoContact: document.getElementById('cAnoContact').value,
+        boys: parseInt(document.getElementById('cBoys').value) || 0,
+        girls: parseInt(document.getElementById('cGirls').value) || 0,
+        attendance: Math.floor(Math.random() * 20) + 75
+      };
+
+      if (editingId) {
+        const idx = colleges.findIndex(function(c){return c.id===editingId;});
+        colleges[idx] = Object.assign(colleges[idx], data);
+      } else {
+        data.id = Date.now();
+        colleges.push(data);
+      }
+      renderTable(colleges);
+      closeModal();
+    }
+
+    function closeModal() { document.getElementById('collegeModal').classList.remove('active'); }
+
+    // Initial render
+    renderTable(colleges);
+
+    // Charts
+    new Chart(document.getElementById('cadetPieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: colleges.map(function(c){return c.name.split(',')[0];}),
+        datasets: [{ data: colleges.map(function(c){return c.boys+c.girls;}), backgroundColor: ['#2d5a27','#4a7c3f','#c8a951','#6b9e65','#1a3a16','#8bc34a'] }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
+    });
+
+    new Chart(document.getElementById('attendLineChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [
+          { label: 'Tripura Univ.', data: [90,92,88,93,91,93], borderColor: '#2d5a27', fill: false, tension: 0.3 },
+          { label: 'MBB College', data: [85,87,84,88,86,88], borderColor: '#c8a951', fill: false, tension: 0.3 },
+          { label: 'Ramthakur', data: [72,68,65,70,67,68], borderColor: '#dc3545', fill: false, tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: false, min: 50 } } }
+    });
+  </script>
 </body>
 </html>
