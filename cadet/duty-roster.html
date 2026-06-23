@@ -3,14 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Portal | Cadet Connection Portal</title>
+  <title>Duty Roster | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 7 -->
+  <div class="cadet-wrapper">
+    <aside class="cadet-sidebar">
+      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name">Cdt. Rahul Das</div><div class="cadet-rank">Cadet | 15th Tripura Bn</div></div>
+      <nav class="sidebar-menu">
+        <a href="dashboard.html"><i class="fas fa-home"></i> My Dashboard</a>
+        <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="id-card.html"><i class="fas fa-id-card"></i> My ID Card</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> My Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="duty-roster.html" class="active"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="cadet-main">
+      <header class="cadet-topbar"><div style="display:flex;align-items:center;gap:1rem;"><button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h2 style="font-size:1.1rem;">Duty Roster</h2></div></header>
+      <div class="cadet-content">
+        <h3 class="mb-3">This Week's Duties</h3>
+        <div class="table-container mb-4">
+          <table>
+            <thead><tr><th>Day</th><th>Date</th><th>Duty Type</th><th>Time</th><th>Location</th></tr></thead>
+            <tbody>
+              <tr><td>Monday</td><td>23 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00 - 08:00</td><td>College Ground</td></tr>
+              <tr><td>Tuesday</td><td>24 Jun</td><td><span class="badge badge-blue">Guard Duty</span></td><td>10:00 - 12:00</td><td>Main Gate</td></tr>
+              <tr><td>Wednesday</td><td>25 Jun</td><td><span class="badge badge-gold">Camp Duty</span></td><td>08:00 - 16:00</td><td>NCC Office</td></tr>
+              <tr><td>Thursday</td><td>26 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00 - 08:00</td><td>Parade Ground</td></tr>
+              <tr><td>Friday</td><td>27 Jun</td><td><span class="badge badge-blue">College Duty</span></td><td>09:00 - 11:00</td><td>Tripura University</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="mb-3">Duty Legend</h3>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;">
+          <span><span class="badge badge-green">Parade</span></span>
+          <span><span class="badge badge-blue">Guard Duty</span></span>
+          <span><span class="badge badge-gold">Camp Duty</span></span>
+          <span><span class="badge badge-red">Special Duty</span></span>
+        </div>
+
+        <button class="btn btn-outline"><i class="fas fa-download"></i> Export Duty Schedule</button>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/cadet.js"></script>
+  <script>requireAuth(['Cadet']);</script>
 </body>
 </html>

@@ -3,14 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Portal | Cadet Connection Portal</title>
+  <title>My ID Card | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
+  <style>
+    @media print { .cadet-sidebar, .cadet-topbar, .id-actions { display:none!important; } .cadet-main { margin-left:0!important; } .id-card { box-shadow:none!important; border:2px solid #000!important; } }
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 7 -->
+  <div class="cadet-wrapper">
+    <aside class="cadet-sidebar">
+      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name">Cdt. Rahul Das</div><div class="cadet-rank">Cadet | 15th Tripura Bn</div></div>
+      <nav class="sidebar-menu">
+        <a href="dashboard.html"><i class="fas fa-home"></i> My Dashboard</a>
+        <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="id-card.html" class="active"><i class="fas fa-id-card"></i> My ID Card</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> My Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="duty-roster.html"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="cadet-main">
+      <header class="cadet-topbar"><div style="display:flex;align-items:center;gap:1rem;"><button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h2 style="font-size:1.1rem;">My ID Card</h2></div></header>
+      <div class="cadet-content">
+        <div class="text-center mb-4">
+          <h3>NCC Digital ID Card</h3>
+          <p class="text-muted">Your official NCC identity card</p>
+        </div>
+
+        <!-- Front of Card -->
+        <div class="id-card" style="margin-bottom:2rem;">
+          <div class="id-card-header">
+            <p style="font-size:0.75rem;margin:0;opacity:0.8;">NATIONAL CADET CORPS</p>
+            <h3>NCC CADET ID CARD</h3>
+            <p style="font-size:0.7rem;margin:0;opacity:0.7;">NER Directorate</p>
+          </div>
+          <div class="id-card-body">
+            <div class="id-card-photo"><i class="fas fa-user" style="font-size:2.5rem;color:var(--text-light);"></i></div>
+            <div class="id-card-details">
+              <p><strong>Name:</strong> Rahul Das</p>
+              <p><strong>Reg:</strong> NCC/NER/TR/15/2024/1045</p>
+              <p><strong>Rank:</strong> Cadet (SD)</p>
+              <p><strong>BN:</strong> 15th Tripura Bn NCC</p>
+              <p><strong>College:</strong> Tripura University</p>
+              <p><strong>Valid:</strong> 2024-2026</p>
+              <p><strong>Blood:</strong> B+</p>
+            </div>
+          </div>
+          <div class="id-card-footer">
+            <div style="font-size:0.75rem;color:var(--text-light);">
+              <p style="margin:0;">Signature: _____________</p>
+            </div>
+            <div style="text-align:right;font-size:0.75rem;color:var(--text-light);">
+              <p style="margin:0;"><i class="fas fa-stamp"></i> CO Stamp</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back of Card -->
+        <div class="id-card">
+          <div class="id-card-header">
+            <h3 style="font-size:0.9rem;">CARD BACK — IMPORTANT INFORMATION</h3>
+          </div>
+          <div style="padding:1.5rem;font-size:0.85rem;line-height:1.8;">
+            <p><strong>Instructions:</strong></p>
+            <ol style="padding-left:1.5rem;margin-bottom:1rem;">
+              <li>This card is non-transferable.</li>
+              <li>Must be carried during all NCC activities.</li>
+              <li>Report loss immediately to the ANO.</li>
+              <li>Valid only with CO signature and stamp.</li>
+            </ol>
+            <p><strong>Emergency Contact:</strong> +91 97654 32100</p>
+            <p><strong>BN Office:</strong> +91 0381-XXXXXXX</p>
+            <div style="text-align:center;margin-top:1rem;padding:1rem;background:var(--bg);border-radius:var(--radius);">
+              <i class="fas fa-qrcode" style="font-size:3rem;color:var(--primary);"></i>
+              <p style="font-size:0.75rem;margin-top:0.5rem;">Scan for Verification</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="id-actions text-center mt-4" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print Card</button>
+          <button class="btn btn-secondary"><i class="fas fa-download"></i> Download PNG</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/cadet.js"></script>
+  <script>requireAuth(['Cadet']);</script>
 </body>
 </html>

@@ -3,14 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Portal | Cadet Connection Portal</title>
+  <title>My Attendance | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 7 -->
+  <div class="cadet-wrapper">
+    <aside class="cadet-sidebar">
+      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name">Cdt. Rahul Das</div><div class="cadet-rank">Cadet | 15th Tripura Bn</div></div>
+      <nav class="sidebar-menu">
+        <a href="dashboard.html"><i class="fas fa-home"></i> My Dashboard</a>
+        <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="id-card.html"><i class="fas fa-id-card"></i> My ID Card</a>
+        <a href="attendance.html" class="active"><i class="fas fa-clipboard-list"></i> My Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="duty-roster.html"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="cadet-main">
+      <header class="cadet-topbar"><div style="display:flex;align-items:center;gap:1rem;"><button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h2 style="font-size:1.1rem;">My Attendance</h2></div></header>
+      <div class="cadet-content">
+        <!-- Summary -->
+        <div class="grid grid-4 mb-4">
+          <div class="stat-card"><div class="stat-number" style="color:var(--primary);">22</div><div class="stat-label">Present</div></div>
+          <div class="stat-card"><div class="stat-number" style="color:#dc3545;">3</div><div class="stat-label">Absent</div></div>
+          <div class="stat-card"><div class="stat-number">25</div><div class="stat-label">Total Days</div></div>
+          <div class="stat-card"><div class="stat-number" style="color:var(--primary);">88%</div><div class="stat-label">Percentage</div></div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="attendance-calendar">
+          <div class="calendar-header">
+            <button class="btn btn-sm btn-outline" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+            <h4 id="calendarTitle">June 2025</h4>
+            <button class="btn btn-sm btn-outline" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-day-name">Sun</div><div class="calendar-day-name">Mon</div><div class="calendar-day-name">Tue</div><div class="calendar-day-name">Wed</div><div class="calendar-day-name">Thu</div><div class="calendar-day-name">Fri</div><div class="calendar-day-name">Sat</div>
+          </div>
+          <div class="calendar-grid" id="calendarDays"></div>
+          <div style="margin-top:1.5rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+            <span><span style="display:inline-block;width:14px;height:14px;background:var(--primary);border-radius:50%;vertical-align:middle;margin-right:0.4rem;"></span> Present</span>
+            <span><span style="display:inline-block;width:14px;height:14px;background:#dc3545;border-radius:50%;vertical-align:middle;margin-right:0.4rem;"></span> Absent</span>
+            <span><span style="display:inline-block;width:14px;height:14px;background:var(--border);border-radius:50%;vertical-align:middle;margin-right:0.4rem;"></span> Holiday</span>
+          </div>
+        </div>
+
+        <button class="btn btn-outline mt-4"><i class="fas fa-download"></i> Download Attendance Report</button>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/cadet.js"></script>
+  <script>
+    requireAuth(['Cadet']);
+
+    // Mock attendance data for June 2025
+    const mockAttendance = {
+      present: [2,3,4,5,6,9,10,11,12,13,16,17,18,19,20,23,24,25,26,27,28,30],
+      absent: [7,14,21],
+      holiday: [1,8,15,22,29]
+    };
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarDays');
+      const firstDay = new Date(2025, 5, 1).getDay(); // June 2025 starts on Sunday=0
+      let html = '';
+
+      // Empty cells
+      for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day"></div>';
+
+      // Days
+      for (let d = 1; d <= 30; d++) {
+        let cls = 'calendar-day';
+        if (mockAttendance.present.includes(d)) cls += ' present';
+        else if (mockAttendance.absent.includes(d)) cls += ' absent';
+        else if (mockAttendance.holiday.includes(d)) cls += ' holiday';
+        if (d === new Date().getDate()) cls += ' today';
+        html += '<div class="' + cls + '">' + d + '</div>';
+      }
+      grid.innerHTML = html;
+    }
+    renderCalendar();
+  </script>
 </body>
 </html>

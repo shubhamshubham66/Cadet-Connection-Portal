@@ -3,14 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Portal | Cadet Connection Portal</title>
+  <title>My Dashboard | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 7 -->
+  <div class="cadet-wrapper">
+    <aside class="cadet-sidebar">
+      <div class="sidebar-header">
+        <div class="cadet-avatar"><i class="fas fa-user"></i></div>
+        <div class="cadet-name" id="cadetName">Cdt. Rahul Das</div>
+        <div class="cadet-rank">Cadet | 15th Tripura Bn</div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="active"><i class="fas fa-home"></i> My Dashboard</a>
+        <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="id-card.html"><i class="fas fa-id-card"></i> My ID Card</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> My Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="duty-roster.html"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="cadet-main">
+      <header class="cadet-topbar">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <h2 style="font-size:1.1rem;">My Dashboard</h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <i class="fas fa-bell" style="color:var(--text-light);cursor:pointer;"></i>
+          <span style="font-size:0.85rem;font-weight:600;" id="topName">Cdt. Rahul Das</span>
+        </div>
+      </header>
+
+      <div class="cadet-content">
+        <div class="welcome-banner">
+          <h2 id="welcomeText">Welcome, Cdt. Rahul Das</h2>
+          <p>Cadet | Tripura University | 15th Tripura Bn NCC</p>
+        </div>
+
+        <div class="grid grid-4 mb-4">
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-number">87%</div><div class="stat-label">Attendance</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-campground"></i></div><div class="stat-number">2</div><div class="stat-label">Upcoming Camps</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-certificate"></i></div><div class="stat-number">3</div><div class="stat-label">Certificates</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div class="stat-number">5</div><div class="stat-label">Duties This Month</div></div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-calendar-day"></i> Today's Schedule</h4></div>
+            <div style="padding:0.5rem 0;">
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);"><span><i class="fas fa-sun" style="color:var(--accent);margin-right:0.5rem;"></i>Morning Parade</span><span class="text-muted">06:00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);"><span><i class="fas fa-running" style="color:var(--primary);margin-right:0.5rem;"></i>Drill Practice</span><span class="text-muted">10:00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;"><span><i class="fas fa-book" style="color:var(--secondary);margin-right:0.5rem;"></i>Theory Class</span><span class="text-muted">14:00</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-bullhorn"></i> Recent Announcements</h4></div>
+            <div style="padding:0.5rem 0;">
+              <div style="padding:0.6rem 0;border-bottom:1px solid var(--border);"><strong style="font-size:0.9rem;">ATC Registration Open</strong><p class="text-muted text-sm">Register before 30 Jun for Annual Training Camp</p></div>
+              <div style="padding:0.6rem 0;border-bottom:1px solid var(--border);"><strong style="font-size:0.9rem;">B Certificate Exam</strong><p class="text-muted text-sm">Exam scheduled for 15 Aug 2025</p></div>
+              <div style="padding:0.6rem 0;"><strong style="font-size:0.9rem;">NCC Day Parade</strong><p class="text-muted text-sm">Mandatory attendance on 28 Nov</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header"><h4><i class="fas fa-campground"></i> Upcoming Camp</h4></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <h4>Annual Training Camp (ATC)</h4>
+              <p class="text-muted">15 Jul - 26 Jul 2025 | Agartala, Tripura</p>
+            </div>
+            <button class="btn btn-primary"><i class="fas fa-check"></i> Register Now</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/cadet.js"></script>
+  <script>
+    const user = requireAuth(['Cadet']);
+    if (user) {
+      document.getElementById('cadetName').textContent = user.name;
+      document.getElementById('topName').textContent = user.name;
+      document.getElementById('welcomeText').textContent = 'Welcome, ' + user.name;
+    }
+  </script>
 </body>
 </html>

@@ -3,14 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Portal | Cadet Connection Portal</title>
+  <title>My Profile | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 7 -->
+  <div class="cadet-wrapper">
+    <aside class="cadet-sidebar">
+      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name">Cdt. Rahul Das</div><div class="cadet-rank">Cadet | 15th Tripura Bn</div></div>
+      <nav class="sidebar-menu">
+        <a href="dashboard.html"><i class="fas fa-home"></i> My Dashboard</a>
+        <a href="profile.html" class="active"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="id-card.html"><i class="fas fa-id-card"></i> My ID Card</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> My Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="duty-roster.html"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="cadet-main">
+      <header class="cadet-topbar">
+        <div style="display:flex;align-items:center;gap:1rem;"><button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h2 style="font-size:1.1rem;">My Profile</h2></div>
+      </header>
+      <div class="cadet-content">
+        <div class="grid grid-2">
+          <!-- Personal Info -->
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-user"></i> Personal Information</h4></div>
+            <div style="text-align:center;margin-bottom:1.5rem;">
+              <div style="width:100px;height:100px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--primary);"><i class="fas fa-user"></i></div>
+              <button class="btn btn-sm btn-outline"><i class="fas fa-camera"></i> Change Photo</button>
+            </div>
+            <div style="display:grid;gap:0.75rem;">
+              <div><strong>NCC Reg No:</strong> <span>NCC/NER/TR/15/2024/1045</span></div>
+              <div><strong>Name:</strong> <span>Rahul Das</span></div>
+              <div><strong>DOB:</strong> <span>15 Mar 2004</span></div>
+              <div><strong>Gender:</strong> <span>Male</span></div>
+              <div><strong>Mobile:</strong> <span>+91 98765 43210</span></div>
+              <div><strong>Email:</strong> <span>rahul.das@email.com</span></div>
+              <div><strong>Blood Group:</strong> <span>B+</span></div>
+              <div><strong>Address:</strong> <span>Agartala, West Tripura, Tripura</span></div>
+              <div><strong>Emergency Contact:</strong> <span>+91 97654 32100 (Father)</span></div>
+            </div>
+          </div>
+          <!-- NCC Info -->
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-shield-alt"></i> NCC Information</h4></div>
+            <div style="display:grid;gap:0.75rem;">
+              <div><strong>Battalion:</strong> <span>15th Tripura Bn NCC</span></div>
+              <div><strong>College:</strong> <span>Tripura University</span></div>
+              <div><strong>Wing:</strong> <span class="badge badge-green">Army</span></div>
+              <div><strong>Rank:</strong> <span>Cadet</span></div>
+              <div><strong>Year:</strong> <span>2nd Year (SD)</span></div>
+              <div><strong>Enrolled:</strong> <span>Aug 2023</span></div>
+              <div><strong>A Certificate:</strong> <span class="badge badge-green">Earned</span></div>
+              <div><strong>B Certificate:</strong> <span class="badge badge-gold">Pending</span></div>
+              <div><strong>C Certificate:</strong> <span class="badge badge-red">Not Appeared</span></div>
+            </div>
+            <div style="margin-top:1.5rem;">
+              <h5 style="margin-bottom:0.75rem;"><i class="fas fa-trophy" style="color:var(--accent);"></i> Achievements</h5>
+              <ul style="padding-left:1.25rem;list-style:disc;color:var(--text-light);font-size:0.9rem;">
+                <li>Best Cadet — ATC 2024</li>
+                <li>Firing Competition — 2nd Place</li>
+                <li>Thal Sainik Camp Selected 2025</li>
+              </ul>
+            </div>
+            <button class="btn btn-primary btn-block mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/cadet.js"></script>
+  <script>requireAuth(['Cadet']);</script>
 </body>
 </html>
