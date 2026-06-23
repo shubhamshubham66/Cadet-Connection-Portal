@@ -107,13 +107,9 @@ function sendOTP(e) {
   // Generate OTP
   generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
 
-  // Send via Fast2SMS
-  try {
-    fetch(SCRIPT_URL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
-  } catch(err) {}
-
-  // Show OTP section
-  document.getElementById('otpNote').textContent = 'OTP sent to +91 XXXXX ' + mobile.slice(-3) + ' via SMS';
+  // Show OTP on screen (demo mode - will use SMS in production)
+  document.getElementById('otpNote').textContent = 'Your OTP: ' + generatedOTP;
+  document.getElementById('otpSubNote').textContent = 'Demo mode — In production, OTP will be sent via SMS';
   document.getElementById('otpSection').classList.remove('hidden');
   document.getElementById('otpSection').scrollIntoView({ behavior: 'smooth' });
 
@@ -263,7 +259,7 @@ function resendOTP() {
   else if (selectedRole === 'SUO') mobile = document.getElementById('suoMobile').value.trim();
 
   try {
-    fetch(SCRIPT_URL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+    document.getElementById('otpNote').textContent = 'Your OTP: ' + generatedOTP;
   } catch(err) {}
 
   clearOTPBoxes();
