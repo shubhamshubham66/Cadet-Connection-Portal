@@ -1,0 +1,295 @@
+/* ═══════════════════════════════════════════
+   CADET PORTAL STYLES
+   ═══════════════════════════════════════════ */
+
+/* ─── Cadet Dashboard Layout (same as officer but lighter) ─── */
+.cadet-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.cadet-sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, var(--primary), var(--dark));
+  color: var(--white);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding-top: 1rem;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.cadet-sidebar .sidebar-header {
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cadet-sidebar .cadet-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  margin: 0 auto 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: var(--accent);
+}
+
+.cadet-sidebar .cadet-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.cadet-sidebar .cadet-rank {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.cadet-sidebar .sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1.5rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.cadet-sidebar .sidebar-menu a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  padding-left: 2rem;
+}
+
+.cadet-sidebar .sidebar-menu a.active {
+  background: rgba(200, 169, 81, 0.15);
+  color: var(--accent);
+  border-left: 3px solid var(--accent);
+}
+
+.cadet-sidebar .sidebar-menu a i {
+  width: 20px;
+  text-align: center;
+}
+
+/* ─── Cadet Main Content ─── */
+.cadet-main {
+  margin-left: 250px;
+  flex: 1;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.cadet-topbar {
+  background: var(--white);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.cadet-content {
+  padding: 2rem;
+}
+
+/* ─── ID Card Styles ─── */
+.id-card {
+  max-width: 450px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--primary);
+}
+
+.id-card-header {
+  background: linear-gradient(135deg, var(--primary), var(--dark));
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--white);
+}
+
+.id-card-header h3 {
+  color: var(--white);
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.id-card-body {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.id-card-photo {
+  width: 110px;
+  height: 130px;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.id-card-details p {
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.id-card-details strong {
+  color: var(--primary);
+  display: inline-block;
+  width: 70px;
+}
+
+.id-card-footer {
+  background: var(--bg);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Attendance Calendar ─── */
+.attendance-calendar {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.calendar-day-name {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  padding: 0.5rem;
+}
+
+.calendar-day {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  margin: 0 auto;
+  cursor: default;
+}
+
+.calendar-day.present {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.calendar-day.absent {
+  background: #dc3545;
+  color: var(--white);
+}
+
+.calendar-day.holiday {
+  background: var(--border);
+  color: var(--text-light);
+}
+
+.calendar-day.today {
+  border: 2px solid var(--accent);
+  font-weight: 700;
+}
+
+/* ─── Certificate Card ─── */
+.cert-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border-left: 4px solid var(--accent);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cert-card .cert-info h4 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.cert-card .cert-info span {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.cert-card .cert-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 992px) {
+  .cadet-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .cadet-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .cadet-main {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .id-card-body {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .id-card-photo {
+    margin: 0 auto;
+  }
+
+  .cadet-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .cert-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
