@@ -1,107 +1,191 @@
 /* ═══════════════════════════════════════════
-   AUTH.JS — OTP Login System
+   AUTH.JS — OTP Login System (Updated)
    Cadet Connection Portal
    ═══════════════════════════════════════════ */
 
+let selectedRole = '';
+let generatedOTP = '';
 let countdownInterval = null;
 
-// ─── Send OTP (Step 1 → Step 2) ───
-function sendOTP(e) {
-  e.preventDefault();
+// ─── Step 1: Select Role → Show Role-specific form ───
+function selectRole(role) {
+  selectedRole = role;
 
-  const loginId = document.getElementById('loginId').value.trim();
-  const role = document.getElementById('role').value;
-
-  if (!loginId || !role) {
-    showToast('Please fill all fields', 'error');
-    return;
-  }
-
-  // Mask the contact info
-  let masked = loginId;
-  if (loginId.includes('@')) {
-    const parts = loginId.split('@');
-    masked = parts[0].slice(0, 2) + '***@' + parts[1];
-  } else if (loginId.length >= 10) {
-    masked = '+91 XXXXX XX' + loginId.slice(-3);
-  }
-
-  document.getElementById('otpMessage').textContent = 'OTP sent to ' + masked;
-
-  // Switch to step 2
+  // Hide step 1, show step 2
   document.getElementById('step1').classList.add('hidden');
   document.getElementById('step2').classList.remove('hidden');
 
+  // Hide all role fields
+  document.getElementById('cadetFields').classList.add('hidden');
+  document.getElementById('anoFields').classList.add('hidden');
+  document.getElementById('coFields').classList.add('hidden');
+  document.getElementById('suoFields').classList.add('hidden');
+
+  // Show correct fields based on role
+  switch (role) {
+    case 'Cadet':
+      document.getElementById('cadetFields').classList.remove('hidden');
+      document.getElementById('step2Title').textContent = 'Cadet Login';
+      document.getElementById('step2Desc').textContent = 'Fill your details to receive OTP';
+      break;
+    case 'ANO':
+      document.getElementById('anoFields').classList.remove('hidden');
+      document.getElementById('step2Title').textContent = 'ANO Login';
+      document.getElementById('step2Desc').textContent = 'Enter your officer details';
+      break;
+    case 'CO':
+      document.getElementById('coFields').classList.remove('hidden');
+      document.getElementById('step2Title').textContent = 'CO Login';
+      document.getElementById('step2Desc').textContent = 'Commanding Officer access';
+      break;
+    case 'SUO':
+      document.getElementById('suoFields').classList.remove('hidden');
+      document.getElementById('step2Title').textContent = 'SUO Login';
+      document.getElementById('step2Desc').textContent = 'Senior Under Officer access';
+      break;
+  }
+
+  // Hide OTP section when switching roles
+  document.getElementById('otpSection').classList.add('hidden');
+}
+
+// ─── Go Back to Step 1 ───
+function goToStep1() {
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('otpSection').classList.add('hidden');
+  if (countdownInterval) clearInterval(countdownInterval);
+}
+
+// ─── Send OTP (validate form → generate & show OTP on page) ───
+function sendOTP(e) {
+  e.preventDefault();
+
+  // Validate based on role
+  let valid = true;
+  let mobile = '';
+  let name = '';
+
+  switch (selectedRole) {
+    case 'Cadet':
+      name = document.getElementById('cadetName').value.trim();
+      const regNo = document.getElementById('cadetRegNo').value.trim();
+      const bn = document.getElementById('cadetBn').value.trim();
+      const college = document.getElementById('cadetCollege').value.trim();
+      mobile = document.getElementById('cadetMobile').value.trim();
+      const dob = document.getElementById('cadetDob').value;
+      const photo = document.getElementById('cadetPhoto').files.length;
+
+      if (!name || !regNo || !bn || !college || !mobile || !dob || !photo) {
+        showToast('Please fill all required fields and upload photo', 'error');
+        valid = false;
+      }
+      break;
+
+    case 'ANO':
+      name = document.getElementById('anoName').value.trim();
+      const anoId = document.getElementById('anoId').value.trim();
+      mobile = document.getElementById('anoMobile').value.trim();
+      if (!name || !anoId || !mobile) {
+        showToast('Please fill all required fields', 'error');
+        valid = false;
+      }
+      break;
+
+    case 'CO':
+      name = document.getElementById('coName').value.trim();
+      const coId = document.getElementById('coId').value.trim();
+      mobile = document.getElementById('coMobile').value.trim();
+      if (!name || !coId || !mobile) {
+        showToast('Please fill all required fields', 'error');
+        valid = false;
+      }
+      break;
+
+    case 'SUO':
+      name = document.getElementById('suoName').value.trim();
+      const suoId = document.getElementById('suoId').value.trim();
+      mobile = document.getElementById('suoMobile').value.trim();
+      if (!name || !suoId || !mobile) {
+        showToast('Please fill all required fields', 'error');
+        valid = false;
+      }
+      break;
+  }
+
+  if (!valid) return;
+
+  if (mobile.length < 10) {
+    showToast('Please enter a valid 10-digit mobile number', 'error');
+    return;
+  }
+
+  // Generate random 6-digit OTP
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Show OTP on same page
+  document.getElementById('generatedOTP').textContent = generatedOTP;
+  document.getElementById('otpSection').classList.remove('hidden');
+
+  // Scroll to OTP section
+  document.getElementById('otpSection').scrollIntoView({ behavior: 'smooth' });
+
   // Focus first OTP box
-  document.querySelector('.otp-box[data-index="0"]').focus();
+  setTimeout(function() {
+    document.querySelector('.otp-box[data-index="0"]').focus();
+  }, 300);
 
   // Start countdown
   startCountdown(45);
 
-  showToast('OTP sent successfully!', 'success');
+  showToast('OTP generated for +91 ' + mobile.slice(-4), 'success');
 }
 
-// ─── Verify OTP (Step 2 → Dashboard) ───
-function verifyOTP(e) {
-  e.preventDefault();
-
+// ─── Verify OTP ───
+function verifyOTP() {
   const boxes = document.querySelectorAll('.otp-box');
-  let otp = '';
-  boxes.forEach(function(box) { otp += box.value; });
+  let enteredOTP = '';
+  boxes.forEach(function(box) { enteredOTP += box.value; });
 
-  if (otp.length !== 6) {
+  if (enteredOTP.length !== 6) {
     showToast('Please enter complete 6-digit OTP', 'error');
     return;
   }
 
-  // Mock: any 6-digit OTP is valid
-  if (otp.length === 6 && /^\d{6}$/.test(otp)) {
-    const role = document.getElementById('role').value;
-    const loginId = document.getElementById('loginId').value.trim();
+  if (enteredOTP === generatedOTP) {
+    // Get name based on role
+    let userName = '';
+    switch (selectedRole) {
+      case 'Cadet': userName = document.getElementById('cadetName').value.trim(); break;
+      case 'ANO': userName = document.getElementById('anoName').value.trim(); break;
+      case 'CO': userName = document.getElementById('coName').value.trim(); break;
+      case 'SUO': userName = document.getElementById('suoName').value.trim(); break;
+    }
 
     // Save to localStorage
     const userData = {
-      loginId: loginId,
-      role: role,
-      name: getMockName(role),
+      name: userName,
+      role: selectedRole,
       loggedIn: true,
       loginTime: new Date().toISOString()
     };
-
     localStorage.setItem('ccp_user', JSON.stringify(userData));
 
     showToast('Login Successful! Redirecting...', 'success');
 
     // Redirect by role
     setTimeout(function() {
-      switch (role) {
-        case 'CO':
-          window.location.href = 'officer/co-dashboard.html';
-          break;
-        case 'ANO':
-          window.location.href = 'officer/ano-dashboard.html';
-          break;
-        case 'SUO':
-          window.location.href = 'officer/suo-dashboard.html';
-          break;
-        case 'Cadet':
-          window.location.href = 'cadet/dashboard.html';
-          break;
-        default:
-          window.location.href = 'index.html';
+      switch (selectedRole) {
+        case 'CO': window.location.href = 'officer/co-dashboard.html'; break;
+        case 'ANO': window.location.href = 'officer/ano-dashboard.html'; break;
+        case 'SUO': window.location.href = 'officer/suo-dashboard.html'; break;
+        case 'Cadet': window.location.href = 'cadet/dashboard.html'; break;
+        default: window.location.href = 'index.html';
       }
     }, 1500);
   } else {
-    showToast('Invalid OTP. Please try again.', 'error');
+    showToast('Invalid OTP. Please enter the correct OTP shown above.', 'error');
   }
-}
-
-// ─── Go Back to Step 1 ───
-function goBack() {
-  document.getElementById('step2').classList.add('hidden');
-  document.getElementById('step1').classList.remove('hidden');
-  clearOTPBoxes();
-  if (countdownInterval) clearInterval(countdownInterval);
 }
 
 // ─── OTP Box Handling ───
@@ -111,12 +195,9 @@ document.addEventListener('DOMContentLoaded', function() {
   boxes.forEach(function(box, index) {
     box.addEventListener('input', function(e) {
       const val = e.target.value;
-
       if (val && /^\d$/.test(val)) {
         box.classList.add('filled');
-        if (index < 5) {
-          boxes[index + 1].focus();
-        }
+        if (index < 5) boxes[index + 1].focus();
       } else {
         box.value = '';
         box.classList.remove('filled');
@@ -140,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
     box.addEventListener('paste', function(e) {
       e.preventDefault();
       const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
-
       if (/^\d{6}$/.test(pasteData)) {
         for (let i = 0; i < 6; i++) {
           boxes[i].value = pasteData[i];
@@ -154,39 +234,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ─── Countdown Timer ───
 function startCountdown(seconds) {
-  const countdownEl = document.getElementById('countdown');
   const timerText = document.getElementById('timerText');
   const resendBtn = document.getElementById('resendBtn');
 
-  timerText.classList.remove('hidden');
-  resendBtn.classList.add('hidden');
+  if (timerText) timerText.classList.remove('hidden');
+  if (resendBtn) resendBtn.classList.add('hidden');
 
   let remaining = seconds;
   updateTimerDisplay(remaining);
 
+  if (countdownInterval) clearInterval(countdownInterval);
   countdownInterval = setInterval(function() {
     remaining--;
     updateTimerDisplay(remaining);
-
     if (remaining <= 0) {
       clearInterval(countdownInterval);
-      timerText.classList.add('hidden');
-      resendBtn.classList.remove('hidden');
+      if (timerText) timerText.classList.add('hidden');
+      if (resendBtn) resendBtn.classList.remove('hidden');
     }
   }, 1000);
 }
 
 function updateTimerDisplay(seconds) {
+  const el = document.getElementById('countdown');
+  if (!el) return;
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  document.getElementById('countdown').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
 }
 
 // ─── Resend OTP ───
 function resendOTP() {
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  document.getElementById('generatedOTP').textContent = generatedOTP;
   clearOTPBoxes();
   startCountdown(45);
-  showToast('OTP resent successfully!', 'success');
+  showToast('New OTP generated!', 'success');
   document.querySelector('.otp-box[data-index="0"]').focus();
 }
 
@@ -198,27 +281,13 @@ function clearOTPBoxes() {
   });
 }
 
-// ─── Mock Name Generator ───
-function getMockName(role) {
-  switch (role) {
-    case 'CO': return 'Col. Rajesh Kumar Sharma';
-    case 'ANO': return 'Capt. Anil Deb';
-    case 'SUO': return 'SUO Priya Sharma';
-    case 'Cadet': return 'Cdt. Rahul Das';
-    default: return 'User';
-  }
-}
-
 // ─── Toast Notification ───
 function showToast(message, type) {
   type = type || 'success';
   const toast = document.getElementById('toast') || createToast();
   toast.className = 'toast toast-' + type + ' show';
   toast.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'times-circle') + '"></i> ' + message;
-
-  setTimeout(function() {
-    toast.classList.remove('show');
-  }, 3000);
+  setTimeout(function() { toast.classList.remove('show'); }, 3000);
 }
 
 function createToast() {
@@ -243,7 +312,6 @@ function requireAuth(allowedRoles) {
     return null;
   }
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Redirect to correct dashboard
     switch (user.role) {
       case 'CO': window.location.href = '../officer/co-dashboard.html'; break;
       case 'ANO': window.location.href = '../officer/ano-dashboard.html'; break;

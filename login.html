@@ -34,40 +34,144 @@
     <div class="login-right">
       <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-      <!-- Step 1: Enter Details -->
+      <!-- Step 1: Select Role -->
       <div class="login-form-container" id="step1">
         <div class="login-form-header">
-          <h2>Welcome Back</h2>
-          <p>Login to your NCC Portal account</p>
+          <h2>Welcome</h2>
+          <p>Select your role to continue</p>
         </div>
-        <form id="loginForm" onsubmit="sendOTP(event)">
-          <div class="form-group">
-            <label for="loginId"><i class="fas fa-user"></i> NCC Reg No / Mobile / Email</label>
-            <input type="text" id="loginId" placeholder="Enter your NCC Reg No, Mobile or Email" required>
+        <div class="role-cards">
+          <div class="role-card" onclick="selectRole('Cadet')">
+            <i class="fas fa-user-graduate"></i>
+            <h4>Cadet</h4>
+            <p>NCC Cadet Login</p>
           </div>
-          <div class="form-group">
-            <label for="role"><i class="fas fa-user-shield"></i> Select Role</label>
-            <select id="role" required>
-              <option value="" disabled selected>Select your role</option>
-              <option value="Cadet">Cadet</option>
-              <option value="SUO">SUO (Senior Under Officer)</option>
-              <option value="ANO">ANO (Associate NCC Officer)</option>
-              <option value="CO">CO (Commanding Officer)</option>
-            </select>
+          <div class="role-card" onclick="selectRole('SUO')">
+            <i class="fas fa-user-shield"></i>
+            <h4>SUO</h4>
+            <p>Senior Under Officer</p>
           </div>
-          <button type="submit" class="btn btn-primary btn-block btn-lg">
-            <i class="fas fa-paper-plane"></i> Send OTP
-          </button>
-        </form>
+          <div class="role-card" onclick="selectRole('ANO')">
+            <i class="fas fa-user-tie"></i>
+            <h4>ANO</h4>
+            <p>Associate NCC Officer</p>
+          </div>
+          <div class="role-card" onclick="selectRole('CO')">
+            <i class="fas fa-star"></i>
+            <h4>CO</h4>
+            <p>Commanding Officer</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Step 2: OTP Verification -->
+      <!-- Step 2: Enter Details (changes based on role) -->
       <div class="login-form-container hidden" id="step2">
         <div class="login-form-header">
-          <h2>Verify OTP</h2>
-          <p id="otpMessage">OTP sent to +91 XXXXX XX789</p>
+          <h2 id="step2Title">Cadet Registration</h2>
+          <p id="step2Desc">Fill your details to get OTP</p>
         </div>
-        <form id="otpForm" onsubmit="verifyOTP(event)">
+        <form id="detailsForm" onsubmit="sendOTP(event)">
+
+          <!-- Cadet Fields -->
+          <div id="cadetFields">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="cadetName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-id-badge"></i> Regimental Number *</label>
+              <input type="text" id="cadetRegNo" placeholder="NCC/NER/TR/15/2024/XXXX">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-building-flag"></i> Battalion Name *</label>
+              <input type="text" id="cadetBn" placeholder="e.g., 15th Tripura Bn NCC">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-school"></i> College / School Name *</label>
+              <input type="text" id="cadetCollege" placeholder="Enter your college or school">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> Mobile Number *</label>
+              <input type="tel" id="cadetMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-envelope"></i> Email (Optional)</label>
+              <input type="email" id="cadetEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-calendar"></i> Date of Birth *</label>
+              <input type="date" id="cadetDob">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-camera"></i> Photo *</label>
+              <input type="file" id="cadetPhoto" accept="image/*" style="padding:0.5rem;">
+            </div>
+          </div>
+
+          <!-- ANO Fields -->
+          <div id="anoFields" class="hidden">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="anoName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-id-badge"></i> ANO ID *</label>
+              <input type="text" id="anoId" placeholder="ANO ID number">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> Mobile Number *</label>
+              <input type="tel" id="anoMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
+            </div>
+          </div>
+
+          <!-- CO Fields -->
+          <div id="coFields" class="hidden">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="coName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-id-badge"></i> CO ID *</label>
+              <input type="text" id="coId" placeholder="CO ID number">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> Mobile Number *</label>
+              <input type="tel" id="coMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
+            </div>
+          </div>
+
+          <!-- SUO Fields -->
+          <div id="suoFields" class="hidden">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="suoName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-id-badge"></i> SUO ID *</label>
+              <input type="text" id="suoId" placeholder="SUO ID number">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> Mobile Number *</label>
+              <input type="tel" id="suoMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-2">
+            <i class="fas fa-paper-plane"></i> Send OTP
+          </button>
+          <button type="button" class="btn btn-outline btn-block mt-2" onclick="goToStep1()">
+            <i class="fas fa-arrow-left"></i> Change Role
+          </button>
+        </form>
+
+        <!-- OTP Section (shows on same page after send) -->
+        <div id="otpSection" class="hidden" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--border);">
+          <div style="background:rgba(45,90,39,0.05);border:1px solid var(--primary);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;text-align:center;">
+            <p style="margin:0;font-weight:700;color:var(--primary);"><i class="fas fa-check-circle"></i> OTP Generated!</p>
+            <p style="margin:0.5rem 0 0;font-size:2rem;font-weight:900;letter-spacing:5px;color:var(--dark);" id="generatedOTP"></p>
+            <p style="margin:0.25rem 0 0;font-size:0.8rem;color:var(--text-light);">Enter this OTP below to verify</p>
+          </div>
+
           <div class="otp-inputs">
             <input type="text" maxlength="1" class="otp-box" data-index="0" autocomplete="off">
             <input type="text" maxlength="1" class="otp-box" data-index="1" autocomplete="off">
@@ -76,17 +180,16 @@
             <input type="text" maxlength="1" class="otp-box" data-index="4" autocomplete="off">
             <input type="text" maxlength="1" class="otp-box" data-index="5" autocomplete="off">
           </div>
+
           <div class="otp-timer">
             <span id="timerText">Resend OTP in <strong id="countdown">0:45</strong></span>
             <button type="button" id="resendBtn" class="resend-btn hidden" onclick="resendOTP()">Resend OTP</button>
           </div>
-          <button type="submit" class="btn btn-primary btn-block btn-lg">
+
+          <button type="button" class="btn btn-primary btn-block btn-lg" onclick="verifyOTP()">
             <i class="fas fa-check-circle"></i> Verify & Login
           </button>
-          <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> Change Details
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
