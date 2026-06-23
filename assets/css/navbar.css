@@ -84,7 +84,7 @@
 .nav-link {
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text);
   border-radius: var(--radius);
   transition: var(--transition);
