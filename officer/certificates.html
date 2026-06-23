@@ -3,14 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Certificate Generator | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .cert-preview{background:#fffff5;border:3px double var(--primary);border-radius:var(--radius);padding:3rem;text-align:center;max-width:700px;margin:0 auto;position:relative;}
+    .cert-preview .cert-header{margin-bottom:1.5rem;}
+    .cert-preview .cert-header h2{color:var(--primary);font-size:1.75rem;letter-spacing:2px;}
+    .cert-preview .cert-body{margin:2rem 0;font-size:1.1rem;line-height:2;}
+    .cert-preview .cert-footer{display:flex;justify-content:space-between;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+    .cert-preview .cert-seal{width:60px;height:60px;border:2px solid var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+    @media print{.sidebar,.dashboard-topbar,.cert-actions-bar{display:none!important;}.dashboard-main{margin-left:0!important;}}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header"><div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div><div><h3>CCP Admin</h3><span>Officer Panel</span></div></div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Colleges</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadets</a>
+        <a href="certificates.html" class="active"><i class="fas fa-scroll"></i> Certificates</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left"><button class="sidebar-toggle"><i class="fas fa-bars"></i></button><div><h2>Certificate Generator</h2><div class="breadcrumb"><a href="co-dashboard.html">Dashboard</a> / <span>Certificates</span></div></div></div>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Tabs -->
+        <div style="display:flex;gap:0.75rem;margin-bottom:2rem;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="showTab('generate')">Generate New</button>
+          <button class="btn btn-outline btn-sm" onclick="showTab('issued')">Issued Certificates</button>
+        </div>
+
+        <!-- Generate Tab -->
+        <div id="generateTab">
+          <div class="grid grid-2">
+            <div class="card">
+              <h4 style="margin-bottom:1.5rem;"><i class="fas fa-scroll"></i> Generate Certificate</h4>
+              <form onsubmit="previewCertificate(event)">
+                <div class="form-group"><label>Certificate Type *</label><select id="certType" required><option value="">Select type</option><option>NCC 'A' Certificate</option><option>NCC 'B' Certificate</option><option>NCC 'C' Certificate</option><option>Camp Participation</option><option>Achievement Certificate</option><option>Appreciation Certificate</option></select></div>
+                <div class="form-group"><label>Cadet Name *</label><input type="text" id="certCadet" placeholder="Enter cadet name" required></div>
+                <div class="form-group"><label>NCC Reg Number *</label><input type="text" id="certReg" placeholder="NCC/NER/TR/15/..."></div>
+                <div class="form-group"><label>Battalion *</label><input type="text" id="certBn" value="15th Tripura Bn NCC"></div>
+                <div class="form-group"><label>College *</label><input type="text" id="certCollege" placeholder="College name"></div>
+                <div class="form-group"><label>Date of Issue *</label><input type="date" id="certDate" required></div>
+                <div class="form-group"><label>Issued By</label><input type="text" id="certIssuer" value="Col. Rajesh Kumar Sharma"></div>
+                <div class="form-group"><label>Camp/Event Name</label><input type="text" id="certEvent" placeholder="If applicable"></div>
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Preview Certificate</button>
+                  <button type="button" class="btn btn-secondary" onclick="window.print()"><i class="fas fa-download"></i> Download PDF</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Preview -->
+            <div class="card" id="certPreviewCard">
+              <h4 style="margin-bottom:1rem;"><i class="fas fa-eye"></i> Certificate Preview</h4>
+              <div class="cert-preview" id="certPreview">
+                <div class="cert-seal"><i class="fas fa-shield-alt" style="color:var(--primary);font-size:1.5rem;"></i></div>
+                <div class="cert-header">
+                  <p style="font-size:0.9rem;color:var(--text-light);letter-spacing:3px;">NATIONAL CADET CORPS</p>
+                  <h2>CERTIFICATE</h2>
+                  <p style="color:var(--accent);font-weight:600;">NER Directorate</p>
+                </div>
+                <div class="cert-body">
+                  <p>This is to certify that<br><strong id="prevName">_______________</strong><br>Reg. No: <strong id="prevReg">_______________</strong><br>of <strong id="prevCollege">_______________</strong><br>has successfully completed the requirements for<br><strong id="prevType" style="font-size:1.3rem;color:var(--primary);">_______________</strong></p>
+                </div>
+                <div class="cert-footer">
+                  <div><p style="border-top:1px solid #333;padding-top:0.5rem;font-size:0.8rem;">Date: <span id="prevDate">__/__/____</span></p></div>
+                  <div style="text-align:center;"><div style="width:50px;height:50px;border:1px dashed var(--primary);border-radius:50%;margin:0 auto 0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--text-light);">QR</div><p style="font-size:0.7rem;">Verify</p></div>
+                  <div style="text-align:right;"><p style="border-top:1px solid #333;padding-top:0.5rem;font-size:0.8rem;"><span id="prevIssuer">CO Signature</span></p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Issued Tab -->
+        <div id="issuedTab" style="display:none;">
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Cert No</th><th>Cadet Name</th><th>Type</th><th>Date</th><th>Issued By</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr><td>CCP/2025/001</td><td>Rahul Das</td><td>NCC 'A'</td><td>15 Mar 2024</td><td>Col. Sharma</td><td><button class="btn btn-sm btn-outline" style="padding:0.3rem 0.6rem;"><i class="fas fa-download"></i></button></td></tr>
+                <tr><td>CCP/2025/002</td><td>Priya Sharma</td><td>Camp Participation</td><td>22 Jul 2024</td><td>Col. Sharma</td><td><button class="btn btn-sm btn-outline" style="padding:0.3rem 0.6rem;"><i class="fas fa-download"></i></button></td></tr>
+                <tr><td>CCP/2025/003</td><td>Amit Roy</td><td>Achievement</td><td>28 Nov 2024</td><td>Col. Sharma</td><td><button class="btn btn-sm btn-outline" style="padding:0.3rem 0.6rem;"><i class="fas fa-download"></i></button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    requireAuth(['CO','ANO']);
+    initSidebarToggle();
+
+    function showTab(tab) {
+      document.getElementById('generateTab').style.display = tab === 'generate' ? 'block' : 'none';
+      document.getElementById('issuedTab').style.display = tab === 'issued' ? 'block' : 'none';
+    }
+
+    function previewCertificate(e) {
+      e.preventDefault();
+      document.getElementById('prevName').textContent = document.getElementById('certCadet').value;
+      document.getElementById('prevReg').textContent = document.getElementById('certReg').value || 'N/A';
+      document.getElementById('prevCollege').textContent = document.getElementById('certCollege').value || 'N/A';
+      document.getElementById('prevType').textContent = document.getElementById('certType').value;
+      document.getElementById('prevDate').textContent = document.getElementById('certDate').value;
+      document.getElementById('prevIssuer').textContent = document.getElementById('certIssuer').value;
+    }
+  </script>
 </body>
 </html>

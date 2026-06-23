@@ -3,14 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Reports & Analytics | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header"><div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div><div><h3>CCP Admin</h3><span>Officer Panel</span></div></div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Colleges</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadets</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificates</a>
+        <a href="reports.html" class="active"><i class="fas fa-chart-bar"></i> Reports</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left"><button class="sidebar-toggle"><i class="fas fa-bars"></i></button><div><h2>Reports & Analytics</h2><div class="breadcrumb"><a href="co-dashboard.html">Dashboard</a> / <span>Reports</span></div></div></div>
+      </header>
+
+      <div class="dashboard-content">
+        <!-- Report Types -->
+        <h4 class="mb-3"><i class="fas fa-file-alt"></i> Select Report Type</h4>
+        <div class="grid grid-4 mb-4">
+          <div class="card text-center" style="cursor:pointer;padding:1.5rem;" onclick="showReport('strength')"><i class="fas fa-users" style="font-size:2rem;color:var(--primary);margin-bottom:0.5rem;"></i><h5>Battalion Strength</h5><p class="text-sm text-muted">Total cadets breakdown</p></div>
+          <div class="card text-center" style="cursor:pointer;padding:1.5rem;" onclick="showReport('attendance')"><i class="fas fa-clipboard-check" style="font-size:2rem;color:var(--primary);margin-bottom:0.5rem;"></i><h5>Attendance Report</h5><p class="text-sm text-muted">Date-wise attendance</p></div>
+          <div class="card text-center" style="cursor:pointer;padding:1.5rem;" onclick="showReport('camp')"><i class="fas fa-campground" style="font-size:2rem;color:var(--primary);margin-bottom:0.5rem;"></i><h5>Camp Report</h5><p class="text-sm text-muted">Camp participation stats</p></div>
+          <div class="card text-center" style="cursor:pointer;padding:1.5rem;" onclick="showReport('certificate')"><i class="fas fa-certificate" style="font-size:2rem;color:var(--primary);margin-bottom:0.5rem;"></i><h5>Certificate Report</h5><p class="text-sm text-muted">Issuance tracking</p></div>
+        </div>
+
+        <!-- Report Preview -->
+        <div id="reportPreview" style="display:none;">
+          <div class="card mb-4">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+              <h4 id="reportTitle"><i class="fas fa-file-alt"></i> Battalion Strength Report</h4>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="btn btn-sm btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                <button class="btn btn-sm btn-secondary"><i class="fas fa-file-excel"></i> Excel</button>
+              </div>
+            </div>
+            <p class="text-muted mb-3">15th Tripura Bn NCC — Generated: June 2025</p>
+
+            <!-- Strength Report Table -->
+            <div class="grid grid-4 mb-3" id="reportStats">
+              <div class="stat-card" style="padding:1rem;"><div class="stat-number" style="font-size:1.5rem;">450</div><div class="stat-label">Total Cadets</div></div>
+              <div class="stat-card" style="padding:1rem;"><div class="stat-number" style="font-size:1.5rem;">248</div><div class="stat-label">Boys</div></div>
+              <div class="stat-card" style="padding:1rem;"><div class="stat-number" style="font-size:1.5rem;">202</div><div class="stat-label">Girls</div></div>
+              <div class="stat-card" style="padding:1rem;"><div class="stat-number" style="font-size:1.5rem;">12</div><div class="stat-label">Colleges</div></div>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead><tr><th>College</th><th>SD Boys</th><th>SD Girls</th><th>SW Boys</th><th>SW Girls</th><th>Total</th></tr></thead>
+                <tbody>
+                  <tr><td>Tripura University</td><td>20</td><td>15</td><td>12</td><td>13</td><td>60</td></tr>
+                  <tr><td>MBB College</td><td>12</td><td>10</td><td>8</td><td>8</td><td>38</td></tr>
+                  <tr><td>Women's College</td><td>0</td><td>25</td><td>0</td><td>20</td><td>45</td></tr>
+                  <tr><td>Ramthakur College</td><td>8</td><td>6</td><td>7</td><td>6</td><td>27</td></tr>
+                  <tr><td>MBB Memorial College</td><td>15</td><td>12</td><td>13</td><td>10</td><td>50</td></tr>
+                  <tr><td>Holy Cross College</td><td>0</td><td>18</td><td>0</td><td>17</td><td>35</td></tr>
+                  <tr style="background:rgba(45,90,39,0.05);font-weight:700;"><td>GRAND TOTAL</td><td>55</td><td>86</td><td>40</td><td>74</td><td>255</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <h4 class="mb-3"><i class="fas fa-chart-line"></i> Analytics Dashboard</h4>
+        <div class="grid grid-2 mb-4">
+          <div class="card"><div class="card-header"><h4>Enrollment Trend (12 Months)</h4></div><canvas id="enrollChart" height="250"></canvas></div>
+          <div class="card"><div class="card-header"><h4>Attendance Trend (6 Months)</h4></div><canvas id="attendChart" height="250"></canvas></div>
+        </div>
+        <div class="grid grid-2">
+          <div class="card"><div class="card-header"><h4>Certificate Issuance</h4></div><canvas id="certChart" height="250"></canvas></div>
+          <div class="card"><div class="card-header"><h4>Camp Participation</h4></div><canvas id="campChart" height="250"></canvas></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    requireAuth(['CO','ANO']);
+    initSidebarToggle();
+
+    function showReport(type) {
+      document.getElementById('reportPreview').style.display = 'block';
+      document.getElementById('reportPreview').scrollIntoView({behavior:'smooth'});
+    }
+
+    // Charts
+    new Chart(document.getElementById('enrollChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{ label:'New Enrollments', data:[25,40,15,10,5,3,8,12,20,30,18,10], borderColor:'#2d5a27', backgroundColor:'rgba(45,90,39,0.1)', fill:true, tension:0.4 }]
+      },
+      options: { responsive:true, scales:{ y:{beginAtZero:true} } }
+    });
+
+    new Chart(document.getElementById('attendChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [
+          { label:'Average', data:[82,84,86,85,87,87], borderColor:'#2d5a27', tension:0.3 },
+          { label:'Target', data:[85,85,85,85,85,85], borderColor:'#c8a951', borderDash:[5,5], tension:0 }
+        ]
+      },
+      options: { responsive:true, scales:{ y:{min:70,max:100} } }
+    });
+
+    new Chart(document.getElementById('certChart'), {
+      type: 'bar',
+      data: {
+        labels: ["'A' Cert","'B' Cert","'C' Cert",'Camp','Achievement'],
+        datasets: [{ label:'Issued 2025', data:[45,28,12,35,8], backgroundColor:['#2d5a27','#4a7c3f','#6b9e65','#c8a951','#1a3a16'], borderRadius:5 }]
+      },
+      options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+    });
+
+    new Chart(document.getElementById('campChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['ATC','CATC','RDC','TSC','Adventure','Social'],
+        datasets: [{ data:[150,80,5,15,30,40], backgroundColor:['#2d5a27','#4a7c3f','#c8a951','#1a3a16','#6b9e65','#8bc34a'] }]
+      },
+      options: { responsive:true, plugins:{legend:{position:'bottom'}} }
+    });
+  </script>
 </body>
 </html>
