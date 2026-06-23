@@ -263,6 +263,8 @@
   .cadet-sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    position: fixed;
+    z-index: 9999;
   }
 
   .cadet-sidebar.open {
@@ -271,6 +273,22 @@
 
   .cadet-main {
     margin-left: 0;
+  }
+
+  .cadet-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .cadet-topbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr !important;
   }
 }
 
@@ -285,11 +303,76 @@
   }
 
   .cadet-content {
-    padding: 1.5rem 1rem;
+    padding: 1.25rem 0.75rem;
   }
 
   .cert-card {
     flex-direction: column;
     text-align: center;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .welcome-banner {
+    padding: 1.25rem;
+  }
+
+  .welcome-banner h2 {
+    font-size: 1.1rem;
+  }
+
+  .table-container {
+    font-size: 0.8rem;
+  }
+
+  .table-container th,
+  .table-container td {
+    padding: 0.6rem 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid-4 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .cadet-sidebar .sidebar-header {
+    padding: 1rem;
+  }
+
+  .cadet-sidebar .cadet-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+}
+
+/* ─── Cadet sidebar overlay on mobile ─── */
+.cadet-sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9998;
+}
+
+@media (max-width: 992px) {
+  .cadet-sidebar.open ~ .cadet-sidebar-overlay,
+  .cadet-sidebar-overlay.show {
+    display: block;
   }
 }

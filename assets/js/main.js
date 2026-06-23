@@ -171,12 +171,22 @@ function initSidebarToggle() {
   if (toggle && sidebar) {
     toggle.addEventListener('click', function () {
       sidebar.classList.toggle('open');
+      // Show/hide overlay
+      let overlay = document.querySelector('.sidebar-overlay') || document.querySelector('.cadet-sidebar-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = sidebar.classList.contains('cadet-sidebar') ? 'cadet-sidebar-overlay' : 'sidebar-overlay';
+        sidebar.parentElement.appendChild(overlay);
+      }
+      overlay.classList.toggle('show');
     });
 
     // Close on outside click
     document.addEventListener('click', function (e) {
-      if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      if (!sidebar.contains(e.target) && !toggle.contains(e.target) && sidebar.classList.contains('open')) {
         sidebar.classList.remove('open');
+        const overlay = document.querySelector('.sidebar-overlay.show') || document.querySelector('.cadet-sidebar-overlay.show');
+        if (overlay) overlay.classList.remove('show');
       }
     });
   }

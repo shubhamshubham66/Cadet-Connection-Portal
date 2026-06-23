@@ -305,11 +305,15 @@
   color: var(--text);
   cursor: pointer;
   padding: 0.5rem;
+  background: none;
+  border: none;
 }
 
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
+    position: fixed;
+    z-index: 9999;
   }
 
   .sidebar.open {
@@ -327,18 +331,120 @@
   .dashboard-content {
     padding: 1.5rem 1rem;
   }
-}
 
-@media (max-width: 576px) {
   .dashboard-topbar {
     padding: 0.75rem 1rem;
+  }
+
+  .topbar-user span {
+    display: none;
+  }
+
+  .welcome-banner h2 {
+    font-size: 1.2rem;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr !important;
   }
 
   .quick-actions {
     flex-direction: column;
   }
 
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-card .stat-icon {
+    font-size: 1.75rem;
+  }
+
+  .table-container {
+    font-size: 0.8rem;
+  }
+
+  .table-container th,
+  .table-container td {
+    padding: 0.6rem 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-topbar {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .topbar-left h2 {
+    font-size: 1rem;
+  }
+
+  .breadcrumb {
+    display: none;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+  }
+
   .welcome-banner {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .welcome-banner h2 {
+    font-size: 1.1rem;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .quick-action-btn {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .activity-log {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* ─── Sidebar overlay on mobile ─── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9998;
+}
+
+@media (max-width: 992px) {
+  .sidebar.open ~ .sidebar-overlay,
+  .sidebar-overlay.show {
+    display: block;
   }
 }

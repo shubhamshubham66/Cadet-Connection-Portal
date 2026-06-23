@@ -23,6 +23,12 @@
     .tab-btn{padding:0.5rem 1.25rem;border-radius:50px;font-size:0.85rem;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--white);color:var(--text);transition:var(--transition);}
     .tab-btn.active{background:var(--primary);color:var(--white);border-color:var(--primary);}
     .date-picker-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+    @media(max-width:768px){
+      .att-row{flex-direction:column;align-items:flex-start;gap:0.75rem;}
+      .att-row .cadet-info{width:100%;}
+      .date-picker-row{gap:0.5rem;}
+      .date-picker-row input{max-width:100%!important;}
+    }
   </style>
 </head>
 <body>
