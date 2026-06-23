@@ -3,14 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Connection Portal</title>
+  <title>Gallery | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/navbar.css">
+  <link rel="stylesheet" href="assets/css/homepage.css">
+  <style>
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+    .gallery-item{border-radius:var(--radius-lg);overflow:hidden;position:relative;background:var(--bg);height:220px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);border:1px solid var(--border);}
+    .gallery-item:hover{transform:scale(1.02);box-shadow:var(--shadow-lg);}
+    .gallery-item i{font-size:3rem;color:var(--secondary);opacity:0.5;}
+    .gallery-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));color:#fff;padding:1rem;font-size:0.85rem;}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem;}
+    .video-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);}
+    .video-placeholder{height:200px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in respective phase -->
+  <nav class="navbar"><div class="nav-container"><a href="index.html" class="navbar-brand"><div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div></a><div class="nav-menu"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="activities.html" class="nav-link">Activities</a><a href="events.html" class="nav-link">Events</a><a href="gallery.html" class="nav-link active">Gallery</a><a href="camps.html" class="nav-link">Camps</a><a href="login.html" class="nav-link nav-login-btn">Login</a></div><div class="nav-hamburger"><span></span><span></span><span></span></div></div><div class="mobile-overlay"></div></nav>
+
+  <section style="background:linear-gradient(135deg,var(--dark),var(--primary));padding:6rem 0 3rem;text-align:center;color:#fff;">
+    <div class="container"><h1 data-aos="fade-up" style="color:#fff;">Photo & Video Gallery</h1><p style="color:rgba(255,255,255,0.7);">Memories from camps, parades & events</p></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;" data-aos="fade-up">
+        <button class="btn btn-primary btn-sm">All</button>
+        <button class="btn btn-outline btn-sm">Camps</button>
+        <button class="btn btn-outline btn-sm">Parades</button>
+        <button class="btn btn-outline btn-sm">Activities</button>
+        <button class="btn btn-outline btn-sm">Achievements</button>
+      </div>
+
+      <div class="gallery-grid" data-aos="fade-up">
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">ATC Camp 2024 — Agartala</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Republic Day Parade 2025</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">CATC Shillong 2024</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">NCC Day Celebration 2024</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Blood Donation Camp</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Tree Plantation Drive</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Firing Practice — Range</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Award Ceremony 2024</div></div>
+        <div class="gallery-item"><i class="fas fa-image"></i><div class="gallery-caption">Adventure Camp — Trekking</div></div>
+      </div>
+
+      <div class="section-title mt-4" data-aos="fade-up"><h2>Videos</h2></div>
+      <div class="video-grid" data-aos="fade-up">
+        <div class="video-card"><div class="video-placeholder"><i class="fas fa-play-circle"></i></div><div style="padding:1rem;"><h5>ATC Camp 2024 — Highlights</h5><p class="text-muted text-sm">12-day camp documentary</p></div></div>
+        <div class="video-card"><div class="video-placeholder"><i class="fas fa-play-circle"></i></div><div style="padding:1rem;"><h5>Republic Day Parade 2025</h5><p class="text-muted text-sm">Full march past ceremony</p></div></div>
+        <div class="video-card"><div class="video-placeholder"><i class="fas fa-play-circle"></i></div><div style="padding:1rem;"><h5>NCC Day 2024 — Cultural</h5><p class="text-muted text-sm">Cultural programme highlights</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2025 Cadet Connection Portal | NCC NER Region</p><p class="jai-hind">Jai Hind!</p></div></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
 </body>

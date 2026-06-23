@@ -3,14 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Connection Portal</title>
+  <title>Camps | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/navbar.css">
+  <link rel="stylesheet" href="assets/css/homepage.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in respective phase -->
+  <nav class="navbar"><div class="nav-container"><a href="index.html" class="navbar-brand"><div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div></a><div class="nav-menu"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="activities.html" class="nav-link">Activities</a><a href="events.html" class="nav-link">Events</a><a href="gallery.html" class="nav-link">Gallery</a><a href="camps.html" class="nav-link active">Camps</a><a href="login.html" class="nav-link nav-login-btn">Login</a></div><div class="nav-hamburger"><span></span><span></span><span></span></div></div><div class="mobile-overlay"></div></nav>
+
+  <section style="background:linear-gradient(135deg,var(--dark),var(--primary));padding:6rem 0 3rem;text-align:center;color:#fff;">
+    <div class="container"><h1 data-aos="fade-up" style="color:#fff;">NCC Camps — NER Region</h1><p style="color:rgba(255,255,255,0.7);">Upcoming, Ongoing & Past Camps</p></div>
+  </section>
+
+  <!-- Ongoing Camp -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up"><h2><span class="badge badge-live" style="font-size:0.8rem;vertical-align:middle;margin-right:0.5rem;">LIVE</span> Ongoing Camp</h2></div>
+      <div class="card" style="border-left:4px solid #dc3545;max-width:800px;margin:0 auto;" data-aos="fade-up">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h3>Pre-RDC Training Camp</h3>
+            <p class="text-muted"><i class="fas fa-calendar"></i> 20 Jun - 30 Jun 2025 | Day 4 of 10</p>
+            <p class="text-muted"><i class="fas fa-location-dot"></i> NER Directorate HQ, Shillong</p>
+            <p class="text-muted"><i class="fas fa-users"></i> 45 Cadets Participating</p>
+          </div>
+          <div class="text-center"><div style="font-size:2rem;font-weight:800;color:var(--primary);">Day 4</div><div class="text-muted text-sm">of 10</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Camps -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up"><h2>Upcoming Camps</h2></div>
+      <div class="grid grid-3" data-aos="fade-up">
+        <div class="card"><span class="badge badge-green" style="margin-bottom:0.75rem;">Army | Basic</span><h4>Annual Training Camp (ATC)</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 15 Jul - 26 Jul 2025</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> Agartala, Tripura</p><p class="text-muted text-sm"><i class="fas fa-clock"></i> 12 Days</p><p class="text-muted text-sm"><i class="fas fa-users"></i> 120 / 150 Seats</p><a href="login.html" class="btn btn-primary btn-sm btn-block mt-2"><i class="fas fa-sign-in-alt"></i> Login to Register</a></div>
+        <div class="card"><span class="badge badge-blue" style="margin-bottom:0.75rem;">Combined | CATC</span><h4>Combined Annual Training Camp</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 05 Aug - 16 Aug 2025</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</p><p class="text-muted text-sm"><i class="fas fa-clock"></i> 12 Days</p><p class="text-muted text-sm"><i class="fas fa-users"></i> 80 / 200 Seats</p><a href="login.html" class="btn btn-primary btn-sm btn-block mt-2"><i class="fas fa-sign-in-alt"></i> Login to Register</a></div>
+        <div class="card"><span class="badge badge-gold" style="margin-bottom:0.75rem;">Special | National</span><h4>Thal Sainik Camp (TSC)</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 20 Sep - 30 Sep 2025</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> Delhi Cantt, Delhi</p><p class="text-muted text-sm"><i class="fas fa-clock"></i> 11 Days</p><p class="text-muted text-sm"><i class="fas fa-users"></i> 15 / 20 Seats</p><a href="login.html" class="btn btn-primary btn-sm btn-block mt-2"><i class="fas fa-sign-in-alt"></i> Login to Register</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Past Camps -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up"><h2>Past Camps (Archive)</h2></div>
+      <div class="grid grid-3" data-aos="fade-up">
+        <div class="card" style="opacity:0.75;"><h4>ATC 2024</h4><p class="text-muted text-sm">10-21 Jul 2024 | Agartala | 140 Cadets</p><p class="text-sm">Highlights: Best drill, firing practice, cultural night.</p></div>
+        <div class="card" style="opacity:0.75;"><h4>CATC Shillong 2024</h4><p class="text-muted text-sm">01-12 Aug 2024 | Shillong | 180 Cadets</p><p class="text-sm">Combined NER camp with inter-BN competitions.</p></div>
+        <div class="card" style="opacity:0.75;"><h4>RDC Camp 2024</h4><p class="text-muted text-sm">01-15 Jan 2024 | Delhi | 5 Cadets Selected</p><p class="text-sm">National level Republic Day Camp.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Camp Types -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up"><h2>Types of NCC Camps</h2></div>
+      <div class="grid grid-3" data-aos="fade-up">
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-campground" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>ATC (Annual Training Camp)</h5><p class="text-sm text-muted">12-day basic training at BN level</p></div>
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-users" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>CATC (Combined)</h5><p class="text-sm text-muted">Combined camp with multiple battalions</p></div>
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-flag" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>RDC (Republic Day Camp)</h5><p class="text-sm text-muted">National level — Best cadets selected</p></div>
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-medal" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>TSC (Thal Sainik Camp)</h5><p class="text-sm text-muted">Inter-directorate competition camp</p></div>
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-mountain" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>Adventure Camp</h5><p class="text-sm text-muted">Trekking, rock climbing, river crossing</p></div>
+        <div class="card text-center" style="padding:1.5rem;"><i class="fas fa-hands-helping" style="font-size:2rem;color:var(--primary);margin-bottom:0.75rem;"></i><h5>Social Service Camp</h5><p class="text-sm text-muted">Community service and awareness</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2025 Cadet Connection Portal | NCC NER Region</p><p class="jai-hind">Jai Hind!</p></div></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
 </body>

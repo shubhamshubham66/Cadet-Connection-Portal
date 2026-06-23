@@ -3,15 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Connection Portal</title>
+  <title>Activities | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/navbar.css">
+  <link rel="stylesheet" href="assets/css/homepage.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in respective phase -->
+  <nav class="navbar"><div class="nav-container"><a href="index.html" class="navbar-brand"><div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div></a><div class="nav-menu"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="activities.html" class="nav-link active">Activities</a><a href="events.html" class="nav-link">Events</a><a href="gallery.html" class="nav-link">Gallery</a><a href="camps.html" class="nav-link">Camps</a><a href="login.html" class="nav-link nav-login-btn">Login</a></div><div class="nav-hamburger"><span></span><span></span><span></span></div></div><div class="mobile-overlay"></div></nav>
+
+  <section style="background:linear-gradient(135deg,var(--dark),var(--primary));padding:6rem 0 3rem;text-align:center;color:#fff;">
+    <div class="container"><h1 data-aos="fade-up" style="color:#fff;">Our Activities</h1><p style="color:rgba(255,255,255,0.7);">Training, Service & Adventure</p></div>
+  </section>
+
+  <!-- Filter Tabs -->
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;" data-aos="fade-up">
+        <button class="btn btn-primary btn-sm filter-tab active" onclick="filterActivities('all',this)">All</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterActivities('Training',this)">Training</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterActivities('Social',this)">Social</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterActivities('Adventure',this)">Adventure</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterActivities('Cultural',this)">Cultural</button>
+      </div>
+
+      <div class="grid grid-3" id="activityGrid" data-aos="fade-up">
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2025 Cadet Connection Portal | NCC NER Region</p><p class="jai-hind">Jai Hind!</p></div></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
+  <script>
+    const activities = [
+      { title:'Annual Training Camp', category:'Training', icon:'fas fa-campground', desc:'12-day intensive training covering drill, weapon training, map reading, and fieldcraft.', date:'Jul 2025', participants:'150 Cadets' },
+      { title:'NCC Day Parade', category:'Training', icon:'fas fa-flag', desc:'Grand parade commemorating NCC Day with guard of honour and march past.', date:'28 Nov 2025', participants:'All Cadets' },
+      { title:'Republic Day Parade', category:'Training', icon:'fas fa-flag', desc:'Participation in Republic Day celebrations with full ceremonial parade.', date:'26 Jan 2025', participants:'Selected Cadets' },
+      { title:'Independence Day Celebration', category:'Cultural', icon:'fas fa-flag', desc:'Flag hoisting ceremony, patriotic songs, and cultural programme.', date:'15 Aug 2025', participants:'All Cadets' },
+      { title:'Trekking & Adventure Camp', category:'Adventure', icon:'fas fa-mountain', desc:'Adventure activities including trekking, rock climbing, and river crossing.', date:'Oct 2025', participants:'50 Cadets' },
+      { title:'Community Service (Shramdan)', category:'Social', icon:'fas fa-hands-helping', desc:'Cleanliness drive, tree plantation, and community awareness programmes.', date:'Monthly', participants:'Rotational' },
+      { title:'Blood Donation Camp', category:'Social', icon:'fas fa-tint', desc:'Voluntary blood donation drive organized in collaboration with Red Cross.', date:'Dec 2025', participants:'Volunteers' },
+      { title:'Disaster Management Training', category:'Training', icon:'fas fa-first-aid', desc:'Training in first aid, rescue operations, and disaster response techniques.', date:'Sep 2025', participants:'80 Cadets' }
+    ];
+
+    function renderActivities(data) {
+      document.getElementById('activityGrid').innerHTML = data.map(function(a) {
+        return '<div class="card" style="padding:1.75rem;"><div style="width:50px;height:50px;background:rgba(45,90,39,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;"><i class="' + a.icon + '" style="font-size:1.25rem;color:var(--primary);"></i></div>' +
+          '<span class="badge badge-green" style="margin-bottom:0.75rem;">' + a.category + '</span>' +
+          '<h4>' + a.title + '</h4><p style="font-size:0.9rem;">' + a.desc + '</p>' +
+          '<div style="display:flex;gap:1rem;font-size:0.8rem;color:var(--text-light);margin-top:0.75rem;"><span><i class="fas fa-calendar"></i> ' + a.date + '</span><span><i class="fas fa-users"></i> ' + a.participants + '</span></div></div>';
+      }).join('');
+    }
+
+    function filterActivities(cat, btn) {
+      document.querySelectorAll('.filter-tab').forEach(function(b){b.className='btn btn-outline btn-sm filter-tab';});
+      btn.className='btn btn-primary btn-sm filter-tab active';
+      if (cat === 'all') renderActivities(activities);
+      else renderActivities(activities.filter(function(a){return a.category===cat;}));
+    }
+
+    renderActivities(activities);
+  </script>
 </body>
 </html>

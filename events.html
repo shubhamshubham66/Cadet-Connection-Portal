@@ -3,14 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadet Connection Portal</title>
+  <title>Events | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/navbar.css">
+  <link rel="stylesheet" href="assets/css/homepage.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in respective phase -->
+  <nav class="navbar"><div class="nav-container"><a href="index.html" class="navbar-brand"><div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div></a><div class="nav-menu"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="activities.html" class="nav-link">Activities</a><a href="events.html" class="nav-link active">Events</a><a href="gallery.html" class="nav-link">Gallery</a><a href="camps.html" class="nav-link">Camps</a><a href="login.html" class="nav-link nav-login-btn">Login</a></div><div class="nav-hamburger"><span></span><span></span><span></span></div></div><div class="mobile-overlay"></div></nav>
+
+  <section style="background:linear-gradient(135deg,var(--dark),var(--primary));padding:6rem 0 3rem;text-align:center;color:#fff;">
+    <div class="container"><h1 data-aos="fade-up" style="color:#fff;">Events & Announcements</h1><p style="color:rgba(255,255,255,0.7);">Stay updated with battalion events</p></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;" data-aos="fade-up">
+        <button class="btn btn-primary btn-sm" onclick="filterEvents('upcoming')">Upcoming</button>
+        <button class="btn btn-outline btn-sm" onclick="filterEvents('past')">Past</button>
+      </div>
+
+      <div class="section-title" data-aos="fade-up"><h2>Upcoming Events</h2></div>
+      <div class="grid grid-3 mb-4" data-aos="fade-up">
+        <div class="card"><span class="badge badge-green">Training</span><h4 style="margin:0.75rem 0 0.5rem;">Annual Training Camp</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 15 Jul 2025 | 06:00 AM</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> BN HQ, Agartala</p><p style="font-size:0.9rem;">12-day mandatory training camp for all enrolled cadets.</p><button class="btn btn-sm btn-outline mt-2"><i class="fas fa-calendar-plus"></i> Add to Calendar</button></div>
+        <div class="card"><span class="badge badge-gold">Camp</span><h4 style="margin:0.75rem 0 0.5rem;">CATC Shillong</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 05 Aug 2025 | 08:00 AM</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</p><p style="font-size:0.9rem;">Combined Annual Training Camp at NER Directorate HQ.</p><button class="btn btn-sm btn-outline mt-2"><i class="fas fa-calendar-plus"></i> Add to Calendar</button></div>
+        <div class="card"><span class="badge badge-blue">Social</span><h4 style="margin:0.75rem 0 0.5rem;">Blood Donation Drive</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 20 Jul 2025 | 09:00 AM</p><p class="text-muted text-sm"><i class="fas fa-location-dot"></i> MBB College, Agartala</p><p style="font-size:0.9rem;">Annual blood donation camp in collaboration with Red Cross.</p><button class="btn btn-sm btn-outline mt-2"><i class="fas fa-calendar-plus"></i> Add to Calendar</button></div>
+      </div>
+
+      <div class="section-title" data-aos="fade-up"><h2>Past Events</h2></div>
+      <div class="grid grid-3" data-aos="fade-up">
+        <div class="card" style="opacity:0.75;"><span class="badge badge-green">Parade</span><h4 style="margin:0.75rem 0 0.5rem;">Republic Day Parade 2025</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 26 Jan 2025</p><p style="font-size:0.9rem;">Grand parade at Agartala with guard of honour by NCC cadets.</p></div>
+        <div class="card" style="opacity:0.75;"><span class="badge badge-gold">Award</span><h4 style="margin:0.75rem 0 0.5rem;">NCC Day Celebration 2024</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 28 Nov 2024</p><p style="font-size:0.9rem;">Award ceremony and cultural programme for NCC Day.</p></div>
+        <div class="card" style="opacity:0.75;"><span class="badge badge-blue">Social</span><h4 style="margin:0.75rem 0 0.5rem;">Tree Plantation Drive</h4><p class="text-muted text-sm"><i class="fas fa-calendar"></i> 05 Jun 2025</p><p style="font-size:0.9rem;">World Environment Day — 500 trees planted by cadets.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2025 Cadet Connection Portal | NCC NER Region</p><p class="jai-hind">Jai Hind!</p></div></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
