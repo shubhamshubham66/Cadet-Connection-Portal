@@ -69,13 +69,13 @@ function sendOTP(e) {
   switch (selectedRole) {
     case 'Cadet':
       name = document.getElementById('cadetName').value.trim();
-      const regNo = document.getElementById('cadetRegNo').value.trim();
-      const bn = document.getElementById('cadetBn').value.trim();
-      const college = document.getElementById('cadetCollege').value.trim();
+      var regNo = document.getElementById('cadetRegNo').value.trim();
+      var bn = document.getElementById('cadetBn').value.trim();
+      var college = document.getElementById('cadetCollege').value.trim();
       mobile = document.getElementById('cadetMobile').value.trim();
-      const dob = document.getElementById('cadetDob').value;
-      const gender = document.getElementById('cadetGender').value;
-      const photo = document.getElementById('cadetPhoto').files.length;
+      var dob = document.getElementById('cadetDob').value;
+      var gender = document.getElementById('cadetGender').value;
+      var photo = document.getElementById('cadetPhoto').files.length;
 
       if (!name || !regNo || !bn || !college || !mobile || !dob || !gender || !photo) {
         showToast('Please fill all required fields and upload photo', 'error');
@@ -85,7 +85,7 @@ function sendOTP(e) {
 
     case 'ANO':
       name = document.getElementById('anoName').value.trim();
-      const anoId = document.getElementById('anoId').value.trim();
+      var anoId = document.getElementById('anoId').value.trim();
       mobile = document.getElementById('anoMobile').value.trim();
       if (!name || !anoId || !mobile) {
         showToast('Please fill all required fields', 'error');
@@ -95,7 +95,7 @@ function sendOTP(e) {
 
     case 'CO':
       name = document.getElementById('coName').value.trim();
-      const coId = document.getElementById('coId').value.trim();
+      var coId = document.getElementById('coId').value.trim();
       mobile = document.getElementById('coMobile').value.trim();
       if (!name || !coId || !mobile) {
         showToast('Please fill all required fields', 'error');
@@ -105,8 +105,8 @@ function sendOTP(e) {
 
     case 'SUO':
       name = document.getElementById('suoName').value.trim();
-      const suoId = document.getElementById('suoId').value.trim();
-      const suoCollege = document.getElementById('suoCollege').value.trim();
+      var suoId = document.getElementById('suoId').value.trim();
+      var suoCollege = document.getElementById('suoCollege').value.trim();
       mobile = document.getElementById('suoMobile').value.trim();
       if (!name || !suoId || !suoCollege || !mobile) {
         showToast('Please fill all required fields', 'error');
