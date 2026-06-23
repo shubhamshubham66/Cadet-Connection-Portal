@@ -66,11 +66,7 @@
 
           <div class="card">
             <div class="card-header"><h4><i class="fas fa-bullhorn"></i> Recent Announcements</h4></div>
-            <div style="padding:0.5rem 0;">
-              <div style="padding:0.6rem 0;border-bottom:1px solid var(--border);"><strong style="font-size:0.9rem;">ATC Registration Open</strong><p class="text-muted text-sm">Register before 30 Jun for Annual Training Camp</p></div>
-              <div style="padding:0.6rem 0;border-bottom:1px solid var(--border);"><strong style="font-size:0.9rem;">B Certificate Exam</strong><p class="text-muted text-sm">Exam scheduled for 15 Aug 2025</p></div>
-              <div style="padding:0.6rem 0;"><strong style="font-size:0.9rem;">NCC Day Parade</strong><p class="text-muted text-sm">Mandatory attendance on 28 Nov</p></div>
-            </div>
+            <div id="cadetNotifications" style="padding:0.5rem 0;"></div>
           </div>
         </div>
 
@@ -99,6 +95,43 @@
       document.getElementById('userCollege').textContent = user.college || 'My College';
       document.getElementById('sidebarCollege').textContent = user.college || 'My College';
     }
+
+    // Load notifications from admin news
+    function loadCadetNotifications() {
+      var news = JSON.parse(localStorage.getItem('co_news') || '[]');
+      var container = document.getElementById('cadetNotifications');
+      if (!container) return;
+
+      var latest = news.slice(0, 5);
+      if (latest.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-light);font-size:0.9rem;padding:0.5rem 0;">No announcements yet</p>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < latest.length; i++) {
+        var n = latest[i];
+        var isUrgent = n.priority === 'urgent';
+        var isImportant = n.priority === 'important';
+        var bgColor = isUrgent ? 'rgba(220,53,69,0.08)' : isImportant ? 'rgba(200,169,81,0.1)' : 'transparent';
+        var borderColor = isUrgent ? '#dc3545' : isImportant ? 'var(--accent)' : 'var(--border)';
+        var badge = isUrgent ? ' <span style="background:#dc3545;color:#fff;padding:0.1rem 0.4rem;border-radius:10px;font-size:0.65rem;font-weight:700;">NEW</span>' : isImportant ? ' <span style="background:var(--accent);color:var(--dark);padding:0.1rem 0.4rem;border-radius:10px;font-size:0.65rem;font-weight:700;">!</span>' : '';
+        html += '<div style="padding:0.75rem;margin-bottom:0.5rem;border-radius:var(--radius);background:' + bgColor + ';border-left:3px solid ' + borderColor + ';">' +
+          '<strong style="font-size:0.9rem;">' + n.title + badge + '</strong>' +
+          '<p style="margin:0.25rem 0 0;font-size:0.8rem;color:var(--text-light);">' + (n.date || '') + (n.content ? ' — ' + n.content.substring(0, 60) + '...' : '') + '</p>' +
+          '</div>';
+      }
+      container.innerHTML = html;
+
+      // Update notification bell count
+      var urgentCount = news.filter(function(n){ return n.priority === 'urgent' || n.priority === 'important'; }).length;
+      if (urgentCount > 0) {
+        var bell = document.querySelector('.fas.fa-bell');
+        if (bell) bell.parentElement.innerHTML = '<i class="fas fa-bell"></i><span style="position:absolute;top:-5px;right:-5px;background:#dc3545;color:#fff;width:18px;height:18px;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center;">' + urgentCount + '</span>';
+      }
+    }
+
+    loadCadetNotifications();
   </script>
 </body>
 </html>

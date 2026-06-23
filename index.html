@@ -232,25 +232,8 @@
         <h2>Latest Announcements</h2>
         <p>Stay informed with battalion updates</p>
       </div>
-      <div class="grid grid-3" data-aos="fade-up">
-        <div class="card news-card">
-          <div class="news-date"><i class="fas fa-clock"></i> 18 Jun 2025</div>
-          <h4>NCC Day Celebration - 15th Tripura Bn</h4>
-          <p>Annual NCC Day to be celebrated on 28th November with parade and cultural events. All cadets report by 0700 hrs.</p>
-          <a href="#" class="feature-link">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div class="card news-card">
-          <div class="news-date"><i class="fas fa-clock"></i> 12 Jun 2025</div>
-          <h4>B Certificate Exam Results Declared</h4>
-          <p>Results for NCC B Certificate examination are now available. Cadets can check results on the portal.</p>
-          <a href="#" class="feature-link">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div class="card news-card">
-          <div class="news-date"><i class="fas fa-clock"></i> 05 Jun 2025</div>
-          <h4>New ANO Appointed — Tripura University</h4>
-          <p>Capt. Anil Deb has been appointed as the new ANO for Tripura University NCC unit effective June 2025.</p>
-          <a href="#" class="feature-link">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
+      <div class="grid grid-3" data-aos="fade-up" id="homeNewsGrid">
+        <!-- Dynamic news loaded from admin -->
       </div>
       <div class="text-center mt-4" data-aos="fade-up">
         <a href="events.html" class="btn btn-outline"><i class="fas fa-newspaper"></i> View All News</a>
@@ -373,7 +356,34 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       initCounterObserver();
+      loadHomeNews();
     });
+
+    function loadHomeNews() {
+      var news = JSON.parse(localStorage.getItem('co_news') || '[]');
+      var grid = document.getElementById('homeNewsGrid');
+      if (!grid) return;
+
+      // Show latest 3
+      var latest = news.slice(0, 3);
+      if (latest.length === 0) {
+        grid.innerHTML = '<div class="card news-card"><div class="news-date"><i class="fas fa-clock"></i> Today</div><h4>Welcome to Cadet Connection Portal</h4><p>Stay tuned for the latest announcements from your battalion.</p></div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < latest.length; i++) {
+        var n = latest[i];
+        var priorityStyle = n.priority === 'urgent' ? 'border-left:4px solid #dc3545;' : n.priority === 'important' ? 'border-left:4px solid var(--accent);' : '';
+        var badge = n.priority === 'urgent' ? '<span style="background:#dc3545;color:#fff;padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:700;margin-left:0.5rem;">URGENT</span>' : n.priority === 'important' ? '<span style="background:var(--accent);color:var(--dark);padding:0.15rem 0.5rem;border-radius:20px;font-size:0.7rem;font-weight:700;margin-left:0.5rem;">IMPORTANT</span>' : '';
+        html += '<div class="card news-card" style="' + priorityStyle + '">' +
+          '<div class="news-date"><i class="fas fa-clock"></i> ' + (n.date || 'Recent') + '</div>' +
+          '<h4>' + n.title + badge + '</h4>' +
+          '<p>' + (n.content || '').substring(0, 100) + (n.content && n.content.length > 100 ? '...' : '') + '</p>' +
+          '</div>';
+      }
+      grid.innerHTML = html;
+    }
   </script>
 </body>
 </html>
