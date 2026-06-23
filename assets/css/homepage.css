@@ -1,0 +1,509 @@
+/* ═══════════════════════════════════════════
+   HOMEPAGE STYLES — Cadet Connection Portal
+   ═══════════════════════════════════════════ */
+
+/* ─── Hero Section ─── */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-bg-pattern {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 35px,
+    rgba(255,255,255,0.02) 35px,
+    rgba(255,255,255,0.02) 70px
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: var(--white);
+}
+
+.hero-emblem {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--accent);
+}
+
+.hero-emblem i {
+  font-size: 3rem;
+  color: var(--accent);
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  color: var(--white);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1rem;
+}
+
+.hero-motto {
+  font-size: 1.5rem;
+  color: var(--accent);
+  font-weight: 700;
+  font-style: italic;
+  margin-bottom: 2.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Stats Section ─── */
+.stats-section {
+  padding: 3rem 0;
+  background: var(--white);
+  margin-top: -3rem;
+  position: relative;
+  z-index: 3;
+  border-radius: 20px 20px 0 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ─── OC Section ─── */
+.oc-section {
+  padding: 5rem 0;
+}
+
+.oc-card {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: var(--white);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  border-left: 5px solid var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+
+.oc-photo {
+  width: 220px;
+  height: 260px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--accent);
+}
+
+.oc-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.oc-photo i {
+  font-size: 5rem;
+  color: var(--secondary);
+}
+
+.oc-info .badge {
+  margin-bottom: 0.75rem;
+}
+
+.oc-info h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.oc-info h4 {
+  color: var(--secondary);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.oc-info p {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .oc-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2rem;
+  }
+  .oc-photo {
+    margin: 0 auto;
+    width: 180px;
+    height: 220px;
+  }
+}
+
+/* ─── Pledge Section ─── */
+.pledge-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.pledge-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20rem;
+  opacity: 0.03;
+  color: var(--white);
+}
+
+.pledge-section .section-title h2 {
+  color: var(--white);
+}
+
+.pledge-section .section-title::after {
+  background: var(--accent);
+}
+
+.motto-box {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.motto-box h3 {
+  font-size: 2.5rem;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.motto-hindi {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+}
+
+.pledge-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  backdrop-filter: blur(5px);
+}
+
+.pledge-box h4 {
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+  font-size: 1.3rem;
+}
+
+.pledge-box p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+
+/* ─── Features Grid ─── */
+.feature-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.25rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon i {
+  font-size: 1.75rem;
+  color: var(--white);
+}
+
+.feature-card h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.feature-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.feature-link:hover {
+  color: var(--accent);
+  gap: 0.6rem;
+}
+
+/* ─── Camp Cards ─── */
+.camp-card {
+  position: relative;
+}
+
+.camp-badge {
+  margin-bottom: 1rem;
+}
+
+.camp-card h4 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.camp-details p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-light);
+}
+
+.camp-details p i {
+  color: var(--primary);
+  width: 16px;
+  text-align: center;
+}
+
+/* ─── News Cards ─── */
+.news-card {
+  padding: 1.5rem;
+}
+
+.news-date {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.news-card h4 {
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.news-card p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* ─── Battalion Grid ─── */
+.bn-grid {
+  gap: 1rem;
+}
+
+.bn-card {
+  background: var(--white);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  display: block;
+}
+
+.bn-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  color: var(--primary);
+}
+
+.bn-card i {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.bn-card h5 {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.bn-card span {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.bn-card.active-bn {
+  border-color: var(--accent);
+  background: rgba(200, 169, 81, 0.05);
+}
+
+.bn-card.active-bn i {
+  color: var(--accent);
+}
+
+/* ─── Footer ─── */
+.footer {
+  background: var(--dark);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 4rem 0 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand h3 {
+  color: var(--white);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand h3 i {
+  color: var(--accent);
+}
+
+.footer-brand p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.footer-motto {
+  margin-top: 1rem;
+  color: var(--accent);
+  font-weight: 700;
+  font-style: italic;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+  color: var(--white);
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.footer-links a {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.35rem 0;
+  font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+  padding-left: 5px;
+}
+
+.footer-contact p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-contact p i {
+  color: var(--accent);
+  width: 16px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.footer-social a {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.footer-social a:hover {
+  background: var(--accent);
+  color: var(--dark);
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.footer-bottom p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.jai-hind {
+  font-size: 1.1rem !important;
+  color: var(--accent) !important;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 992px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-content h1 { font-size: 2.2rem; }
+  .hero-motto { font-size: 1.2rem; }
+  .motto-box h3 { font-size: 1.8rem; }
+}
