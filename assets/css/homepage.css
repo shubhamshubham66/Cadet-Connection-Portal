@@ -176,6 +176,20 @@
 .pledge-section {
   position: relative;
   overflow: hidden;
+  background: url('../../unity.jpg') center center / cover no-repeat !important;
+}
+
+.pledge-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 30, 10, 0.75);
+  z-index: 0;
+}
+
+.pledge-section > * {
+  position: relative;
+  z-index: 1;
 }
 
 .pledge-watermark {
