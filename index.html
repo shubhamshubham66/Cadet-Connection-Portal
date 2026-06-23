@@ -92,21 +92,17 @@
     </div>
   </section>
 
-  <!-- OC / CO Section -->
-  <section class="section section-light oc-section">
+  <!-- Achievements / Highlights Section -->
+  <section class="section section-light">
     <div class="container">
-      <div class="oc-card" data-aos="fade-up">
-        <div class="oc-photo">
-          <img src="assets/images/placeholder-oc.jpg" alt="Commanding Officer" onerror="this.parentElement.innerHTML='<i class=\'fas fa-user-tie\'></i>'">
-        </div>
-        <div class="oc-info">
-          <span class="badge badge-gold">Commanding Officer</span>
-          <h2>Col. Rajesh Kumar Sharma</h2>
-          <h4>15th Tripura Bn NCC, NER Region</h4>
-          <p>Welcome to the Cadet Connection Portal. This digital platform serves as the official hub for all NCC cadets, officers, and staff of the North East Region. Together, we uphold the values of Unity and Discipline that NCC stands for. I encourage all cadets to make full use of this portal for their training, certifications, and growth.</p>
-          <p><strong>Jai Hind!</strong></p>
-        </div>
+      <div class="section-title" data-aos="fade-up">
+        <h2>15 Tripura BN NCC Secures 2nd Rank in NE Directorate; Ramthakur College, NIT Agartala Shine</h2>
       </div>
+      <div style="max-width:900px;margin:0 auto;" data-aos="fade-up">
+        <img src="assets/images/achievement-banner.png" alt="15 Tripura BN NCC Achievement" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);margin-bottom:1.5rem;">
+      </div>
+      <!-- Dynamic achievements from admin -->
+      <div id="homeAchievements" data-aos="fade-up" style="max-width:900px;margin:1.5rem auto 0;"></div>
     </div>
   </section>
 
@@ -357,7 +353,33 @@
     document.addEventListener('DOMContentLoaded', function() {
       initCounterObserver();
       loadHomeNews();
+      loadHomeAchievements();
     });
+
+    function loadHomeAchievements() {
+      var awards = JSON.parse(localStorage.getItem('co_awards') || '[]');
+      var container = document.getElementById('homeAchievements');
+      if (!container) return;
+
+      var latest = awards.slice(0, 4);
+      if (latest.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+
+      var html = '<div class="grid grid-2" style="gap:1rem;">';
+      for (var i = 0; i < latest.length; i++) {
+        var a = latest[i];
+        html += '<div class="card" style="border-left:4px solid var(--accent);padding:1.25rem;">' +
+          '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">' +
+          '<i class="fas fa-trophy" style="color:var(--accent);font-size:1.25rem;"></i>' +
+          '<strong>' + a.title + '</strong></div>' +
+          '<p style="margin:0;font-size:0.85rem;color:var(--text-light);">' + (a.description || a.cadetName || '') + '</p>' +
+          '<span style="font-size:0.75rem;color:var(--text-light);">' + (a.date || '') + '</span></div>';
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
 
     function loadHomeNews() {
       var news = JSON.parse(localStorage.getItem('co_news') || '[]');
