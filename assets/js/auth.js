@@ -74,9 +74,10 @@ function sendOTP(e) {
       const college = document.getElementById('cadetCollege').value.trim();
       mobile = document.getElementById('cadetMobile').value.trim();
       const dob = document.getElementById('cadetDob').value;
+      const gender = document.getElementById('cadetGender').value;
       const photo = document.getElementById('cadetPhoto').files.length;
 
-      if (!name || !regNo || !bn || !college || !mobile || !dob || !photo) {
+      if (!name || !regNo || !bn || !college || !mobile || !dob || !gender || !photo) {
         showToast('Please fill all required fields and upload photo', 'error');
         valid = false;
       }
