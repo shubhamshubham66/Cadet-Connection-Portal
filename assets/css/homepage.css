@@ -612,4 +612,32 @@
     background: var(--border);
     border-radius: 3px;
   }
+
+  /* Carousel images full visible on mobile */
+  .carousel-wrapper {
+    overflow: visible !important;
+  }
+
+  .carousel-track {
+    display: flex;
+    flex-direction: column !important;
+    transform: none !important;
+    gap: 1rem;
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    object-fit: contain !important;
+    border-radius: 8px !important;
+  }
+
+  .carousel-dots {
+    display: none !important;
+  }
 }
