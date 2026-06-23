@@ -14,8 +14,8 @@
     <aside class="cadet-sidebar">
       <div class="sidebar-header">
         <div class="cadet-avatar"><i class="fas fa-user"></i></div>
-        <div class="cadet-name" id="cadetName">Cdt. Rahul Das</div>
-        <div class="cadet-rank">Cadet | 15th Tripura Bn</div>
+        <div class="cadet-name" id="cadetName">Cadet</div>
+        <div class="cadet-rank">Cadet | <span id="sidebarCollege">College</span></div>
       </div>
       <nav class="sidebar-menu">
         <a href="dashboard.html" class="active"><i class="fas fa-home"></i> My Dashboard</a>
@@ -44,7 +44,7 @@
       <div class="cadet-content">
         <div class="welcome-banner">
           <h2 id="welcomeText">Welcome, Cdt. Rahul Das</h2>
-          <p>Cadet | Tripura University | 15th Tripura Bn NCC</p>
+          <p>Cadet | <span id="userCollege">College</span> | 15th Tripura Bn NCC</p>
         </div>
 
         <div class="grid grid-4 mb-4">
@@ -96,6 +96,8 @@
       document.getElementById('cadetName').textContent = user.name;
       document.getElementById('topName').textContent = user.name;
       document.getElementById('welcomeText').textContent = 'Welcome, ' + user.name;
+      document.getElementById('userCollege').textContent = user.college || 'My College';
+      document.getElementById('sidebarCollege').textContent = user.college || 'My College';
     }
   </script>
 </body>
