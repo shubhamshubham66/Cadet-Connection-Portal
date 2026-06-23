@@ -21,9 +21,9 @@
 <body>
   <div class="dashboard-wrapper">
     <aside class="sidebar">
-      <div class="sidebar-header"><div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div><div><h3>CCP Admin</h3><span>Officer Panel</span></div></div>
+      <div class="sidebar-header"><div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div><div><h3>CCP Admin</h3><span>Admin</span></div></div>
       <nav class="sidebar-menu">
-        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="college-management.html"><i class="fas fa-school"></i> Colleges</a>
         <a href="cadet-management.html"><i class="fas fa-users"></i> Cadets</a>
         <a href="certificates.html" class="active"><i class="fas fa-scroll"></i> Certificates</a>
@@ -35,7 +35,7 @@
 
     <main class="dashboard-main">
       <header class="dashboard-topbar">
-        <div class="topbar-left"><button class="sidebar-toggle"><i class="fas fa-bars"></i></button><div><h2>Certificate Generator</h2><div class="breadcrumb"><a href="co-dashboard.html">Dashboard</a> / <span>Certificates</span></div></div></div>
+        <div class="topbar-left"><button class="sidebar-toggle"><i class="fas fa-bars"></i></button><div><h2>Certificate Generator</h2><div class="breadcrumb"><a href="admin-dashboard.html">Dashboard</a> / <span>Certificates</span></div></div></div>
       </header>
 
       <div class="dashboard-content">
@@ -109,7 +109,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
-    requireAuth(['CO','ANO']);
+    requireAuth(['Admin']);
     initSidebarToggle();
 
     function showTab(tab) {

@@ -14,10 +14,10 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
-        <div><h3>CCP Admin</h3><span>Officer Panel</span></div>
+        <div><h3>CCP Admin</h3><span>Admin</span></div>
       </div>
       <nav class="sidebar-menu">
-        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="college-management.html" class="active"><i class="fas fa-school"></i> College Management</a>
         <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
         <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
@@ -33,7 +33,7 @@
       <header class="dashboard-topbar">
         <div class="topbar-left">
           <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
-          <div><h2>College Management</h2><div class="breadcrumb"><a href="co-dashboard.html">Dashboard</a> / <span>Colleges</span></div></div>
+          <div><h2>College Management</h2><div class="breadcrumb"><a href="admin-dashboard.html">Dashboard</a> / <span>Colleges</span></div></div>
         </div>
         <div class="topbar-right">
           <div class="topbar-notification"><i class="fas fa-bell"></i><span class="notif-badge">2</span></div>
@@ -107,7 +107,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
-    requireAuth(['CO','ANO']);
+    requireAuth(['Admin']);
     initSidebarToggle();
 
     // Mock college data

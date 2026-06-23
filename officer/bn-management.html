@@ -53,10 +53,10 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
-        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+        <div><h3>CCP Admin</h3><span>Admin</span></div>
       </div>
       <nav class="sidebar-menu">
-        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
         <a href="bn-management.html" class="active"><i class="fas fa-building-flag"></i> Battalion Management</a>
         <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
@@ -81,13 +81,13 @@
           <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
           <div>
             <h2>Battalion Management</h2>
-            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Battalions</span></div>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="admin-dashboard.html">Dashboard</a> / <span>Battalions</span></div>
           </div>
         </div>
         <div class="topbar-right">
           <div class="topbar-user">
-            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
-            <span id="userName">CO</span>
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">AD</div>
+            <span id="userName">Admin</span>
           </div>
         </div>
       </header>
@@ -154,9 +154,9 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
-    var user = requireAuth(['CO','Admin']);
+    var user = requireAuth(['Admin']);
     initSidebarToggle();
-    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+    if(user) document.getElementById('userName').textContent = user.name || 'Admin';
 
     var BN_KEY = 'co_battalions';
 

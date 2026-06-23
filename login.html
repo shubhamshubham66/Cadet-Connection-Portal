@@ -14,6 +14,27 @@
     .back-home{position:relative!important;top:auto!important;left:auto!important;margin-bottom:1.5rem;}
     .login-form-container{padding-bottom:3rem;}
     .hide{display:none!important;}
+    .form-group{margin-bottom:1rem;}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;}
+    .form-group input,.form-group select{width:100%;padding:0.6rem 0.8rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;}
+    .form-group input:focus,.form-group select:focus{outline:none;border-color:#2d5a27;}
+    .btn{padding:0.75rem 1.5rem;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;transition:all 0.3s;}
+    .btn-primary{background:#2d5a27;color:#fff;}
+    .btn-primary:hover{background:#1e3d1a;transform:translateY(-1px);}
+    .btn-outline{background:transparent;border:2px solid #2d5a27;color:#2d5a27;}
+    .btn-outline:hover{background:#2d5a27;color:#fff;}
+    .mt-2{margin-top:1rem;}
+    .mt-3{margin-top:1.5rem;}
+    .option-cards{display:flex;gap:1rem;margin:1.5rem 0;}
+    .option-card{flex:1;padding:1.5rem;border:2px solid #ddd;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.3s;}
+    .option-card:hover{border-color:#2d5a27;background:rgba(45,90,39,0.03);}
+    .option-card i{font-size:2rem;color:#2d5a27;margin-bottom:0.5rem;}
+    .option-card h4{margin:0.5rem 0 0.25rem;color:#1c1c1c;}
+    .option-card p{margin:0;font-size:0.8rem;color:#666;}
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);padding:0.75rem 1.5rem;border-radius:8px;color:#fff;font-weight:600;font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s;}
+    .toast.show{opacity:1;}
+    .toast-success{background:#2d5a27;}
+    .toast-error{background:#dc3545;}
   </style>
 </head>
 <body class="login-body" style="height:100vh;overflow:hidden;padding:0;margin:0;">
@@ -41,67 +62,62 @@
         <div class="login-form-header"><h2>Welcome</h2><p>Select your role to continue</p></div>
         <div class="role-cards">
           <div class="role-card" onclick="pickRole('Cadet')"><i class="fas fa-user-graduate"></i><h4>Cadet</h4><p>NCC Cadet Login</p></div>
-          <div class="role-card" onclick="pickRole('SUO')"><i class="fas fa-user-shield"></i><h4>SUO</h4><p>Senior Under Officer</p></div>
           <div class="role-card" onclick="pickRole('Admin')"><i class="fas fa-user-tie"></i><h4>Admin</h4><p>Full Management Access</p></div>
-          <div class="role-card" onclick="pickRole('CO')"><i class="fas fa-star"></i><h4>CO</h4><p>Commanding Officer</p></div>
         </div>
       </div>
 
-      <!-- STEP 2: Form -->
-      <div class="login-form-container hide" id="step2">
-        <div class="login-form-header"><h2 id="step2Title">Login</h2><p id="step2Desc">Fill details</p></div>
-
-        <div id="cadetFields" class="hide">
-          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="cadetName" placeholder="Enter your full name"></div>
-          <div class="form-group"><label><i class="fas fa-id-badge"></i> Regimental Number *</label><input type="text" id="cadetRegNo" placeholder="NCC/NER/TR/15/2024/XXXX"></div>
-          <div class="form-group"><label><i class="fas fa-building-flag"></i> Battalion Name *</label><input type="text" id="cadetBn" placeholder="e.g., 15th Tripura Bn NCC"></div>
-          <div class="form-group"><label><i class="fas fa-school"></i> College / School *</label><input type="text" id="cadetCollege" placeholder="Enter college or school"></div>
-          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="cadetMobile" placeholder="10 digit number" maxlength="10"></div>
-          <div class="form-group"><label><i class="fas fa-envelope"></i> Email (Optional)</label><input type="email" id="cadetEmail" placeholder="your@email.com"></div>
-          <div class="form-group"><label><i class="fas fa-calendar"></i> Date of Birth *</label><input type="date" id="cadetDob"></div>
-          <div class="form-group"><label><i class="fas fa-venus-mars"></i> Gender *</label><select id="cadetGender"><option value="">Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
-          <div class="form-group"><label><i class="fas fa-camera"></i> Photo *</label><input type="file" id="cadetPhoto" accept="image/*" style="padding:0.5rem;"></div>
-        </div>
-
-        <div id="adminFields" class="hide">
-          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="adminName" placeholder="Enter your full name"></div>
-          <div class="form-group"><label><i class="fas fa-id-badge"></i> Admin ID *</label><input type="text" id="adminId" placeholder="Admin ID number"></div>
-          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="adminMobile" placeholder="10 digit number" maxlength="10"></div>
-        </div>
-
-        <div id="coFields" class="hide">
-          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="coName" placeholder="Enter your full name"></div>
-          <div class="form-group"><label><i class="fas fa-id-badge"></i> CO ID *</label><input type="text" id="coId" placeholder="CO ID number"></div>
-          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="coMobile" placeholder="10 digit number" maxlength="10"></div>
-        </div>
-
-        <div id="suoFields" class="hide">
-          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="suoName" placeholder="Enter your full name"></div>
-          <div class="form-group"><label><i class="fas fa-id-badge"></i> SUO ID *</label><input type="text" id="suoId" placeholder="SUO ID number"></div>
-          <div class="form-group"><label><i class="fas fa-school"></i> College Name *</label><input type="text" id="suoCollege" placeholder="e.g., Tripura University"></div>
-          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="suoMobile" placeholder="10 digit number" maxlength="10"></div>
-        </div>
-
-        <button type="button" class="btn btn-primary btn-block btn-lg mt-2" id="sendOtpBtn"><i class="fas fa-paper-plane"></i> Send OTP</button>
-        <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
-
-        <!-- OTP SECTION -->
-        <div id="otpBox" class="hide" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #ddd;">
-          <div style="background:rgba(45,90,39,0.05);border:1px solid #2d5a27;border-radius:8px;padding:1rem;margin-bottom:1.5rem;text-align:center;">
-            <p style="margin:0;font-weight:700;color:#2d5a27;"><i class="fas fa-check-circle"></i> OTP Generated!</p>
-            <p style="margin:0.5rem 0 0;font-size:2rem;font-weight:900;letter-spacing:5px;color:#1c1c1c;" id="otpDisplay">------</p>
-            <p style="margin:0.25rem 0 0;font-size:0.8rem;color:#555;">Enter this OTP below to verify</p>
+      <!-- STEP 2a: Cadet Options -->
+      <div class="login-form-container hide" id="step2Cadet">
+        <div class="login-form-header"><h2>Cadet Access</h2><p>Choose an option</p></div>
+        <div class="option-cards">
+          <div class="option-card" onclick="showCadetRegister()">
+            <i class="fas fa-user-plus"></i>
+            <h4>Register</h4>
+            <p>New cadet? Create account</p>
           </div>
-          <div class="otp-inputs">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+          <div class="option-card" onclick="showCadetLogin()">
+            <i class="fas fa-sign-in-alt"></i>
+            <h4>Login</h4>
+            <p>Already registered? Sign in</p>
           </div>
-          <button type="button" class="btn btn-primary btn-block btn-lg mt-2" id="verifyBtn"><i class="fas fa-check-circle"></i> Verify & Login</button>
         </div>
+        <button type="button" class="btn btn-outline mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
+      </div>
+
+      <!-- STEP 3a: Cadet Register Form -->
+      <div class="login-form-container hide" id="step3Register">
+        <div class="login-form-header"><h2>Cadet Registration</h2><p>Fill your details to create account</p></div>
+        <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="regName" placeholder="Enter your full name"></div>
+        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="regMobile" placeholder="10 digit number" maxlength="10"></div>
+        <div class="form-group"><label><i class="fas fa-envelope"></i> Email *</label><input type="email" id="regEmail" placeholder="your@email.com"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="regPassword" placeholder="Create a password"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Confirm Password *</label><input type="password" id="regConfirmPassword" placeholder="Confirm password"></div>
+        <div class="form-group"><label><i class="fas fa-id-badge"></i> Regiment No *</label><input type="text" id="regRegNo" placeholder="NCC/NER/TR/15/2024/XXXX"></div>
+        <div class="form-group"><label><i class="fas fa-building-flag"></i> Battalion *</label><input type="text" id="regBattalion" placeholder="e.g., 15th Tripura Bn NCC"></div>
+        <div class="form-group"><label><i class="fas fa-school"></i> College *</label><input type="text" id="regCollege" placeholder="Enter your college"></div>
+        <div class="form-group"><label><i class="fas fa-calendar"></i> Date of Birth *</label><input type="date" id="regDob"></div>
+        <div class="form-group"><label><i class="fas fa-venus-mars"></i> Gender *</label><select id="regGender"><option value="">Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+        <div class="form-group"><label><i class="fas fa-camera"></i> Photo *</label><input type="file" id="regPhoto" accept="image/*" style="padding:0.5rem;"></div>
+        <button type="button" class="btn btn-primary mt-2" onclick="registerCadet()"><i class="fas fa-user-plus"></i> Register</button>
+        <button type="button" class="btn btn-outline mt-2" onclick="backToCadetOptions()"><i class="fas fa-arrow-left"></i> Back</button>
+      </div>
+
+      <!-- STEP 3b: Cadet Login Form -->
+      <div class="login-form-container hide" id="step3Login">
+        <div class="login-form-header"><h2>Cadet Login</h2><p>Enter your credentials</p></div>
+        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile / Email *</label><input type="text" id="loginCadetId" placeholder="Mobile number or email"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="loginCadetPassword" placeholder="Enter your password"></div>
+        <button type="button" class="btn btn-primary mt-2" onclick="loginCadet()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button type="button" class="btn btn-outline mt-2" onclick="backToCadetOptions()"><i class="fas fa-arrow-left"></i> Back</button>
+      </div>
+
+      <!-- STEP 2b: Admin Login Form -->
+      <div class="login-form-container hide" id="step2Admin">
+        <div class="login-form-header"><h2>Admin Login</h2><p>Enter admin credentials</p></div>
+        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="adminMobile" placeholder="10 digit number" maxlength="10"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="adminPassword" placeholder="Enter password"></div>
+        <button type="button" class="btn btn-primary mt-2" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button type="button" class="btn btn-outline mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
       </div>
     </div>
   </div>
@@ -109,126 +125,154 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    var myRole = '';
-    var myOTP = '';
-
     function pickRole(role) {
-      myRole = role;
       document.getElementById('step1').classList.add('hide');
-      document.getElementById('step2').classList.remove('hide');
-      document.getElementById('cadetFields').classList.add('hide');
-      document.getElementById('adminFields').classList.add('hide');
-      document.getElementById('coFields').classList.add('hide');
-      document.getElementById('suoFields').classList.add('hide');
-      document.getElementById('otpBox').classList.add('hide');
-
-      if (role === 'Cadet') { document.getElementById('cadetFields').classList.remove('hide'); document.getElementById('step2Title').textContent='Cadet Login'; document.getElementById('step2Desc').textContent='Fill your details'; }
-      else if (role === 'Admin') { document.getElementById('adminFields').classList.remove('hide'); document.getElementById('step2Title').textContent='Admin Login'; document.getElementById('step2Desc').textContent='Enter admin credentials'; }
-      else if (role === 'CO') { document.getElementById('coFields').classList.remove('hide'); document.getElementById('step2Title').textContent='CO Login'; document.getElementById('step2Desc').textContent='Commanding Officer access'; }
-      else if (role === 'SUO') { document.getElementById('suoFields').classList.remove('hide'); document.getElementById('step2Title').textContent='SUO Login'; document.getElementById('step2Desc').textContent='Senior Under Officer access'; }
+      if (role === 'Cadet') {
+        document.getElementById('step2Cadet').classList.remove('hide');
+      } else if (role === 'Admin') {
+        document.getElementById('step2Admin').classList.remove('hide');
+      }
     }
 
     function goBack() {
-      document.getElementById('step2').classList.add('hide');
       document.getElementById('step1').classList.remove('hide');
-      document.getElementById('otpBox').classList.add('hide');
+      document.getElementById('step2Cadet').classList.add('hide');
+      document.getElementById('step2Admin').classList.add('hide');
+      document.getElementById('step3Register').classList.add('hide');
+      document.getElementById('step3Login').classList.add('hide');
     }
 
-    // SEND OTP
-    document.getElementById('sendOtpBtn').onclick = function() {
-      var mobile = '';
-      var name = '';
+    function backToCadetOptions() {
+      document.getElementById('step3Register').classList.add('hide');
+      document.getElementById('step3Login').classList.add('hide');
+      document.getElementById('step2Cadet').classList.remove('hide');
+    }
 
-      if (myRole === 'Cadet') {
-        name = document.getElementById('cadetName').value.trim();
-        mobile = document.getElementById('cadetMobile').value.trim();
-        var r = document.getElementById('cadetRegNo').value.trim();
-        var b = document.getElementById('cadetBn').value.trim();
-        var c = document.getElementById('cadetCollege').value.trim();
-        var d = document.getElementById('cadetDob').value;
-        var g = document.getElementById('cadetGender').value;
-        var p = document.getElementById('cadetPhoto').files.length;
-        if (!name || !r || !b || !c || !mobile || !d || !g || !p) { toast('Please fill all fields & upload photo','error'); return; }
-      } else if (myRole === 'Admin') {
-        name = document.getElementById('adminName').value.trim();
-        mobile = document.getElementById('adminMobile').value.trim();
-        var aid = document.getElementById('adminId').value.trim();
-        if (!name || !aid || !mobile) { toast('Please fill all fields','error'); return; }
-      } else if (myRole === 'CO') {
-        name = document.getElementById('coName').value.trim();
-        mobile = document.getElementById('coMobile').value.trim();
-        var cid = document.getElementById('coId').value.trim();
-        if (!name || !cid || !mobile) { toast('Please fill all fields','error'); return; }
-      } else if (myRole === 'SUO') {
-        name = document.getElementById('suoName').value.trim();
-        mobile = document.getElementById('suoMobile').value.trim();
-        var sid = document.getElementById('suoId').value.trim();
-        var sc = document.getElementById('suoCollege').value.trim();
-        if (!name || !sid || !sc || !mobile) { toast('Please fill all fields','error'); return; }
+    function showCadetRegister() {
+      document.getElementById('step2Cadet').classList.add('hide');
+      document.getElementById('step3Register').classList.remove('hide');
+    }
+
+    function showCadetLogin() {
+      document.getElementById('step2Cadet').classList.add('hide');
+      document.getElementById('step3Login').classList.remove('hide');
+    }
+
+    // Register Cadet
+    function registerCadet() {
+      var name = document.getElementById('regName').value.trim();
+      var mobile = document.getElementById('regMobile').value.trim();
+      var email = document.getElementById('regEmail').value.trim();
+      var password = document.getElementById('regPassword').value;
+      var confirmPassword = document.getElementById('regConfirmPassword').value;
+      var regNo = document.getElementById('regRegNo').value.trim();
+      var battalion = document.getElementById('regBattalion').value.trim();
+      var college = document.getElementById('regCollege').value.trim();
+      var dob = document.getElementById('regDob').value;
+      var gender = document.getElementById('regGender').value;
+      var photo = document.getElementById('regPhoto').files.length;
+
+      if (!name || !mobile || !email || !password || !confirmPassword || !regNo || !battalion || !college || !dob || !gender || !photo) {
+        toast('Please fill all fields and upload photo', 'error');
+        return;
+      }
+      if (mobile.length < 10) { toast('Enter valid 10-digit mobile', 'error'); return; }
+      if (password.length < 4) { toast('Password must be at least 4 characters', 'error'); return; }
+      if (password !== confirmPassword) { toast('Passwords do not match', 'error'); return; }
+
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+
+      // Check if already registered
+      for (var i = 0; i < cadets.length; i++) {
+        if (cadets[i].mobile === mobile || cadets[i].email === email) {
+          toast('This mobile or email is already registered. Please login.', 'error');
+          return;
+        }
       }
 
-      if (mobile.length < 10) { toast('Enter valid 10-digit mobile','error'); return; }
+      cadets.push({
+        name: name,
+        mobile: mobile,
+        email: email,
+        password: password,
+        regNo: regNo,
+        battalion: battalion,
+        college: college,
+        dob: dob,
+        gender: gender,
+        registeredAt: new Date().toISOString()
+      });
 
-      // Generate & show OTP
-      myOTP = String(Math.floor(100000 + Math.random() * 900000));
-      document.getElementById('otpDisplay').textContent = myOTP;
-      document.getElementById('otpBox').classList.remove('hide');
-      document.getElementById('otpBox').scrollIntoView({behavior:'smooth'});
-      toast('OTP Generated!','success');
+      localStorage.setItem('registered_cadets', JSON.stringify(cadets));
+      toast('Registration successful! Please login now.', 'success');
 
-      // Focus first box
-      setTimeout(function(){ document.querySelectorAll('.otp-box')[0].focus(); }, 300);
-    };
+      setTimeout(function() {
+        document.getElementById('step3Register').classList.add('hide');
+        document.getElementById('step3Login').classList.remove('hide');
+      }, 1500);
+    }
 
-    // VERIFY OTP
-    document.getElementById('verifyBtn').onclick = function() {
-      var boxes = document.querySelectorAll('.otp-box');
-      var entered = '';
-      for (var i=0; i<boxes.length; i++) entered += boxes[i].value;
+    // Login Cadet
+    function loginCadet() {
+      var id = document.getElementById('loginCadetId').value.trim();
+      var password = document.getElementById('loginCadetPassword').value;
 
-      if (entered.length !== 6) { toast('Enter complete 6-digit OTP','error'); return; }
+      if (!id || !password) { toast('Please fill all fields', 'error'); return; }
 
-      if (entered === myOTP) {
-        var userName = '';
-        var userCollege = '';
-        if (myRole === 'Cadet') { userName = document.getElementById('cadetName').value.trim(); userCollege = document.getElementById('cadetCollege').value.trim(); }
-        else if (myRole === 'Admin') { userName = document.getElementById('adminName').value.trim(); }
-        else if (myRole === 'CO') { userName = document.getElementById('coName').value.trim(); }
-        else if (myRole === 'SUO') { userName = document.getElementById('suoName').value.trim(); userCollege = document.getElementById('suoCollege').value.trim(); }
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      var found = null;
 
-        localStorage.setItem('ccp_user', JSON.stringify({name:userName, role:myRole, college:userCollege, loggedIn:true}));
-        toast('Login Successful! Redirecting...','success');
+      for (var i = 0; i < cadets.length; i++) {
+        if ((cadets[i].mobile === id || cadets[i].email === id) && cadets[i].password === password) {
+          found = cadets[i];
+          break;
+        }
+      }
 
-        setTimeout(function(){
-          if (myRole==='CO') window.location.href='officer/co-dashboard.html';
-          else if (myRole==='Admin') window.location.href='officer/admin-dashboard.html';
-          else if (myRole==='SUO') window.location.href='officer/suo-dashboard.html';
-          else window.location.href='cadet/dashboard.html';
-        }, 1200);
+      if (found) {
+        localStorage.setItem('ccp_user', JSON.stringify({
+          name: found.name,
+          role: 'Cadet',
+          college: found.college,
+          loggedIn: true,
+          loginTime: new Date().toISOString()
+        }));
+        toast('Login Successful! Redirecting...', 'success');
+        setTimeout(function() { window.location.href = 'cadet/dashboard.html'; }, 1200);
       } else {
-        toast('Invalid OTP! Check and try again.','error');
+        toast('Invalid credentials. Check mobile/email and password.', 'error');
       }
-    };
-
-    // OTP BOX AUTO-MOVE
-    var otpBoxes = document.querySelectorAll('.otp-box');
-    for (var i=0; i<otpBoxes.length; i++) {
-      (function(idx){
-        otpBoxes[idx].addEventListener('input', function(){
-          if (this.value && idx < 5) otpBoxes[idx+1].focus();
-        });
-        otpBoxes[idx].addEventListener('keydown', function(e){
-          if (e.key==='Backspace' && !this.value && idx > 0) { otpBoxes[idx-1].focus(); otpBoxes[idx-1].value=''; }
-        });
-      })(i);
     }
 
-    // TOAST
+    // Login Admin
+    function loginAdmin() {
+      var mobile = document.getElementById('adminMobile').value.trim();
+      var password = document.getElementById('adminPassword').value;
+
+      if (!mobile || !password) { toast('Please fill all fields', 'error'); return; }
+
+      // Hardcoded admin credentials
+      if (mobile === '9876543210' && password === 'admin123') {
+        localStorage.setItem('ccp_user', JSON.stringify({
+          name: 'Admin',
+          role: 'Admin',
+          college: '',
+          loggedIn: true,
+          loginTime: new Date().toISOString()
+        }));
+        toast('Login Successful! Redirecting...', 'success');
+        setTimeout(function() { window.location.href = 'officer/admin-dashboard.html'; }, 1200);
+      } else {
+        toast('Invalid admin credentials.', 'error');
+      }
+    }
+
+    // Toast
     function toast(msg, type) {
       var t = document.getElementById('toast');
-      t.className = 'toast toast-' + (type||'success') + ' show';
-      t.innerHTML = '<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+'"></i> ' + msg;
-      setTimeout(function(){ t.classList.remove('show'); }, 3000);
+      t.className = 'toast toast-' + (type || 'success') + ' show';
+      t.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'times-circle') + '"></i> ' + msg;
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
     }
   </script>
 </body>
