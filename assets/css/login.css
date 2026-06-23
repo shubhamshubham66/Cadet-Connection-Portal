@@ -1,0 +1,243 @@
+/* ═══════════════════════════════════════════
+   LOGIN PAGE STYLES
+   ═══════════════════════════════════════════ */
+
+.login-body {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.login-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* ─── Left Panel ─── */
+.login-left {
+  background: linear-gradient(135deg, var(--dark), var(--primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 40px,
+    rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px
+  );
+}
+
+.login-left-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--white);
+}
+
+.login-emblem {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 1.5rem;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-emblem i {
+  font-size: 2.5rem;
+  color: var(--accent);
+}
+
+.login-left-content h1 {
+  color: var(--white);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-motto {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.login-desc {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.login-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+.login-features div {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+}
+
+.login-features div i {
+  color: var(--accent);
+}
+
+/* ─── Right Panel ─── */
+.login-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: var(--white);
+  position: relative;
+}
+
+.back-home {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.back-home:hover {
+  color: var(--primary);
+}
+
+/* ─── Form Container ─── */
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form-header {
+  margin-bottom: 2rem;
+}
+
+.login-form-header h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.login-form-header p {
+  color: var(--text-light);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.form-group label i {
+  color: var(--primary);
+}
+
+/* ─── OTP Input Boxes ─── */
+.otp-inputs {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.otp-box {
+  width: 50px !important;
+  height: 55px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.otp-box:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.15);
+}
+
+.otp-box.filled {
+  border-color: var(--primary);
+  background: rgba(45, 90, 39, 0.03);
+}
+
+/* ─── Timer ─── */
+.otp-timer {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.resend-btn {
+  background: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.resend-btn:hover {
+  color: var(--accent);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 992px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    padding: 2rem 1.5rem;
+    min-height: 100vh;
+  }
+}
+
+@media (max-width: 576px) {
+  .otp-box {
+    width: 42px !important;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .otp-inputs {
+    gap: 0.5rem;
+  }
+}
