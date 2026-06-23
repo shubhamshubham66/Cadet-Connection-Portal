@@ -100,9 +100,11 @@
           <button class="tab-btn active" onclick="switchTab('upcoming')">Upcoming</button>
           <button class="tab-btn" onclick="switchTab('ongoing')">Ongoing</button>
           <button class="tab-btn" onclick="switchTab('past')">Past</button>
+          <button class="tab-btn" onclick="switchTab('registrations')" style="color:#dc3545;border-bottom-color:transparent;"><i class="fas fa-user-check"></i> Registrations</button>
         </div>
 
         <div class="camp-grid" id="campGrid"></div>
+        <div id="registrationsView" style="display:none;"></div>
       </div>
     </main>
   </div>
@@ -194,7 +196,50 @@
       currentTab = tab;
       document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
       event.target.classList.add('active');
-      renderCamps();
+      if (tab === 'registrations') {
+        document.getElementById('campGrid').style.display = 'none';
+        document.getElementById('registrationsView').style.display = 'block';
+        renderRegistrations();
+      } else {
+        document.getElementById('campGrid').style.display = 'grid';
+        document.getElementById('registrationsView').style.display = 'none';
+        renderCamps();
+      }
+    }
+
+    function renderRegistrations() {
+      var regs = JSON.parse(localStorage.getItem('camp_registrations') || '[]');
+      var container = document.getElementById('registrationsView');
+      if (regs.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-user-check"></i><h4>No Camp Registrations Yet</h4><p style="color:var(--text-light);">When cadets register for camps, their data will appear here.</p></div>';
+        return;
+      }
+
+      // Group by camp name
+      var grouped = {};
+      regs.forEach(function(r) {
+        if (!grouped[r.campName]) grouped[r.campName] = [];
+        grouped[r.campName].push(r);
+      });
+
+      var html = '<div style="margin-bottom:1rem;background:var(--white);padding:1rem 1.5rem;border-radius:var(--radius-lg);box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;">' +
+        '<div><h3 style="margin:0;"><i class="fas fa-user-check" style="color:var(--primary);"></i> Camp Registrations</h3><p class="text-muted text-sm" style="margin:0;">Total: ' + regs.length + ' registrations across ' + Object.keys(grouped).length + ' camps</p></div>' +
+        '</div>';
+
+      for (var campName in grouped) {
+        var campRegs = grouped[campName];
+        html += '<div style="background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow);border-left:4px solid var(--primary);">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">';
+        html += '<h4 style="margin:0;"><i class="fas fa-campground" style="color:var(--primary);margin-right:0.5rem;"></i>' + campName + '</h4>';
+        html += '<span style="background:var(--primary);color:#fff;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:700;">' + campRegs.length + ' Registered</span>';
+        html += '</div>';
+        html += '<div class="table-container"><table><thead><tr><th>Cadet Name</th><th>College</th><th>Mobile</th><th>Registered On</th><th>Status</th></tr></thead><tbody>';
+        campRegs.forEach(function(r) {
+          html += '<tr><td><strong>' + r.cadetName + '</strong></td><td>' + (r.cadetCollege || '-') + '</td><td>' + (r.cadetMobile || '-') + '</td><td>' + (r.registeredOn || '-') + '</td><td><span class="badge badge-green" style="background:rgba(45,90,39,0.1);color:var(--primary);padding:0.2rem 0.6rem;border-radius:10px;font-size:0.75rem;">' + r.status + '</span></td></tr>';
+        });
+        html += '</tbody></table></div></div>';
+      }
+      container.innerHTML = html;
     }
 
     function renderCamps(){

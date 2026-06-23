@@ -35,7 +35,7 @@
             <p class="text-muted"><i class="fas fa-calendar"></i> 15 Jul - 26 Jul 2025</p>
             <p class="text-muted"><i class="fas fa-location-dot"></i> Agartala, Tripura</p>
             <p class="text-muted"><i class="fas fa-users"></i> 120 / 150 Seats</p>
-            <button class="btn btn-primary btn-block mt-2" onclick="alert('Registration Confirmed!')"><i class="fas fa-check"></i> Register Now</button>
+            <button class="btn btn-primary btn-block mt-2" onclick="saveRegistration('Annual Training Camp (ATC)','15 Jul - 26 Jul 2025','Agartala, Tripura')"><i class="fas fa-check"></i> Register Now</button>
           </div>
           <div class="card camp-card">
             <span class="badge badge-blue" style="margin-bottom:0.75rem;">Combined | CATC</span>
@@ -43,7 +43,7 @@
             <p class="text-muted"><i class="fas fa-calendar"></i> 05 Aug - 16 Aug 2025</p>
             <p class="text-muted"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</p>
             <p class="text-muted"><i class="fas fa-users"></i> 80 / 200 Seats</p>
-            <button class="btn btn-primary btn-block mt-2" onclick="alert('Registration Confirmed!')"><i class="fas fa-check"></i> Register Now</button>
+            <button class="btn btn-primary btn-block mt-2" onclick="saveRegistration('Combined Annual Training Camp (CATC)','05 Aug - 16 Aug 2025','Shillong, Meghalaya')"><i class="fas fa-check"></i> Register Now</button>
           </div>
         </div>
 
@@ -51,8 +51,8 @@
         <div class="table-container mb-4">
           <table>
             <thead><tr><th>Camp</th><th>Date</th><th>Location</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>ATC 2025</td><td>15-26 Jul 2025</td><td>Agartala</td><td><span class="badge badge-green">Registered</span></td></tr>
+            <tbody id="myRegsBody">
+              <tr><td colspan="4" style="text-align:center;color:var(--text-light);">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -72,6 +72,54 @@
   </div>
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script>requireAuth(['Cadet']);</script>
+  <script>
+    var user = requireAuth(['Cadet']);
+    var REG_KEY = 'camp_registrations';
+
+    function getRegistrations() {
+      return JSON.parse(localStorage.getItem(REG_KEY) || '[]');
+    }
+
+    function saveRegistration(campName, campDate, campLocation) {
+      if (!user) { alert('Please login first'); return; }
+      var regs = getRegistrations();
+      var alreadyReg = regs.find(function(r) { return r.campName === campName && r.cadetName === user.name; });
+      if (alreadyReg) {
+        alert('You are already registered for ' + campName + '!');
+        return;
+      }
+      var reg = {
+        id: Date.now(),
+        cadetName: user.name,
+        cadetMobile: user.mobile || '',
+        cadetCollege: user.college || '',
+        campName: campName,
+        campDate: campDate,
+        campLocation: campLocation,
+        registeredOn: new Date().toISOString().split('T')[0],
+        status: 'Confirmed'
+      };
+      regs.push(reg);
+      localStorage.setItem(REG_KEY, JSON.stringify(regs));
+      alert('Registration Confirmed for ' + campName + '!');
+      loadMyRegistrations();
+    }
+
+    function loadMyRegistrations() {
+      if (!user) return;
+      var regs = getRegistrations().filter(function(r) { return r.cadetName === user.name; });
+      var tbody = document.getElementById('myRegsBody');
+      if (!tbody) return;
+      if (regs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-light);">No registrations yet. Register for a camp above!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = regs.map(function(r) {
+        return '<tr><td>' + r.campName + '</td><td>' + r.campDate + '</td><td>' + r.campLocation + '</td><td><span class="badge badge-green">' + r.status + '</span></td></tr>';
+      }).join('');
+    }
+
+    loadMyRegistrations();
+  </script>
 </body>
 </html>
