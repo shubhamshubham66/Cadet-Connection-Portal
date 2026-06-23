@@ -3,14 +3,276 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Camp Management | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid var(--border)}
+    .tab-btn{padding:0.75rem 1.5rem;background:none;border:none;cursor:pointer;font-weight:600;font-size:0.9rem;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:var(--transition)}
+    .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+    .tab-btn:hover{color:var(--primary)}
+    .camp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
+    .camp-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);position:relative;border-left:4px solid var(--primary)}
+    .camp-card h4{margin-bottom:0.5rem;color:var(--dark)}
+    .camp-card .camp-meta{font-size:0.85rem;color:var(--text-light);margin-bottom:0.75rem}
+    .camp-card .camp-meta i{width:18px;color:var(--primary)}
+    .camp-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;margin-bottom:0.5rem}
+    .badge-atc{background:rgba(45,90,39,0.1);color:var(--primary)}
+    .badge-catc{background:rgba(200,169,81,0.2);color:#8a6d1b}
+    .badge-tsc{background:rgba(0,123,255,0.1);color:#007bff}
+    .badge-rdc{background:rgba(220,53,69,0.1);color:#dc3545}
+    .badge-adventure{background:rgba(111,66,193,0.1);color:#6f42c1}
+    .camp-actions{display:flex;gap:0.5rem;margin-top:1rem}
+    .camp-seats{font-size:0.85rem;color:var(--text-light);margin-top:0.5rem}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center}
+    .modal-overlay.active{display:flex}
+    .modal{background:#fff;border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:550px;max-height:85vh;overflow-y:auto;position:relative}
+    .modal h3{margin-bottom:1.5rem;color:var(--dark)}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-light)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .empty-state{text-align:center;padding:3rem;color:var(--text-light)}
+    .empty-state i{font-size:3rem;margin-bottom:1rem;opacity:0.3}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html" class="active"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Camp Management</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Camps</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="page-header">
+          <h2><i class="fas fa-campground"></i> Camps</h2>
+          <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Create Camp</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('upcoming')">Upcoming</button>
+          <button class="tab-btn" onclick="switchTab('ongoing')">Ongoing</button>
+          <button class="tab-btn" onclick="switchTab('past')">Past</button>
+        </div>
+
+        <div class="camp-grid" id="campGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 id="modalTitle">Create Camp</h3>
+      <form id="campForm" onsubmit="saveCamp(event)">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label>Camp Name *</label><input type="text" id="fName" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Type *</label><select id="fType" required><option value="">Select</option><option>ATC</option><option>CATC</option><option>TSC</option><option>RDC</option><option>Adventure</option></select></div>
+          <div class="form-group"><label>Wing</label><select id="fWing"><option>Army</option><option>Navy</option><option>Air Force</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Start Date *</label><input type="date" id="fStart" required></div>
+          <div class="form-group"><label>End Date *</label><input type="date" id="fEnd" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Location *</label><input type="text" id="fLocation" required></div>
+          <div class="form-group"><label>Seats</label><input type="number" id="fSeats" value="50"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem"><i class="fas fa-save"></i> Save Camp</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var CAMP_KEY = 'co_camps';
+    var currentTab = 'upcoming';
+
+    function getDefaultCamps(){
+      var today = new Date();
+      var fmt = function(d){return d.toISOString().split('T')[0]};
+      var future1 = new Date(today); future1.setDate(today.getDate()+15);
+      var future2 = new Date(today); future2.setDate(today.getDate()+30);
+      var future3 = new Date(today); future3.setDate(today.getDate()+45);
+      var future1e = new Date(future1); future1e.setDate(future1.getDate()+10);
+      var future2e = new Date(future2); future2e.setDate(future2.getDate()+12);
+      var future3e = new Date(future3); future3e.setDate(future3.getDate()+8);
+      var ongStart = new Date(today); ongStart.setDate(today.getDate()-3);
+      var ongEnd = new Date(today); ongEnd.setDate(today.getDate()+7);
+      var past1s = new Date(today); past1s.setDate(today.getDate()-40);
+      var past1e = new Date(today); past1e.setDate(today.getDate()-30);
+      var past2s = new Date(today); past2s.setDate(today.getDate()-60);
+      var past2e = new Date(today); past2e.setDate(today.getDate()-50);
+      return [
+        {id:1,name:'Annual Training Camp 2025',type:'ATC',wing:'Army',start:fmt(future1),end:fmt(future1e),location:'Agartala Cantonment',seats:100},
+        {id:2,name:'Combined Annual Training Camp',type:'CATC',wing:'Army',start:fmt(future2),end:fmt(future2e),location:'Shillong',seats:80},
+        {id:3,name:'Thal Sainik Camp Selection',type:'TSC',wing:'Army',start:fmt(future3),end:fmt(future3e),location:'Guwahati',seats:30},
+        {id:4,name:'NCC Adventure Camp',type:'Adventure',wing:'Army',start:fmt(ongStart),end:fmt(ongEnd),location:'Tawang, Arunachal',seats:40},
+        {id:5,name:'Republic Day Camp 2025',type:'RDC',wing:'Army',start:fmt(past1s),end:fmt(past1e),location:'New Delhi',seats:25},
+        {id:6,name:'CATC December 2024',type:'CATC',wing:'Army',start:fmt(past2s),end:fmt(past2e),location:'Imphal',seats:60}
+      ];
+    }
+
+    function getCamps(){
+      var d = localStorage.getItem(CAMP_KEY);
+      if(!d){ var def = getDefaultCamps(); localStorage.setItem(CAMP_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveCamps(arr){ localStorage.setItem(CAMP_KEY,JSON.stringify(arr)); }
+
+    function getStatus(camp){
+      var today = new Date().toISOString().split('T')[0];
+      if(camp.start > today) return 'upcoming';
+      if(camp.end < today) return 'past';
+      return 'ongoing';
+    }
+
+    function getBadgeClass(type){
+      var t = type.toLowerCase();
+      if(t==='atc') return 'badge-atc';
+      if(t==='catc') return 'badge-catc';
+      if(t==='tsc') return 'badge-tsc';
+      if(t==='rdc') return 'badge-rdc';
+      return 'badge-adventure';
+    }
+
+    function switchTab(tab){
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+      event.target.classList.add('active');
+      renderCamps();
+    }
+
+    function renderCamps(){
+      var camps = getCamps().filter(function(c){return getStatus(c)===currentTab});
+      if(camps.length===0){
+        document.getElementById('campGrid').innerHTML = '<div class="empty-state"><i class="fas fa-campground"></i><p>No '+currentTab+' camps</p></div>';
+        return;
+      }
+      var html = camps.map(function(c){
+        return '<div class="camp-card"><span class="camp-badge '+getBadgeClass(c.type)+'">'+c.type+'</span><h4>'+c.name+'</h4>'+
+          '<div class="camp-meta"><i class="fas fa-calendar"></i> '+c.start+' to '+c.end+'</div>'+
+          '<div class="camp-meta"><i class="fas fa-map-marker-alt"></i> '+c.location+'</div>'+
+          '<div class="camp-meta"><i class="fas fa-flag"></i> Wing: '+c.wing+'</div>'+
+          '<div class="camp-seats"><i class="fas fa-chair"></i> Seats: '+c.seats+'</div>'+
+          '<div class="camp-actions"><button class="btn btn-sm btn-primary" onclick="editCamp('+c.id+')"><i class="fas fa-edit"></i> Edit</button>'+
+          '<button class="btn btn-sm btn-danger" onclick="deleteCamp('+c.id+')"><i class="fas fa-trash"></i> Delete</button></div></div>';
+      }).join('');
+      document.getElementById('campGrid').innerHTML = html;
+    }
+
+    function openModal(){
+      document.getElementById('modalTitle').textContent = 'Create Camp';
+      document.getElementById('campForm').reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
+
+    function saveCamp(e){
+      e.preventDefault();
+      var camps = getCamps();
+      var editId = document.getElementById('editId').value;
+      var obj = {
+        name:document.getElementById('fName').value.trim(),
+        type:document.getElementById('fType').value,
+        wing:document.getElementById('fWing').value,
+        start:document.getElementById('fStart').value,
+        end:document.getElementById('fEnd').value,
+        location:document.getElementById('fLocation').value.trim(),
+        seats:parseInt(document.getElementById('fSeats').value)||50
+      };
+      if(editId){
+        var idx = camps.findIndex(function(c){return c.id==editId});
+        if(idx>-1){obj.id=parseInt(editId);camps[idx]=obj;}
+      } else {
+        obj.id = Date.now();
+        camps.push(obj);
+      }
+      saveCamps(camps);
+      closeModal();
+      renderCamps();
+      showToast(editId?'Camp updated':'Camp created','success');
+    }
+
+    function editCamp(id){
+      var c = getCamps().find(function(x){return x.id===id});
+      if(!c) return;
+      document.getElementById('modalTitle').textContent = 'Edit Camp';
+      document.getElementById('editId').value = c.id;
+      document.getElementById('fName').value = c.name;
+      document.getElementById('fType').value = c.type;
+      document.getElementById('fWing').value = c.wing;
+      document.getElementById('fStart').value = c.start;
+      document.getElementById('fEnd').value = c.end;
+      document.getElementById('fLocation').value = c.location;
+      document.getElementById('fSeats').value = c.seats;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function deleteCamp(id){
+      if(!confirm('Delete this camp?')) return;
+      saveCamps(getCamps().filter(function(c){return c.id!==id}));
+      renderCamps();
+      showToast('Camp deleted','error');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+    renderCamps();
+  </script>
 </body>
 </html>

@@ -3,14 +3,258 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Events Management | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid var(--border)}
+    .tab-btn{padding:0.75rem 1.5rem;background:none;border:none;cursor:pointer;font-weight:600;font-size:0.9rem;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:var(--transition)}
+    .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+    .tab-btn:hover{color:var(--primary)}
+    .events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+    .event-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);position:relative;border-left:4px solid var(--primary)}
+    .event-card.type-camp{border-left-color:var(--primary)}
+    .event-card.type-parade{border-left-color:var(--accent)}
+    .event-card.type-social{border-left-color:#007bff}
+    .event-card.type-training{border-left-color:#6f42c1}
+    .event-card h4{margin-bottom:0.5rem;color:var(--dark)}
+    .event-card .event-meta{font-size:0.85rem;color:var(--text-light);margin-bottom:0.4rem}
+    .event-card .event-meta i{width:18px;color:var(--primary)}
+    .event-card .event-desc{font-size:0.85rem;color:var(--text);margin-top:0.5rem;line-height:1.4}
+    .event-type-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;margin-bottom:0.5rem}
+    .badge-camp{background:rgba(45,90,39,0.1);color:var(--primary)}
+    .badge-parade{background:rgba(200,169,81,0.2);color:#8a6d1b}
+    .badge-social{background:rgba(0,123,255,0.1);color:#007bff}
+    .badge-training{background:rgba(111,66,193,0.1);color:#6f42c1}
+    .event-actions{display:flex;gap:0.5rem;margin-top:1rem}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center}
+    .modal-overlay.active{display:flex}
+    .modal{background:#fff;border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:550px;max-height:85vh;overflow-y:auto;position:relative}
+    .modal h3{margin-bottom:1.5rem;color:var(--dark)}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-light)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary)}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .empty-state{text-align:center;padding:3rem;color:var(--text-light)}
+    .empty-state i{font-size:3rem;margin-bottom:1rem;opacity:0.3}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html" class="active"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Events Management</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Events</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="page-header">
+          <h2><i class="fas fa-calendar-alt"></i> Events</h2>
+          <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Create Event</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('all')">All</button>
+          <button class="tab-btn" onclick="switchTab('upcoming')">Upcoming</button>
+          <button class="tab-btn" onclick="switchTab('past')">Past</button>
+        </div>
+
+        <div class="events-grid" id="eventsGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 id="modalTitle">Create Event</h3>
+      <form id="eventForm" onsubmit="saveEvent(event)">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label>Event Name *</label><input type="text" id="fName" required placeholder="Event name"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date *</label><input type="date" id="fDate" required></div>
+          <div class="form-group"><label>Time</label><input type="time" id="fTime"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Venue *</label><input type="text" id="fVenue" required placeholder="Location"></div>
+          <div class="form-group"><label>Type *</label><select id="fType" required><option value="">Select</option><option>Camp</option><option>Parade</option><option>Social</option><option>Training</option></select></div>
+        </div>
+        <div class="form-group"><label>Description</label><textarea id="fDesc" placeholder="Event details..."></textarea></div>
+        <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-save"></i> Save Event</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var EVENT_KEY = 'co_events';
+    var currentTab = 'all';
+
+    function getDefaultEvents(){
+      var today = new Date();
+      var fmt = function(d){return d.toISOString().split('T')[0]};
+      var f1 = new Date(today); f1.setDate(today.getDate()+10);
+      var f2 = new Date(today); f2.setDate(today.getDate()+25);
+      var f3 = new Date(today); f3.setDate(today.getDate()+40);
+      var p1 = new Date(today); p1.setDate(today.getDate()-15);
+      var p2 = new Date(today); p2.setDate(today.getDate()-30);
+      return [
+        {id:1,name:'Annual Parade & March Past',date:fmt(f1),time:'08:00',venue:'Tripura University Ground',type:'Parade',description:'Annual grand parade with march past. All cadets must report in full uniform by 0730 hrs.'},
+        {id:2,name:'NCC Adventure Training',date:fmt(f2),time:'06:00',venue:'Jampui Hills, Tripura',type:'Training',description:'2-day adventure training including trekking, rappelling, and survival skills.'},
+        {id:3,name:'Blood Donation & Social Service',date:fmt(f3),time:'09:00',venue:'MBB College Campus',type:'Social',description:'Community outreach program - blood donation camp and cleanliness drive.'},
+        {id:4,name:'Republic Day Celebration',date:fmt(p1),time:'07:30',venue:'Agartala Parade Ground',type:'Parade',description:'Flag hoisting ceremony followed by cultural programs and awards.'},
+        {id:5,name:'Pre-RDC Screening Camp',date:fmt(p2),time:'05:30',venue:'NCC Training Centre',type:'Camp',description:'Selection camp for Republic Day Camp representation. 5-day intensive training.'}
+      ];
+    }
+
+    function getEvents(){
+      var d = localStorage.getItem(EVENT_KEY);
+      if(!d){ var def = getDefaultEvents(); localStorage.setItem(EVENT_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveEvents(arr){ localStorage.setItem(EVENT_KEY,JSON.stringify(arr)); }
+
+    function switchTab(tab){
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+      event.target.classList.add('active');
+      renderEvents();
+    }
+
+    function renderEvents(){
+      var events = getEvents();
+      var today = new Date().toISOString().split('T')[0];
+      if(currentTab==='upcoming') events = events.filter(function(e){return e.date>=today});
+      else if(currentTab==='past') events = events.filter(function(e){return e.date<today});
+
+      if(events.length===0){
+        document.getElementById('eventsGrid').innerHTML = '<div class="empty-state"><i class="fas fa-calendar-alt"></i><p>No events found</p></div>';
+        return;
+      }
+      var html = events.map(function(e){
+        var typeClass = 'type-'+e.type.toLowerCase();
+        var badgeClass = 'badge-'+e.type.toLowerCase();
+        return '<div class="event-card '+typeClass+'"><span class="event-type-badge '+badgeClass+'">'+e.type+'</span>'+
+          '<h4>'+e.name+'</h4>'+
+          '<div class="event-meta"><i class="fas fa-calendar"></i> '+e.date+'</div>'+
+          '<div class="event-meta"><i class="fas fa-clock"></i> '+(e.time||'TBD')+'</div>'+
+          '<div class="event-meta"><i class="fas fa-map-marker-alt"></i> '+e.venue+'</div>'+
+          (e.description?'<p class="event-desc">'+e.description+'</p>':'')+
+          '<div class="event-actions"><button class="btn btn-sm btn-primary" onclick="editEvent('+e.id+')"><i class="fas fa-edit"></i> Edit</button>'+
+          '<button class="btn btn-sm btn-danger" onclick="deleteEvent('+e.id+')"><i class="fas fa-trash"></i> Delete</button></div></div>';
+      }).join('');
+      document.getElementById('eventsGrid').innerHTML = html;
+    }
+
+    function openModal(){
+      document.getElementById('modalTitle').textContent = 'Create Event';
+      document.getElementById('eventForm').reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
+
+    function saveEvent(e){
+      e.preventDefault();
+      var events = getEvents();
+      var editId = document.getElementById('editId').value;
+      var obj = {
+        name:document.getElementById('fName').value.trim(),
+        date:document.getElementById('fDate').value,
+        time:document.getElementById('fTime').value,
+        venue:document.getElementById('fVenue').value.trim(),
+        type:document.getElementById('fType').value,
+        description:document.getElementById('fDesc').value.trim()
+      };
+      if(editId){
+        var idx = events.findIndex(function(ev){return ev.id==editId});
+        if(idx>-1){obj.id=parseInt(editId);events[idx]=obj;}
+      } else {
+        obj.id = Date.now();
+        events.push(obj);
+      }
+      saveEvents(events);
+      closeModal();
+      renderEvents();
+      showToast(editId?'Event updated':'Event created','success');
+    }
+
+    function editEvent(id){
+      var e = getEvents().find(function(x){return x.id===id});
+      if(!e) return;
+      document.getElementById('modalTitle').textContent = 'Edit Event';
+      document.getElementById('editId').value = e.id;
+      document.getElementById('fName').value = e.name;
+      document.getElementById('fDate').value = e.date;
+      document.getElementById('fTime').value = e.time||'';
+      document.getElementById('fVenue').value = e.venue;
+      document.getElementById('fType').value = e.type;
+      document.getElementById('fDesc').value = e.description||'';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function deleteEvent(id){
+      if(!confirm('Delete this event?')) return;
+      saveEvents(getEvents().filter(function(e){return e.id!==id}));
+      renderEvents();
+      showToast('Event deleted','error');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+    renderEvents();
+  </script>
 </body>
 </html>

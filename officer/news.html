@@ -3,14 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>News & Announcements | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .post-form{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:2rem}
+    .post-form h3{margin-bottom:1rem;color:var(--dark)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary)}
+    .form-group textarea{resize:vertical;min-height:100px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem}
+    .news-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);position:relative;border-top:4px solid var(--primary)}
+    .news-card.priority-urgent{border-top-color:#dc3545}
+    .news-card.priority-important{border-top-color:var(--accent)}
+    .news-card.priority-normal{border-top-color:var(--primary)}
+    .news-card h4{margin-bottom:0.5rem;color:var(--dark)}
+    .news-card p{font-size:0.9rem;color:var(--text-light);margin-bottom:0.75rem;line-height:1.5}
+    .news-card .news-meta{font-size:0.8rem;color:var(--text-light);display:flex;justify-content:space-between;align-items:center}
+    .priority-badge{padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase}
+    .priority-badge.urgent{background:rgba(220,53,69,0.1);color:#dc3545}
+    .priority-badge.important{background:rgba(200,169,81,0.2);color:#8a6d1b}
+    .priority-badge.normal{background:rgba(45,90,39,0.1);color:var(--primary)}
+    .news-delete{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#dc3545;cursor:pointer;font-size:1.1rem}
+    .news-delete:hover{transform:scale(1.2)}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html" class="active"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>News & Announcements</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>News</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="post-form">
+          <h3><i class="fas fa-plus-circle"></i> Post News</h3>
+          <form onsubmit="postNews(event)">
+            <div class="form-group"><label>Title *</label><input type="text" id="newsTitle" required placeholder="Enter news title"></div>
+            <div class="form-group"><label>Content *</label><textarea id="newsContent" required placeholder="Write news content here..."></textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label>Priority</label><select id="newsPriority"><option value="Normal">Normal</option><option value="Important">Important</option><option value="Urgent">Urgent</option></select></div>
+              <div class="form-group"><label>Date</label><input type="date" id="newsDate"></div>
+              <div class="form-group" style="display:flex;align-items:flex-end"><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post News</button></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="page-header">
+          <h2><i class="fas fa-newspaper"></i> All News</h2>
+        </div>
+
+        <div class="news-grid" id="newsGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var NEWS_KEY = 'co_news';
+
+    function getDefaultNews(){
+      return [
+        {id:1,title:'NCC Day Celebration 2025',content:'All cadets are requested to attend the NCC Day celebration on 22nd November. Dress code: Full uniform with polished shoes. Assembly at 0800 hrs at parade ground.',priority:'Important',date:'2025-01-15'},
+        {id:2,title:'ATC Camp Registration Open',content:'Registration for Annual Training Camp is now open. Interested cadets should submit their forms to respective ANOs by 20th January. Camp dates: 1-10 February 2025.',priority:'Urgent',date:'2025-01-10'},
+        {id:3,title:'Republic Day Parade Selection',content:'Selected cadets for Republic Day Parade contingent have been announced. Please check the notice board for your names. Practice starts from tomorrow 0600 hrs.',priority:'Normal',date:'2025-01-08'},
+        {id:4,title:'Blood Donation Camp',content:'NCC is organizing a blood donation camp on 25th January at Tripura University campus. All SD/SW cadets are encouraged to participate.',priority:'Normal',date:'2025-01-05'}
+      ];
+    }
+
+    function getNews(){
+      var d = localStorage.getItem(NEWS_KEY);
+      if(!d){ var def = getDefaultNews(); localStorage.setItem(NEWS_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveNews(arr){ localStorage.setItem(NEWS_KEY,JSON.stringify(arr)); }
+
+    function postNews(e){
+      e.preventDefault();
+      var title = document.getElementById('newsTitle').value.trim();
+      var content = document.getElementById('newsContent').value.trim();
+      var priority = document.getElementById('newsPriority').value;
+      var date = document.getElementById('newsDate').value || new Date().toISOString().split('T')[0];
+      var news = getNews();
+      news.unshift({id:Date.now(),title:title,content:content,priority:priority,date:date});
+      saveNews(news);
+      e.target.reset();
+      document.getElementById('newsDate').value = new Date().toISOString().split('T')[0];
+      renderNews();
+      showToast('News posted successfully','success');
+    }
+
+    function deleteNews(id){
+      if(!confirm('Delete this news?')) return;
+      saveNews(getNews().filter(function(n){return n.id!==id}));
+      renderNews();
+      showToast('News deleted','error');
+    }
+
+    function renderNews(){
+      var news = getNews();
+      if(news.length===0){
+        document.getElementById('newsGrid').innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem">No news posted yet</p>';
+        return;
+      }
+      var html = news.map(function(n){
+        var pClass = n.priority.toLowerCase();
+        return '<div class="news-card priority-'+pClass+'">'+
+          '<button class="news-delete" onclick="deleteNews('+n.id+')"><i class="fas fa-trash"></i></button>'+
+          '<h4>'+n.title+'</h4>'+
+          '<p>'+n.content+'</p>'+
+          '<div class="news-meta"><span class="priority-badge '+pClass+'">'+n.priority+'</span><span><i class="fas fa-calendar"></i> '+n.date+'</span></div></div>';
+      }).join('');
+      document.getElementById('newsGrid').innerHTML = html;
+    }
+
+    document.getElementById('newsDate').value = new Date().toISOString().split('T')[0];
+    renderNews();
+  </script>
 </body>
 </html>

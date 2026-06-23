@@ -3,14 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Battalion Management | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-info{background:#007bff;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .search-bar{margin-bottom:1.5rem}
+    .search-bar input{width:100%;max-width:400px;padding:0.6rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .search-bar input:focus{outline:none;border-color:var(--primary)}
+    .table-container{background:var(--white);border-radius:var(--radius-lg);overflow-x:auto;box-shadow:var(--shadow)}
+    .table-container table{width:100%;border-collapse:collapse}
+    .table-container th,.table-container td{padding:0.75rem 1rem;text-align:left;border-bottom:1px solid var(--border);font-size:0.85rem}
+    .table-container th{background:var(--primary);color:#fff;font-weight:600;white-space:nowrap}
+    .table-container tr:hover{background:rgba(45,90,39,0.04)}
+    .actions-cell{display:flex;gap:0.4rem}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center}
+    .modal-overlay.active{display:flex}
+    .modal{background:#fff;border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:600px;max-height:85vh;overflow-y:auto;position:relative}
+    .modal h3{margin-bottom:1.5rem;color:var(--dark)}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-light)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .detail-modal .detail-section{margin-bottom:1.5rem}
+    .detail-modal .detail-section h4{margin-bottom:0.75rem;color:var(--primary);font-size:0.95rem}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1rem}
+    .detail-grid .item{font-size:0.85rem}
+    .detail-grid .item strong{color:var(--dark)}
+    .detail-grid .item span{color:var(--text-light)}
+    .stats-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .mini-stat{background:var(--white);padding:1rem 1.5rem;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;align-items:center;gap:0.75rem}
+    .mini-stat i{font-size:1.5rem;color:var(--primary)}
+    .mini-stat .num{font-size:1.3rem;font-weight:700;color:var(--dark)}
+    .mini-stat .lbl{font-size:0.8rem;color:var(--text-light)}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html" class="active"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Battalion Management</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Battalions</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="stats-row" id="statsRow"></div>
+
+        <div class="page-header">
+          <h2><i class="fas fa-building-flag"></i> NER Battalions</h2>
+          <button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Battalion</button>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search by name, state, CO..." oninput="renderTable()">
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead><tr><th>#</th><th>Battalion Name</th><th>State</th><th>City</th><th>CO</th><th>Cadets</th><th>Colleges</th><th>Actions</th></tr></thead>
+            <tbody id="bnTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeEditModal()">&times;</button>
+      <h3 id="editModalTitle">Add Battalion</h3>
+      <form id="bnForm" onsubmit="saveBn(event)">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label>Battalion Name *</label><input type="text" id="fName" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>State *</label><input type="text" id="fState" required></div>
+          <div class="form-group"><label>City *</label><input type="text" id="fCity" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Wing</label><select id="fWing"><option>Army</option><option>Navy</option><option>Air Force</option></select></div>
+          <div class="form-group"><label>Established</label><input type="text" id="fEstablished" placeholder="Year"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>CO Name *</label><input type="text" id="fCo" required></div>
+          <div class="form-group"><label>CO Email</label><input type="email" id="fCoEmail"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Total Cadets</label><input type="number" id="fCadets" value="0"></div>
+          <div class="form-group"><label>No. of Colleges</label><input type="number" id="fColleges" value="0"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-save"></i> Save Battalion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal detail-modal" style="max-width:650px">
+      <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var BN_KEY = 'co_battalions';
+
+    function getDefaultBns(){
+      return [
+        {id:'15th-tripura',name:'15th Tripura Bn NCC',state:'Tripura',city:'Agartala',wing:'Army',established:'1985',co:'Col. Rajesh Kumar Sharma',coEmail:'co15tripura@ncc.gov.in',totalCadets:450,colleges:12,activeCamps:2,attendance:87,achievements:['RDC Delhi 2024 — Best Cadet NER','TSC Winner 2023','PM Rally Selected — 3 Cadets']},
+        {id:'1st-tripura',name:'1st Tripura Bn NCC',state:'Tripura',city:'Agartala',wing:'Army',established:'1963',co:'Col. Deepak Sinha',coEmail:'co1tripura@ncc.gov.in',totalCadets:380,colleges:9,activeCamps:1,attendance:84,achievements:['Best Bn NER 2023','Blood Donation Award 2024']},
+        {id:'1st-assam',name:'1st Assam Bn NCC',state:'Assam',city:'Guwahati',wing:'Army',established:'1952',co:'Col. Bhaskar Barua',coEmail:'co1assam@ncc.gov.in',totalCadets:520,colleges:15,activeCamps:3,attendance:89,achievements:['PM Rally 2024 — 5 Cadets','Best Drill Squad NER 2023']},
+        {id:'2nd-assam',name:'2nd Assam Bn NCC',state:'Assam',city:'Silchar',wing:'Army',established:'1968',co:'Col. Manash Das',coEmail:'co2assam@ncc.gov.in',totalCadets:410,colleges:11,activeCamps:1,attendance:82,achievements:['Adventure Camp Winner 2024','Social Service Award NER']},
+        {id:'1st-meghalaya',name:'1st Meghalaya Bn NCC',state:'Meghalaya',city:'Shillong',wing:'Army',established:'1972',co:'Col. David Lyngdoh',coEmail:'co1meghalaya@ncc.gov.in',totalCadets:300,colleges:8,activeCamps:2,attendance:86,achievements:['Cultural Fest Winner 2024','Trekking Excellence Award']},
+        {id:'1st-manipur',name:'1st Manipur Bn NCC',state:'Manipur',city:'Imphal',wing:'Army',established:'1965',co:'Col. Ibomcha Singh',coEmail:'co1manipur@ncc.gov.in',totalCadets:350,colleges:10,activeCamps:1,attendance:88,achievements:['Best Firing NER 2024','Republic Day Camp Selected 2025']},
+        {id:'1st-mizoram',name:'1st Mizoram Bn NCC',state:'Mizoram',city:'Aizawl',wing:'Army',established:'1975',co:'Col. Lalremruata',coEmail:'co1mizoram@ncc.gov.in',totalCadets:280,colleges:7,activeCamps:1,attendance:90,achievements:['Discipline Award NER 2024','Best Attendance BN']},
+        {id:'1st-nagaland',name:'1st Nagaland Bn NCC',state:'Nagaland',city:'Kohima',wing:'Army',established:'1970',co:'Col. Kevisetuo Basa',coEmail:'co1nagaland@ncc.gov.in',totalCadets:310,colleges:8,activeCamps:1,attendance:85,achievements:['Adventure Activity Best BN 2024']},
+        {id:'1st-arunachal',name:'1st Arunachal Bn NCC',state:'Arunachal Pradesh',city:'Itanagar',wing:'Army',established:'1980',co:'Col. Tamo Riba',coEmail:'co1arunachal@ncc.gov.in',totalCadets:250,colleges:6,activeCamps:1,attendance:83,achievements:['Mountaineering Award 2024']},
+        {id:'1st-sikkim',name:'1st Sikkim Bn NCC',state:'Sikkim',city:'Gangtok',wing:'Army',established:'1978',co:'Col. Pemba Sherpa',coEmail:'co1sikkim@ncc.gov.in',totalCadets:220,colleges:5,activeCamps:1,attendance:91,achievements:['Best Discipline Award NER 2024','Eco-camp Winner']}
+      ];
+    }
+
+    function getBns(){
+      var d = localStorage.getItem(BN_KEY);
+      if(!d){ var def = getDefaultBns(); localStorage.setItem(BN_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveBns(arr){ localStorage.setItem(BN_KEY,JSON.stringify(arr)); }
+
+    function renderStats(){
+      var bns = getBns();
+      var totalCadets = bns.reduce(function(s,b){return s+b.totalCadets},0);
+      var totalColleges = bns.reduce(function(s,b){return s+b.colleges},0);
+      document.getElementById('statsRow').innerHTML =
+        '<div class="mini-stat"><i class="fas fa-building-flag"></i><div><div class="num">'+bns.length+'</div><div class="lbl">Battalions</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-users"></i><div><div class="num">'+totalCadets+'</div><div class="lbl">Total Cadets</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-school"></i><div><div class="num">'+totalColleges+'</div><div class="lbl">Total Colleges</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-map-marked-alt"></i><div><div class="num">NER</div><div class="lbl">Region</div></div></div>';
+    }
+
+    function renderTable(){
+      var bns = getBns();
+      var q = document.getElementById('searchInput').value.toLowerCase();
+      if(q) bns = bns.filter(function(b){return b.name.toLowerCase().includes(q)||b.state.toLowerCase().includes(q)||b.co.toLowerCase().includes(q)});
+      var html = '';
+      bns.forEach(function(b,i){
+        html += '<tr><td>'+(i+1)+'</td><td><strong>'+b.name+'</strong></td><td>'+b.state+'</td><td>'+b.city+'</td><td>'+b.co+'</td><td>'+b.totalCadets+'</td><td>'+b.colleges+'</td>'+
+          '<td class="actions-cell"><button class="btn btn-sm btn-info" onclick="viewBn(\''+b.id+'\')"><i class="fas fa-eye"></i></button> '+
+          '<button class="btn btn-sm btn-primary" onclick="editBn(\''+b.id+'\')"><i class="fas fa-edit"></i></button> '+
+          '<button class="btn btn-sm btn-danger" onclick="deleteBn(\''+b.id+'\')"><i class="fas fa-trash"></i></button></td></tr>';
+      });
+      document.getElementById('bnTableBody').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:2rem">No battalions found</td></tr>';
+    }
+
+    function openAddModal(){
+      document.getElementById('editModalTitle').textContent = 'Add Battalion';
+      document.getElementById('bnForm').reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('editModal').classList.add('active');
+    }
+    function closeEditModal(){ document.getElementById('editModal').classList.remove('active'); }
+    function closeDetailModal(){ document.getElementById('detailModal').classList.remove('active'); }
+
+    function saveBn(e){
+      e.preventDefault();
+      var bns = getBns();
+      var editId = document.getElementById('editId').value;
+      var obj = {
+        name:document.getElementById('fName').value.trim(),
+        state:document.getElementById('fState').value.trim(),
+        city:document.getElementById('fCity').value.trim(),
+        wing:document.getElementById('fWing').value,
+        established:document.getElementById('fEstablished').value.trim(),
+        co:document.getElementById('fCo').value.trim(),
+        coEmail:document.getElementById('fCoEmail').value.trim(),
+        totalCadets:parseInt(document.getElementById('fCadets').value)||0,
+        colleges:parseInt(document.getElementById('fColleges').value)||0,
+        activeCamps:0,attendance:0,achievements:[]
+      };
+      if(editId){
+        var idx = bns.findIndex(function(b){return b.id===editId});
+        if(idx>-1){obj.id=editId;obj.activeCamps=bns[idx].activeCamps;obj.attendance=bns[idx].attendance;obj.achievements=bns[idx].achievements;bns[idx]=obj;}
+      } else {
+        obj.id = Date.now().toString();
+        bns.push(obj);
+      }
+      saveBns(bns);
+      closeEditModal();
+      renderTable();
+      renderStats();
+      showToast(editId?'Battalion updated':'Battalion added','success');
+    }
+
+    function editBn(id){
+      var b = getBns().find(function(x){return x.id===id});
+      if(!b) return;
+      document.getElementById('editModalTitle').textContent = 'Edit Battalion';
+      document.getElementById('editId').value = b.id;
+      document.getElementById('fName').value = b.name;
+      document.getElementById('fState').value = b.state;
+      document.getElementById('fCity').value = b.city;
+      document.getElementById('fWing').value = b.wing;
+      document.getElementById('fEstablished').value = b.established||'';
+      document.getElementById('fCo').value = b.co;
+      document.getElementById('fCoEmail').value = b.coEmail||'';
+      document.getElementById('fCadets').value = b.totalCadets;
+      document.getElementById('fColleges').value = b.colleges;
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function deleteBn(id){
+      if(!confirm('Delete this battalion?')) return;
+      saveBns(getBns().filter(function(b){return b.id!==id}));
+      renderTable();
+      renderStats();
+      showToast('Battalion deleted','error');
+    }
+
+    function viewBn(id){
+      var b = getBns().find(function(x){return x.id===id});
+      if(!b) return;
+      var achieveHtml = (b.achievements&&b.achievements.length) ? b.achievements.map(function(a){return '<li style="margin-bottom:0.3rem">'+a+'</li>'}).join('') : '<li>No achievements recorded</li>';
+      document.getElementById('detailContent').innerHTML =
+        '<h3 style="margin-bottom:1.5rem"><i class="fas fa-building-flag" style="color:var(--primary)"></i> '+b.name+'</h3>'+
+        '<div class="detail-section"><h4><i class="fas fa-info-circle"></i> Basic Information</h4><div class="detail-grid">'+
+        '<div class="item"><strong>State:</strong> <span>'+b.state+'</span></div>'+
+        '<div class="item"><strong>City:</strong> <span>'+b.city+'</span></div>'+
+        '<div class="item"><strong>Wing:</strong> <span>'+b.wing+'</span></div>'+
+        '<div class="item"><strong>Established:</strong> <span>'+(b.established||'N/A')+'</span></div>'+
+        '</div></div>'+
+        '<div class="detail-section"><h4><i class="fas fa-user-tie"></i> Commanding Officer</h4><div class="detail-grid">'+
+        '<div class="item"><strong>Name:</strong> <span>'+b.co+'</span></div>'+
+        '<div class="item"><strong>Email:</strong> <span>'+(b.coEmail||'N/A')+'</span></div>'+
+        '</div></div>'+
+        '<div class="detail-section"><h4><i class="fas fa-chart-bar"></i> Statistics</h4><div class="detail-grid">'+
+        '<div class="item"><strong>Total Cadets:</strong> <span>'+b.totalCadets+'</span></div>'+
+        '<div class="item"><strong>Colleges:</strong> <span>'+b.colleges+'</span></div>'+
+        '<div class="item"><strong>Active Camps:</strong> <span>'+(b.activeCamps||0)+'</span></div>'+
+        '<div class="item"><strong>Attendance:</strong> <span>'+(b.attendance||0)+'%</span></div>'+
+        '</div></div>'+
+        '<div class="detail-section"><h4><i class="fas fa-trophy"></i> Achievements</h4><ul style="padding-left:1.5rem;list-style:disc;color:var(--text-light)">'+achieveHtml+'</ul></div>';
+      document.getElementById('detailModal').classList.add('active');
+    }
+
+    document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeEditModal()});
+    document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetailModal()});
+
+    renderStats();
+    renderTable();
+  </script>
 </body>
 </html>

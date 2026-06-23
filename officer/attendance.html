@@ -3,14 +3,285 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Attendance | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-success{background:#28a745;color:#fff}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-warning{background:var(--accent);color:var(--dark)}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .filter-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:flex-end}
+    .filter-row .form-group{margin:0}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select{padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+    .table-container{background:var(--white);border-radius:var(--radius-lg);overflow-x:auto;box-shadow:var(--shadow);margin-bottom:2rem}
+    .table-container table{width:100%;border-collapse:collapse}
+    .table-container th,.table-container td{padding:0.75rem 1rem;text-align:left;border-bottom:1px solid var(--border);font-size:0.85rem}
+    .table-container th{background:var(--primary);color:#fff;font-weight:600}
+    .table-container tr:hover{background:rgba(45,90,39,0.04)}
+    .att-btn{padding:0.3rem 0.7rem;border:none;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:600}
+    .att-btn.present{background:#28a745;color:#fff}
+    .att-btn.absent{background:#dc3545;color:#fff}
+    .att-btn.inactive{background:#e9ecef;color:#666}
+    .stats-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .mini-stat{background:var(--white);padding:1rem 1.5rem;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;align-items:center;gap:0.75rem}
+    .mini-stat i{font-size:1.5rem;color:var(--primary)}
+    .mini-stat .num{font-size:1.3rem;font-weight:700;color:var(--dark)}
+    .mini-stat .lbl{font-size:0.8rem;color:var(--text-light)}
+    .quick-btns{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap}
+    .section-title{font-size:1.1rem;font-weight:700;margin:1.5rem 0 1rem;color:var(--dark)}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html" class="active"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Attendance Management</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Attendance</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="stats-row" id="statsRow"></div>
+
+        <div class="page-header">
+          <h2><i class="fas fa-clipboard-list"></i> Mark Attendance</h2>
+        </div>
+
+        <div class="filter-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="attDate">
+          </div>
+          <div class="form-group">
+            <label>College Filter</label>
+            <select id="collegeFilter" onchange="renderAttTable()">
+              <option value="">All Colleges</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="saveAttendance()"><i class="fas fa-save"></i> Save Attendance</button>
+        </div>
+
+        <div class="quick-btns">
+          <button class="btn btn-success btn-sm" onclick="markAll('P')"><i class="fas fa-check-double"></i> All Present</button>
+          <button class="btn btn-danger btn-sm" onclick="markAll('A')"><i class="fas fa-times"></i> All Absent</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead><tr><th>#</th><th>Name</th><th>Reg No</th><th>College</th><th>Status</th></tr></thead>
+            <tbody id="attTableBody"></tbody>
+          </table>
+        </div>
+
+        <h3 class="section-title"><i class="fas fa-history"></i> Attendance History (Last 7 Days)</h3>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Date</th><th>Total</th><th>Present</th><th>Absent</th><th>Percentage</th></tr></thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var ATT_KEY = 'co_attendance';
+    var todayStatus = {};
+
+    function getCadets(){
+      var data = localStorage.getItem('co_cadets');
+      if(!data) return [
+        {id:1,name:'Rahul Das',regNo:'NCC/TR/2024/001',college:'Tripura University'},
+        {id:2,name:'Priya Sharma',regNo:'NCC/TR/2024/002',college:'MBB College'},
+        {id:3,name:'Amit Deb',regNo:'NCC/TR/2024/003',college:"Women's College, Agartala"},
+        {id:4,name:'Sneha Roy',regNo:'NCC/TR/2024/004',college:'Ramthakur College'},
+        {id:5,name:'Bikash Saha',regNo:'NCC/TR/2024/005',college:'Tripura University'},
+        {id:6,name:'Monika Debnath',regNo:'NCC/TR/2024/006',college:'Holy Cross College'},
+        {id:7,name:'Rajib Chakraborty',regNo:'NCC/TR/2024/007',college:'Maharaja Bir Bikram College'},
+        {id:8,name:'Taniya Paul',regNo:'NCC/TR/2024/008',college:'MBB College'},
+        {id:9,name:'Dipankar Nath',regNo:'NCC/TR/2024/009',college:'Ramthakur College'},
+        {id:10,name:'Ritu Bhowmik',regNo:'NCC/TR/2024/010',college:'Tripura University'}
+      ];
+      return JSON.parse(data);
+    }
+
+    function getAttData(){
+      var d = localStorage.getItem(ATT_KEY);
+      return d ? JSON.parse(d) : {};
+    }
+    function saveAttData(data){ localStorage.setItem(ATT_KEY, JSON.stringify(data)); }
+
+    function init(){
+      var today = new Date().toISOString().split('T')[0];
+      document.getElementById('attDate').value = today;
+
+      var cadets = getCadets();
+      var colleges = [...new Set(cadets.map(function(c){return c.college}))];
+      var sel = document.getElementById('collegeFilter');
+      colleges.forEach(function(col){
+        var opt = document.createElement('option');
+        opt.value = col; opt.textContent = col;
+        sel.appendChild(opt);
+      });
+
+      // Load existing attendance for today
+      var attData = getAttData();
+      if(attData[today]){
+        todayStatus = {};
+        attData[today].forEach(function(r){ todayStatus[r.id] = r.status; });
+      } else {
+        cadets.forEach(function(c){ todayStatus[c.id] = ''; });
+      }
+
+      renderAttTable();
+      renderStats();
+      renderHistory();
+    }
+
+    function renderAttTable(){
+      var cadets = getCadets();
+      var college = document.getElementById('collegeFilter').value;
+      if(college) cadets = cadets.filter(function(c){return c.college===college});
+
+      var html = '';
+      cadets.forEach(function(c,i){
+        var status = todayStatus[c.id] || '';
+        html += '<tr><td>'+(i+1)+'</td><td>'+c.name+'</td><td>'+c.regNo+'</td><td>'+c.college+'</td><td>'+
+          '<button class="att-btn '+(status==='P'?'present':'inactive')+'" onclick="markStatus('+c.id+',\'P\')">Present</button> '+
+          '<button class="att-btn '+(status==='A'?'absent':'inactive')+'" onclick="markStatus('+c.id+',\'A\')">Absent</button>'+
+          '</td></tr>';
+      });
+      document.getElementById('attTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;padding:2rem">No cadets found</td></tr>';
+    }
+
+    function markStatus(id, status){
+      todayStatus[id] = status;
+      renderAttTable();
+      renderStats();
+    }
+
+    function markAll(status){
+      var cadets = getCadets();
+      var college = document.getElementById('collegeFilter').value;
+      if(college) cadets = cadets.filter(function(c){return c.college===college});
+      cadets.forEach(function(c){ todayStatus[c.id] = status; });
+      renderAttTable();
+      renderStats();
+    }
+
+    function saveAttendance(){
+      var date = document.getElementById('attDate').value;
+      if(!date){ showToast('Please select a date','error'); return; }
+      var cadets = getCadets();
+      var records = [];
+      cadets.forEach(function(c){
+        if(todayStatus[c.id]){
+          records.push({id:c.id, name:c.name, status:todayStatus[c.id]});
+        }
+      });
+      if(records.length===0){ showToast('Please mark attendance for at least one cadet','error'); return; }
+      var attData = getAttData();
+      attData[date] = records;
+      saveAttData(attData);
+      renderHistory();
+      showToast('Attendance saved for '+date,'success');
+    }
+
+    function renderStats(){
+      var cadets = getCadets();
+      var total = cadets.length;
+      var present = 0, absent = 0;
+      cadets.forEach(function(c){
+        if(todayStatus[c.id]==='P') present++;
+        else if(todayStatus[c.id]==='A') absent++;
+      });
+      var pct = total ? Math.round((present/total)*100) : 0;
+      document.getElementById('statsRow').innerHTML =
+        '<div class="mini-stat"><i class="fas fa-users"></i><div><div class="num">'+total+'</div><div class="lbl">Total Cadets</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-check-circle" style="color:#28a745"></i><div><div class="num">'+present+'</div><div class="lbl">Present</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-times-circle" style="color:#dc3545"></i><div><div class="num">'+absent+'</div><div class="lbl">Absent</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-percentage"></i><div><div class="num">'+pct+'%</div><div class="lbl">Attendance</div></div></div>';
+    }
+
+    function renderHistory(){
+      var attData = getAttData();
+      var dates = Object.keys(attData).sort().reverse().slice(0,7);
+      if(dates.length===0){
+        // Generate mock history
+        var mockDates = [];
+        for(var i=1;i<=7;i++){
+          var d = new Date(); d.setDate(d.getDate()-i);
+          var ds = d.toISOString().split('T')[0];
+          mockDates.push(ds);
+          attData[ds] = getCadets().map(function(c){return {id:c.id,name:c.name,status:Math.random()>0.15?'P':'A'}});
+        }
+        saveAttData(attData);
+        dates = mockDates;
+      }
+      var html = '';
+      dates.forEach(function(date){
+        var records = attData[date];
+        var total = records.length;
+        var present = records.filter(function(r){return r.status==='P'}).length;
+        var absent = total - present;
+        var pct = total ? Math.round((present/total)*100) : 0;
+        html += '<tr><td>'+date+'</td><td>'+total+'</td><td>'+present+'</td><td>'+absent+'</td><td>'+pct+'%</td></tr>';
+      });
+      document.getElementById('historyBody').innerHTML = html;
+    }
+
+    init();
+  </script>
 </body>
 </html>

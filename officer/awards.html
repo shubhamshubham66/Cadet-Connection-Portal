@@ -3,14 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Awards | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .award-form{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:2rem}
+    .award-form h3{margin-bottom:1rem;color:var(--dark)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;font-family:inherit}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary)}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+    .awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
+    .award-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);position:relative;border-left:4px solid var(--accent)}
+    .award-card h4{margin-bottom:0.5rem;color:var(--dark);display:flex;align-items:center;gap:0.5rem}
+    .award-card h4 i{color:var(--accent)}
+    .award-card .award-meta{font-size:0.85rem;color:var(--text-light);margin-bottom:0.5rem}
+    .award-card .award-desc{font-size:0.9rem;color:var(--text);line-height:1.5}
+    .award-card .type-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:600;margin-top:0.75rem}
+    .type-individual{background:rgba(0,123,255,0.1);color:#007bff}
+    .type-battalion{background:rgba(45,90,39,0.1);color:var(--primary)}
+    .award-delete{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#dc3545;cursor:pointer;font-size:1.1rem}
+    .award-delete:hover{transform:scale(1.2)}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html" class="active"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Awards & Achievements</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Awards</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="award-form">
+          <h3><i class="fas fa-plus-circle"></i> Add Award</h3>
+          <form onsubmit="addAward(event)">
+            <div class="form-row">
+              <div class="form-group"><label>Award Title *</label><input type="text" id="awardTitle" required placeholder="Award name"></div>
+              <div class="form-group"><label>Cadet / BN Name *</label><input type="text" id="awardCadet" required placeholder="Recipient name"></div>
+              <div class="form-group"><label>Date *</label><input type="date" id="awardDate" required></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="grid-column:1/3"><label>Description</label><textarea id="awardDesc" placeholder="Brief description of the achievement..."></textarea></div>
+              <div class="form-group"><label>Type</label><select id="awardType"><option>Individual</option><option>Battalion</option></select><br><br><button type="submit" class="btn btn-primary"><i class="fas fa-trophy"></i> Add Award</button></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="page-header">
+          <h2><i class="fas fa-trophy"></i> All Awards</h2>
+        </div>
+
+        <div class="awards-grid" id="awardsGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var AWARD_KEY = 'co_awards';
+
+    function getDefaultAwards(){
+      return [
+        {id:1,title:'Best Cadet NER Region',cadet:'Cdt. Rahul Das',date:'2024-12-10',description:'Won the Best Cadet award at the NER Regional Camp held in Guwahati. Demonstrated exceptional drill, knowledge, and leadership.',type:'Individual'},
+        {id:2,title:'Republic Day Camp Selection',cadet:'Cdt. Priya Sharma',date:'2025-01-05',description:'Selected for the prestigious Republic Day Camp in New Delhi representing 15th Tripura Bn NCC.',type:'Individual'},
+        {id:3,title:'Best Battalion NER 2024',cadet:'15th Tripura Bn NCC',date:'2024-11-22',description:'Awarded Best Battalion in NER region for outstanding performance in all activities throughout the year.',type:'Battalion'},
+        {id:4,title:'Thal Sainik Camp Gold Medal',cadet:'Cdt. Amit Deb',date:'2024-10-15',description:'Won Gold Medal in firing competition at Thal Sainik Camp, Delhi Cantt.',type:'Individual'}
+      ];
+    }
+
+    function getAwards(){
+      var d = localStorage.getItem(AWARD_KEY);
+      if(!d){ var def = getDefaultAwards(); localStorage.setItem(AWARD_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveAwards(arr){ localStorage.setItem(AWARD_KEY,JSON.stringify(arr)); }
+
+    function addAward(e){
+      e.preventDefault();
+      var awards = getAwards();
+      awards.unshift({
+        id:Date.now(),
+        title:document.getElementById('awardTitle').value.trim(),
+        cadet:document.getElementById('awardCadet').value.trim(),
+        date:document.getElementById('awardDate').value,
+        description:document.getElementById('awardDesc').value.trim(),
+        type:document.getElementById('awardType').value
+      });
+      saveAwards(awards);
+      e.target.reset();
+      document.getElementById('awardDate').value = new Date().toISOString().split('T')[0];
+      renderAwards();
+      showToast('Award added successfully','success');
+    }
+
+    function deleteAward(id){
+      if(!confirm('Delete this award?')) return;
+      saveAwards(getAwards().filter(function(a){return a.id!==id}));
+      renderAwards();
+      showToast('Award deleted','error');
+    }
+
+    function renderAwards(){
+      var awards = getAwards();
+      if(awards.length===0){
+        document.getElementById('awardsGrid').innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem">No awards added yet</p>';
+        return;
+      }
+      var html = awards.map(function(a){
+        var typeClass = a.type==='Individual'?'type-individual':'type-battalion';
+        return '<div class="award-card"><button class="award-delete" onclick="deleteAward('+a.id+')"><i class="fas fa-trash"></i></button>'+
+          '<h4><i class="fas fa-trophy"></i> '+a.title+'</h4>'+
+          '<div class="award-meta"><i class="fas fa-user"></i> '+a.cadet+' &nbsp;|&nbsp; <i class="fas fa-calendar"></i> '+a.date+'</div>'+
+          '<p class="award-desc">'+a.description+'</p>'+
+          '<span class="type-badge '+typeClass+'">'+a.type+'</span></div>';
+      }).join('');
+      document.getElementById('awardsGrid').innerHTML = html;
+    }
+
+    document.getElementById('awardDate').value = new Date().toISOString().split('T')[0];
+    renderAwards();
+  </script>
 </body>
 </html>

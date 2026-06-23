@@ -3,14 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>Documents | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:var(--transition)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--secondary);transform:translateY(-1px)}
+    .btn-danger{background:#dc3545;color:#fff}
+    .btn-success{background:#28a745;color:#fff}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center}
+    .modal-overlay.active{display:flex}
+    .modal{background:#fff;border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:500px;max-height:85vh;overflow-y:auto;position:relative}
+    .modal h3{margin-bottom:1.5rem;color:var(--dark)}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-light)}
+    .form-group{margin-bottom:1rem}
+    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;color:var(--text)}
+    .form-group input,.form-group select{width:100%;padding:0.6rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+    .table-container{background:var(--white);border-radius:var(--radius-lg);overflow-x:auto;box-shadow:var(--shadow)}
+    .table-container table{width:100%;border-collapse:collapse}
+    .table-container th,.table-container td{padding:0.75rem 1rem;text-align:left;border-bottom:1px solid var(--border);font-size:0.85rem}
+    .table-container th{background:var(--primary);color:#fff;font-weight:600}
+    .table-container tr:hover{background:rgba(45,90,39,0.04)}
+    .cat-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:600}
+    .cat-forms{background:rgba(0,123,255,0.1);color:#007bff}
+    .cat-circulars{background:rgba(200,169,81,0.2);color:#8a6d1b}
+    .cat-guidelines{background:rgba(45,90,39,0.1);color:var(--primary)}
+    .cat-sops{background:rgba(111,66,193,0.1);color:#6f42c1}
+    .search-bar{margin-bottom:1.5rem}
+    .search-bar input{width:100%;max-width:400px;padding:0.6rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem}
+    .search-bar input:focus{outline:none;border-color:var(--primary)}
+  </style>
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-shield-alt" style="color:var(--dark)"></i></div>
+        <div><h3>CCP Admin</h3><span>Commanding Officer</span></div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="co-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html" class="active"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Documents</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="co-dashboard.html">Dashboard</a> / <span>Documents</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;border:2px solid var(--accent);">CO</div>
+            <span id="userName">CO</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="page-header">
+          <h2><i class="fas fa-file-alt"></i> Document Repository</h2>
+          <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-upload"></i> Upload Document</button>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search documents..." oninput="renderTable()">
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead><tr><th>#</th><th>Title</th><th>Category</th><th>Date</th><th>Download</th><th>Delete</th></tr></thead>
+            <tbody id="docTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3>Upload Document</h3>
+      <form onsubmit="uploadDoc(event)">
+        <div class="form-group"><label>Title *</label><input type="text" id="docTitle" required placeholder="Document title"></div>
+        <div class="form-group"><label>Category *</label><select id="docCategory" required><option value="">Select</option><option>Forms</option><option>Circulars</option><option>Guidelines</option><option>SOPs</option></select></div>
+        <div class="form-group"><label>File</label><input type="file" id="docFile"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-upload"></i> Upload</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    var user = requireAuth(['CO','Admin']);
+    initSidebarToggle();
+    if(user) document.getElementById('userName').textContent = user.name || 'CO';
+
+    var DOC_KEY = 'co_documents';
+
+    function getDefaultDocs(){
+      return [
+        {id:1,title:'NCC Enrollment Form 2025',category:'Forms',date:'2025-01-10',filename:'enrollment_form.pdf'},
+        {id:2,title:'Annual Training Camp Circular',category:'Circulars',date:'2025-01-08',filename:'atc_circular.pdf'},
+        {id:3,title:'Uniform Guidelines for Cadets',category:'Guidelines',date:'2024-12-20',filename:'uniform_guide.pdf'},
+        {id:4,title:'Camp SOP - Safety Protocols',category:'SOPs',date:'2024-12-15',filename:'camp_sop.pdf'},
+        {id:5,title:'Certificate Application Form',category:'Forms',date:'2024-11-30',filename:'cert_application.pdf'}
+      ];
+    }
+
+    function getDocs(){
+      var d = localStorage.getItem(DOC_KEY);
+      if(!d){ var def = getDefaultDocs(); localStorage.setItem(DOC_KEY,JSON.stringify(def)); return def; }
+      return JSON.parse(d);
+    }
+    function saveDocs(arr){ localStorage.setItem(DOC_KEY,JSON.stringify(arr)); }
+
+    function getCatClass(cat){
+      return 'cat-'+cat.toLowerCase();
+    }
+
+    function renderTable(){
+      var docs = getDocs();
+      var q = document.getElementById('searchInput').value.toLowerCase();
+      if(q) docs = docs.filter(function(d){return d.title.toLowerCase().includes(q)||d.category.toLowerCase().includes(q)});
+      var html = '';
+      docs.forEach(function(d,i){
+        html += '<tr><td>'+(i+1)+'</td><td>'+d.title+'</td><td><span class="cat-badge '+getCatClass(d.category)+'">'+d.category+'</span></td><td>'+d.date+'</td>'+
+          '<td><button class="btn btn-sm btn-success" onclick="downloadDoc('+d.id+')"><i class="fas fa-download"></i></button></td>'+
+          '<td><button class="btn btn-sm btn-danger" onclick="deleteDoc('+d.id+')"><i class="fas fa-trash"></i></button></td></tr>';
+      });
+      document.getElementById('docTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;padding:2rem">No documents found</td></tr>';
+    }
+
+    function openModal(){ document.getElementById('modalOverlay').classList.add('active'); }
+    function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
+
+    function uploadDoc(e){
+      e.preventDefault();
+      var title = document.getElementById('docTitle').value.trim();
+      var category = document.getElementById('docCategory').value;
+      var file = document.getElementById('docFile').files[0];
+      var docs = getDocs();
+      docs.unshift({id:Date.now(),title:title,category:category,date:new Date().toISOString().split('T')[0],filename:file?file.name:'document.pdf'});
+      saveDocs(docs);
+      closeModal();
+      e.target.reset();
+      renderTable();
+      showToast('Document uploaded successfully','success');
+    }
+
+    function downloadDoc(id){
+      var doc = getDocs().find(function(d){return d.id===id});
+      if(doc) showToast('Downloading: '+doc.filename,'success');
+    }
+
+    function deleteDoc(id){
+      if(!confirm('Delete this document?')) return;
+      saveDocs(getDocs().filter(function(d){return d.id!==id}));
+      renderTable();
+      showToast('Document deleted','error');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+    renderTable();
+  </script>
 </body>
 </html>
