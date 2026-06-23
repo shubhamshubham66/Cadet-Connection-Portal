@@ -38,7 +38,6 @@
         <a href="#" class="active" data-page="overview" onclick="showPage('overview',this)"><i class="fas fa-chart-pie"></i> My Overview</a>
         <a href="#" data-page="cadets" onclick="showPage('cadets',this)"><i class="fas fa-users"></i> My Cadets</a>
         <a href="#" data-page="attendance" onclick="showPage('attendance',this)"><i class="fas fa-clipboard-list"></i> Mark Attendance</a>
-        <a href="#" data-page="duty" onclick="showPage('duty',this)"><i class="fas fa-calendar-day"></i> Duty Roster</a>
         <a href="#" data-page="announcements" onclick="showPage('announcements',this)"><i class="fas fa-bullhorn"></i> Announcements</a>
         <a href="#" data-page="camps" onclick="showPage('camps',this)"><i class="fas fa-campground"></i> Camps</a>
         <a href="#" data-page="certificates" onclick="showPage('certificates',this)"><i class="fas fa-scroll"></i> My Certificates</a>
@@ -173,27 +172,6 @@
           <div id="announcementsList"></div>
         </div>
 
-        <!-- ═══ DUTY ROSTER PAGE ═══ -->
-        <div class="page-section" id="page-duty">
-          <h3 class="mb-3"><i class="fas fa-calendar-day"></i> Duty Roster</h3>
-          <div class="card">
-            <h4 style="margin-bottom:1rem;">This Week's Duties</h4>
-            <div class="table-container" style="box-shadow:none;">
-              <table>
-                <thead><tr><th>Day</th><th>Date</th><th>Duty</th><th>Time</th><th>Location</th></tr></thead>
-                <tbody>
-                  <tr><td>Monday</td><td>23 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00-08:00</td><td>College Ground</td></tr>
-                  <tr><td>Tuesday</td><td>24 Jun</td><td><span class="badge badge-blue">Guard Duty</span></td><td>10:00-12:00</td><td>Main Gate</td></tr>
-                  <tr><td>Wednesday</td><td>25 Jun</td><td><span class="badge badge-gold">Camp Duty</span></td><td>08:00-16:00</td><td>NCC Office</td></tr>
-                  <tr><td>Thursday</td><td>26 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00-08:00</td><td>Parade Ground</td></tr>
-                  <tr><td>Friday</td><td>27 Jun</td><td><span class="badge badge-blue">College Duty</span></td><td>09:00-11:00</td><td>Tripura University</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-
         <!-- ═══ CAMPS PAGE ═══ -->
         <div class="page-section" id="page-camps">
           <h3 class="mb-3"><i class="fas fa-campground"></i> Camps</h3>
@@ -298,7 +276,7 @@
       document.getElementById('page-' + page).classList.add('active');
       document.querySelectorAll('.sidebar-menu a').forEach(function(a){ a.classList.remove('active'); });
       if (btn) btn.classList.add('active');
-      const titles = {overview:'My Overview',cadets:'My Cadets',attendance:'Mark Attendance',duty:'Duty Roster',announcements:'Announcements',camps:'Camps',certificates:'My Certificates',profile:'My Profile'};
+      const titles = {overview:'My Overview',cadets:'My Cadets',attendance:'Mark Attendance',announcements:'Announcements',camps:'Camps',certificates:'My Certificates',profile:'My Profile'};
       document.getElementById('pageTitle').textContent = titles[page] || page;
       if (page === 'attendance') loadAttendance();
       if (page === 'announcements') renderAnnouncements();
