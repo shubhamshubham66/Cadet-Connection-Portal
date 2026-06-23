@@ -92,28 +92,30 @@
     </div>
   </section>
 
-  <!-- Achievements / Highlights Section — Auto Scroll Carousel -->
-  <section class="section section-light">
+  <!-- Achievements / Highlights Section — Full Page Auto Scroll Carousel -->
+  <section class="section section-light" style="padding:3rem 0;">
     <div class="container">
       <div class="section-title" data-aos="fade-up">
         <h2>15 Tripura BN NCC Secures 2nd Rank in NE Directorate; Ramthakur College, NIT Agartala Shine</h2>
       </div>
-      <!-- Auto-scrolling Carousel -->
-      <div class="carousel-wrapper" data-aos="fade-up">
-        <div class="carousel-track" id="achieveCarousel">
-          <div class="carousel-slide">
-            <img src="assets/images/achievement-banner.png" alt="Achievement 1">
-          </div>
-          <div class="carousel-slide">
-            <img src="assets/images/achievement-banner2.png" alt="Achievement 2">
-          </div>
+    </div>
+    <!-- Full Width Carousel -->
+    <div class="carousel-wrapper" data-aos="fade-up" style="max-width:100%;border-radius:0;box-shadow:none;">
+      <div class="carousel-track" id="achieveCarousel">
+        <div class="carousel-slide">
+          <img src="assets/images/achievement-banner.png" alt="Achievement 1" style="border-radius:0;width:100%;height:auto;">
         </div>
-        <div class="carousel-dots" id="carouselDots">
-          <span class="dot active" onclick="goToSlide(0)"></span>
-          <span class="dot" onclick="goToSlide(1)"></span>
+        <div class="carousel-slide">
+          <img src="assets/images/achievement-banner2.png" alt="Achievement 2" style="border-radius:0;width:100%;height:auto;">
         </div>
       </div>
-      <!-- Dynamic achievements from admin -->
+      <div class="carousel-dots" id="carouselDots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+      </div>
+    </div>
+    <!-- Dynamic achievements from admin -->
+    <div class="container">
       <div id="homeAchievements" data-aos="fade-up" style="max-width:900px;margin:1.5rem auto 0;"></div>
     </div>
   </section>
