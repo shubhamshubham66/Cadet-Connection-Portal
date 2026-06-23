@@ -32,6 +32,7 @@
         <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
         <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
         <div class="sidebar-divider"></div>
+        <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Settings</a>
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </nav>
     </aside>
@@ -102,6 +103,44 @@
     </main>
   </div>
 
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal" style="max-width:500px;">
+      <button class="modal-close" onclick="closeSettings()">&times;</button>
+      <h3 style="margin-bottom:1.5rem;"><i class="fas fa-cog"></i> Admin Settings</h3>
+      
+      <!-- Current Info -->
+      <div style="background:var(--bg);padding:1rem;border-radius:var(--radius);margin-bottom:1.5rem;">
+        <h5 style="margin-bottom:0.5rem;">Current Credentials</h5>
+        <p style="margin:0.25rem 0;font-size:0.9rem;"><strong>Mobile:</strong> <span id="currentMobile">9876543210</span></p>
+        <p style="margin:0.25rem 0;font-size:0.9rem;"><strong>Email:</strong> <span id="currentEmail">admin@ccp.com</span></p>
+      </div>
+
+      <!-- Change Mobile -->
+      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-phone"></i> Change Mobile Number</h5>
+        <div class="form-group" style="margin-bottom:0.75rem;"><input type="tel" id="newMobile" placeholder="Enter new mobile number" maxlength="10"></div>
+        <button class="btn btn-sm btn-primary" onclick="changeMobile()"><i class="fas fa-save"></i> Update Mobile</button>
+      </div>
+
+      <!-- Change Email -->
+      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-envelope"></i> Change Email</h5>
+        <div class="form-group" style="margin-bottom:0.75rem;"><input type="email" id="newEmail" placeholder="Enter new email"></div>
+        <button class="btn btn-sm btn-primary" onclick="changeEmail()"><i class="fas fa-save"></i> Update Email</button>
+      </div>
+
+      <!-- Change Password -->
+      <div>
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-lock"></i> Change Password</h5>
+        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="currentPass" placeholder="Current password"></div>
+        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="newPass" placeholder="New password"></div>
+        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
+        <button class="btn btn-sm btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Update Password</button>
+      </div>
+    </div>
+  </div>
+
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
@@ -111,6 +150,68 @@
       document.getElementById('welcomeText').textContent = 'Welcome, ' + (user.name || 'Admin');
     }
     initSidebarToggle();
+
+    // Load current admin credentials
+    function loadAdminCreds() {
+      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
+      var mobile = creds.mobile || '9876543210';
+      var email = creds.email || 'admin@ccp.com';
+      document.getElementById('currentMobile').textContent = mobile;
+      document.getElementById('currentEmail').textContent = email;
+    }
+
+    function showSettings() {
+      loadAdminCreds();
+      document.getElementById('settingsModal').classList.add('active');
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    function changeMobile() {
+      var newMob = document.getElementById('newMobile').value.trim();
+      if (!newMob || newMob.length < 10) { showToast('Enter valid 10-digit mobile number', 'error'); return; }
+      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
+      creds.mobile = newMob;
+      localStorage.setItem('admin_credentials', JSON.stringify(creds));
+      document.getElementById('currentMobile').textContent = newMob;
+      document.getElementById('newMobile').value = '';
+      showToast('Mobile number updated!', 'success');
+    }
+
+    function changeEmail() {
+      var newEm = document.getElementById('newEmail').value.trim();
+      if (!newEm || !newEm.includes('@')) { showToast('Enter valid email', 'error'); return; }
+      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
+      creds.email = newEm;
+      localStorage.setItem('admin_credentials', JSON.stringify(creds));
+      document.getElementById('currentEmail').textContent = newEm;
+      document.getElementById('newEmail').value = '';
+      showToast('Email updated!', 'success');
+    }
+
+    function changePassword() {
+      var current = document.getElementById('currentPass').value;
+      var newP = document.getElementById('newPass').value;
+      var confirm = document.getElementById('confirmPass').value;
+
+      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
+      var currentPassword = creds.password || 'admin123';
+
+      if (current !== currentPassword) { showToast('Current password is wrong!', 'error'); return; }
+      if (!newP || newP.length < 4) { showToast('New password must be at least 4 characters', 'error'); return; }
+      if (newP !== confirm) { showToast('Passwords do not match!', 'error'); return; }
+
+      creds.password = newP;
+      localStorage.setItem('admin_credentials', JSON.stringify(creds));
+      document.getElementById('currentPass').value = '';
+      document.getElementById('newPass').value = '';
+      document.getElementById('confirmPass').value = '';
+      showToast('Password changed successfully!', 'success');
+    }
+
+    loadAdminCreds();
   </script>
 </body>
 </html>

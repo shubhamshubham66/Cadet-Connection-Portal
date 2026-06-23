@@ -251,8 +251,12 @@
 
       if (!mobile || !password) { toast('Please fill all fields', 'error'); return; }
 
-      // Hardcoded admin credentials
-      if (mobile === '9876543210' && password === 'admin123') {
+      // Check admin credentials from localStorage (or default)
+      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
+      var adminMobile = creds.mobile || '9876543210';
+      var adminPassword = creds.password || 'admin123';
+
+      if (mobile === adminMobile && password === adminPassword) {
         localStorage.setItem('ccp_user', JSON.stringify({
           name: 'Admin',
           role: 'Admin',
