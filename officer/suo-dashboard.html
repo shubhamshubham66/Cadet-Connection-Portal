@@ -3,14 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Officer Dashboard | Cadet Connection Portal</title>
+  <title>SUO Dashboard | Cadet Connection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
 </head>
 <body>
-  <!-- Placeholder - will be built in Phase 4 -->
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:40px;height:40px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-user-graduate" style="color:#fff"></i></div>
+        <div>
+          <h3>CCP Panel</h3>
+          <span>Senior Under Officer</span>
+        </div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="suo-dashboard.html" class="active"><i class="fas fa-chart-pie"></i> My Overview</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Mark Attendance</a>
+        <a href="#duty-roster"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> Announcements</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
+        <a href="#certificates"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="#profile"><i class="fas fa-user-circle"></i> My Profile</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>SUO Dashboard</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <span>SUO Dashboard</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-notification"><i class="fas fa-bell"></i><span class="notif-badge">2</span></div>
+          <div class="topbar-user">
+            <div style="width:35px;height:35px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;border:2px solid var(--accent);">SUO</div>
+            <span id="userName">SUO Priya Sharma</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <div class="welcome-banner">
+          <h2>Welcome, SUO Priya Sharma</h2>
+          <p>15th Tripura Bn NCC | Tripura University</p>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid grid-4 mb-4">
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number">35</div><div class="stat-label">My Cadets</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-number">92%</div><div class="stat-label">Today's Attendance</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div class="stat-number">3</div><div class="stat-label">Upcoming Duties</div></div>
+          <div class="stat-card"><div class="stat-icon"><i class="fas fa-certificate"></i></div><div class="stat-number">2</div><div class="stat-label">My Certificates</div></div>
+        </div>
+
+        <div class="grid grid-2">
+          <!-- Today's Duty Roster -->
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-calendar-day"></i> Today's Duty Roster</h4></div>
+            <div class="table-container" style="box-shadow:none;">
+              <table>
+                <thead><tr><th>Time</th><th>Duty</th><th>Location</th></tr></thead>
+                <tbody>
+                  <tr><td>06:00</td><td>Morning Parade</td><td>College Ground</td></tr>
+                  <tr><td>10:00</td><td>Guard Duty</td><td>Main Gate</td></tr>
+                  <tr><td>14:00</td><td>Drill Practice</td><td>Parade Ground</td></tr>
+                  <tr><td>16:30</td><td>Camp Preparation</td><td>NCC Room</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Attendance Quick Mark -->
+          <div class="card">
+            <div class="card-header"><h4><i class="fas fa-clipboard-check"></i> Quick Attendance Mark</h4></div>
+            <div class="quick-attendance">
+              <div class="attendance-row"><span>Cdt. Rahul Das</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+              <div class="attendance-row"><span>Cdt. Amit Roy</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+              <div class="attendance-row"><span>Cdt. Suman Devi</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+              <div class="attendance-row"><span>Cdt. Priya Deb</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+              <div class="attendance-row"><span>Cdt. Rajib Saha</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+            </div>
+            <button class="btn btn-primary btn-sm btn-block mt-2"><i class="fas fa-save"></i> Submit Attendance</button>
+          </div>
+        </div>
+
+        <!-- Upcoming Camps -->
+        <div class="card mt-4">
+          <div class="card-header"><h4><i class="fas fa-campground"></i> Upcoming Camps</h4></div>
+          <div class="table-container" style="box-shadow:none;">
+            <table>
+              <thead><tr><th>Camp Name</th><th>Date</th><th>Location</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Annual Training Camp</td><td>15 Jul - 26 Jul 2025</td><td>Agartala</td><td><span class="badge badge-green">Registered</span></td></tr>
+                <tr><td>CATC Shillong</td><td>05 Aug - 16 Aug 2025</td><td>Shillong</td><td><span class="badge badge-gold">Apply</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/officer.js"></script>
+  <script>
+    const user = requireAuth(['SUO']);
+    if (user) document.getElementById('userName').textContent = user.name || 'SUO Priya Sharma';
+    initSidebarToggle();
+  </script>
+  <style>
+    .attendance-row { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border); }
+    .attendance-row:last-child { border-bottom:none; }
+    .attendance-row span { font-weight:500; font-size:0.9rem; }
+  </style>
 </body>
 </html>
