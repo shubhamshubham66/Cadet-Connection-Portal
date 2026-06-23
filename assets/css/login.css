@@ -6,7 +6,7 @@
   padding: 0;
   margin: 0;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .login-wrapper {
@@ -15,6 +15,7 @@
   min-height: 100vh;
 }
 
+
 /* ─── Left Panel ─── */
 .login-left {
   background: linear-gradient(135deg, var(--dark), var(--primary));
@@ -22,7 +23,9 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -106,10 +109,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 3rem;
+  padding-top: 4rem;
   background: var(--white);
   position: relative;
+  overflow-y: auto;
+  min-height: 100vh;
 }
 
 .back-home {
@@ -267,6 +273,7 @@
   .login-right {
     padding: 2rem 1.5rem;
     min-height: 100vh;
+    overflow-y: auto;
   }
 }
 
