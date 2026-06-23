@@ -125,8 +125,13 @@ function sendOTP(e) {
   // Generate random 6-digit OTP
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Show OTP on same page
-  document.getElementById('generatedOTP').textContent = generatedOTP;
+  // Send real OTP via Fast2SMS (Google Apps Script)
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
+  fetch(scriptURL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+
+  // Show OTP section on same page (hide the generated OTP display for production)
+  document.getElementById('generatedOTP').textContent = '******';
+  document.getElementById('otpNote').textContent = 'OTP sent to +91 ' + mobile.slice(-4) + ' via SMS';
   document.getElementById('otpSection').classList.remove('hidden');
 
   // Scroll to OTP section
@@ -140,7 +145,7 @@ function sendOTP(e) {
   // Start countdown
   startCountdown(45);
 
-  showToast('OTP generated for +91 ' + mobile.slice(-4), 'success');
+  showToast('OTP sent to your mobile +91 ' + mobile.slice(-4) + '!', 'success');
 }
 
 // ─── Verify OTP ───
@@ -270,10 +275,23 @@ function updateTimerDisplay(seconds) {
 // ─── Resend OTP ───
 function resendOTP() {
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-  document.getElementById('generatedOTP').textContent = generatedOTP;
+  
+  // Get mobile number based on role
+  let mobile = '';
+  switch (selectedRole) {
+    case 'Cadet': mobile = document.getElementById('cadetMobile').value.trim(); break;
+    case 'ANO': mobile = document.getElementById('anoMobile').value.trim(); break;
+    case 'CO': mobile = document.getElementById('coMobile').value.trim(); break;
+    case 'SUO': mobile = document.getElementById('suoMobile').value.trim(); break;
+  }
+  
+  // Send via Fast2SMS
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
+  fetch(scriptURL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+  
   clearOTPBoxes();
   startCountdown(45);
-  showToast('New OTP generated!', 'success');
+  showToast('New OTP sent to your mobile!', 'success');
   document.querySelector('.otp-box[data-index="0"]').focus();
 }
 
