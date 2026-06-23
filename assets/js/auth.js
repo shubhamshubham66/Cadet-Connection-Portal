@@ -1,55 +1,47 @@
 /* ═══════════════════════════════════════════
-   AUTH.JS — OTP Login System (Updated)
+   AUTH.JS — OTP Login System (Fixed)
    Cadet Connection Portal
    ═══════════════════════════════════════════ */
 
-let selectedRole = '';
-let generatedOTP = '';
-let countdownInterval = null;
+var selectedRole = '';
+var generatedOTP = '';
+var countdownInterval = null;
 
-// ─── Step 1: Select Role → Show Role-specific form ───
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
+
+// ─── Select Role ───
 function selectRole(role) {
   selectedRole = role;
-
-  // Hide step 1, show step 2
   document.getElementById('step1').classList.add('hidden');
   document.getElementById('step2').classList.remove('hidden');
 
-  // Hide all role fields
   document.getElementById('cadetFields').classList.add('hidden');
-  document.getElementById('anoFields').classList.add('hidden');
+  document.getElementById('adminFields').classList.add('hidden');
   document.getElementById('coFields').classList.add('hidden');
   document.getElementById('suoFields').classList.add('hidden');
 
-  // Show correct fields based on role
-  switch (role) {
-    case 'Cadet':
-      document.getElementById('cadetFields').classList.remove('hidden');
-      document.getElementById('step2Title').textContent = 'Cadet Login';
-      document.getElementById('step2Desc').textContent = 'Fill your details to receive OTP';
-      break;
-    case 'ANO':
-      document.getElementById('anoFields').classList.remove('hidden');
-      document.getElementById('step2Title').textContent = 'ANO Login';
-      document.getElementById('step2Desc').textContent = 'Enter your officer details';
-      break;
-    case 'CO':
-      document.getElementById('coFields').classList.remove('hidden');
-      document.getElementById('step2Title').textContent = 'CO Login';
-      document.getElementById('step2Desc').textContent = 'Commanding Officer access';
-      break;
-    case 'SUO':
-      document.getElementById('suoFields').classList.remove('hidden');
-      document.getElementById('step2Title').textContent = 'SUO Login';
-      document.getElementById('step2Desc').textContent = 'Senior Under Officer access';
-      break;
+  if (role === 'Cadet') {
+    document.getElementById('cadetFields').classList.remove('hidden');
+    document.getElementById('step2Title').textContent = 'Cadet Login';
+    document.getElementById('step2Desc').textContent = 'Fill your details to receive OTP';
+  } else if (role === 'Admin') {
+    document.getElementById('adminFields').classList.remove('hidden');
+    document.getElementById('step2Title').textContent = 'Admin Login';
+    document.getElementById('step2Desc').textContent = 'Enter admin credentials';
+  } else if (role === 'CO') {
+    document.getElementById('coFields').classList.remove('hidden');
+    document.getElementById('step2Title').textContent = 'CO Login';
+    document.getElementById('step2Desc').textContent = 'Commanding Officer access';
+  } else if (role === 'SUO') {
+    document.getElementById('suoFields').classList.remove('hidden');
+    document.getElementById('step2Title').textContent = 'SUO Login';
+    document.getElementById('step2Desc').textContent = 'Senior Under Officer access';
   }
 
-  // Hide OTP section when switching roles
   document.getElementById('otpSection').classList.add('hidden');
 }
 
-// ─── Go Back to Step 1 ───
+// ─── Go Back ───
 function goToStep1() {
   document.getElementById('step2').classList.add('hidden');
   document.getElementById('step1').classList.remove('hidden');
@@ -57,62 +49,52 @@ function goToStep1() {
   if (countdownInterval) clearInterval(countdownInterval);
 }
 
-// ─── Send OTP (validate form → generate & show OTP on page) ───
+// ─── Send OTP ───
 function sendOTP(e) {
   e.preventDefault();
 
-  // Validate based on role
-  let valid = true;
-  let mobile = '';
-  let name = '';
+  var valid = true;
+  var mobile = '';
+  var name = '';
 
-  switch (selectedRole) {
-    case 'Cadet':
-      name = document.getElementById('cadetName').value.trim();
-      var regNo = document.getElementById('cadetRegNo').value.trim();
-      var bn = document.getElementById('cadetBn').value.trim();
-      var college = document.getElementById('cadetCollege').value.trim();
-      mobile = document.getElementById('cadetMobile').value.trim();
-      var dob = document.getElementById('cadetDob').value;
-      var gender = document.getElementById('cadetGender').value;
-      var photo = document.getElementById('cadetPhoto').files.length;
-
-      if (!name || !regNo || !bn || !college || !mobile || !dob || !gender || !photo) {
-        showToast('Please fill all required fields and upload photo', 'error');
-        valid = false;
-      }
-      break;
-
-    case 'ANO':
-      name = document.getElementById('anoName').value.trim();
-      var anoId = document.getElementById('anoId').value.trim();
-      mobile = document.getElementById('anoMobile').value.trim();
-      if (!name || !anoId || !mobile) {
-        showToast('Please fill all required fields', 'error');
-        valid = false;
-      }
-      break;
-
-    case 'CO':
-      name = document.getElementById('coName').value.trim();
-      var coId = document.getElementById('coId').value.trim();
-      mobile = document.getElementById('coMobile').value.trim();
-      if (!name || !coId || !mobile) {
-        showToast('Please fill all required fields', 'error');
-        valid = false;
-      }
-      break;
-
-    case 'SUO':
-      name = document.getElementById('suoName').value.trim();
-      var suoId = document.getElementById('suoId').value.trim();
-      var suoCollege = document.getElementById('suoCollege').value.trim();
-      mobile = document.getElementById('suoMobile').value.trim();
-      if (!name || !suoId || !suoCollege || !mobile) {
-        showToast('Please fill all required fields', 'error');
-        valid = false;
-      }
-      break;
+  if (selectedRole === 'Cadet') {
+    name = document.getElementById('cadetName').value.trim();
+    var regNo = document.getElementById('cadetRegNo').value.trim();
+    var bn = document.getElementById('cadetBn').value.trim();
+    var college = document.getElementById('cadetCollege').value.trim();
+    mobile = document.getElementById('cadetMobile').value.trim();
+    var dob = document.getElementById('cadetDob').value;
+    var gender = document.getElementById('cadetGender').value;
+    var photo = document.getElementById('cadetPhoto').files.length;
+    if (!name || !regNo || !bn || !college || !mobile || !dob || !gender || !photo) {
+      showToast('Please fill all required fields and upload photo', 'error');
+      valid = false;
+    }
+  } else if (selectedRole === 'Admin') {
+    name = document.getElementById('adminName').value.trim();
+    var adminId = document.getElementById('adminId').value.trim();
+    mobile = document.getElementById('adminMobile').value.trim();
+    if (!name || !adminId || !mobile) {
+      showToast('Please fill all required fields', 'error');
+      valid = false;
+    }
+  } else if (selectedRole === 'CO') {
+    name = document.getElementById('coName').value.trim();
+    var coId = document.getElementById('coId').value.trim();
+    mobile = document.getElementById('coMobile').value.trim();
+    if (!name || !coId || !mobile) {
+      showToast('Please fill all required fields', 'error');
+      valid = false;
+    }
+  } else if (selectedRole === 'SUO') {
+    name = document.getElementById('suoName').value.trim();
+    var suoId = document.getElementById('suoId').value.trim();
+    var suoCollege = document.getElementById('suoCollege').value.trim();
+    mobile = document.getElementById('suoMobile').value.trim();
+    if (!name || !suoId || !suoCollege || !mobile) {
+      showToast('Please fill all required fields', 'error');
+      valid = false;
+    }
   }
 
   if (!valid) return;
@@ -122,36 +104,35 @@ function sendOTP(e) {
     return;
   }
 
-  // Generate random 6-digit OTP
-  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  // Generate OTP
+  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
 
-  // Send real OTP via Fast2SMS (Google Apps Script)
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
-  fetch(scriptURL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+  // Send via Fast2SMS
+  try {
+    fetch(SCRIPT_URL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+  } catch(err) {}
 
   // Show OTP section
-  document.getElementById('otpNote').textContent = 'OTP sent to +91 ' + mobile.slice(-4) + ' via SMS';
+  document.getElementById('otpNote').textContent = 'OTP sent to +91 XXXXX ' + mobile.slice(-3) + ' via SMS';
   document.getElementById('otpSection').classList.remove('hidden');
-
-  // Scroll to OTP section
   document.getElementById('otpSection').scrollIntoView({ behavior: 'smooth' });
 
-  // Focus first OTP box
   setTimeout(function() {
-    document.querySelector('.otp-box[data-index="0"]').focus();
+    var firstBox = document.querySelector('.otp-box[data-index="0"]');
+    if (firstBox) firstBox.focus();
   }, 300);
 
-  // Start countdown
   startCountdown(45);
-
-  showToast('OTP sent to your mobile +91 ' + mobile.slice(-4) + '!', 'success');
+  showToast('OTP sent to your mobile!', 'success');
 }
 
 // ─── Verify OTP ───
 function verifyOTP() {
-  const boxes = document.querySelectorAll('.otp-box');
-  let enteredOTP = '';
-  boxes.forEach(function(box) { enteredOTP += box.value; });
+  var boxes = document.querySelectorAll('.otp-box');
+  var enteredOTP = '';
+  for (var i = 0; i < boxes.length; i++) {
+    enteredOTP += boxes[i].value;
+  }
 
   if (enteredOTP.length !== 6) {
     showToast('Please enter complete 6-digit OTP', 'error');
@@ -159,18 +140,22 @@ function verifyOTP() {
   }
 
   if (enteredOTP === generatedOTP) {
-    // Get name based on role
-    let userName = '';
-    let userCollege = '';
-    switch (selectedRole) {
-      case 'Cadet': userName = document.getElementById('cadetName').value.trim(); userCollege = document.getElementById('cadetCollege').value.trim(); break;
-      case 'ANO': userName = document.getElementById('anoName').value.trim(); break;
-      case 'CO': userName = document.getElementById('coName').value.trim(); break;
-      case 'SUO': userName = document.getElementById('suoName').value.trim(); userCollege = document.getElementById('suoCollege').value.trim(); break;
+    var userName = '';
+    var userCollege = '';
+
+    if (selectedRole === 'Cadet') {
+      userName = document.getElementById('cadetName').value.trim();
+      userCollege = document.getElementById('cadetCollege').value.trim();
+    } else if (selectedRole === 'Admin') {
+      userName = document.getElementById('adminName').value.trim();
+    } else if (selectedRole === 'CO') {
+      userName = document.getElementById('coName').value.trim();
+    } else if (selectedRole === 'SUO') {
+      userName = document.getElementById('suoName').value.trim();
+      userCollege = document.getElementById('suoCollege').value.trim();
     }
 
-    // Save to localStorage
-    const userData = {
+    var userData = {
       name: userName,
       role: selectedRole,
       college: userCollege,
@@ -181,74 +166,70 @@ function verifyOTP() {
 
     showToast('Login Successful! Redirecting...', 'success');
 
-    // Redirect by role
     setTimeout(function() {
-      switch (selectedRole) {
-        case 'CO': window.location.href = 'officer/co-dashboard.html'; break;
-        case 'ANO': window.location.href = 'officer/ano-dashboard.html'; break;
-        case 'SUO': window.location.href = 'officer/suo-dashboard.html'; break;
-        case 'Cadet': window.location.href = 'cadet/dashboard.html'; break;
-        default: window.location.href = 'index.html';
-      }
+      if (selectedRole === 'CO') window.location.href = 'officer/co-dashboard.html';
+      else if (selectedRole === 'Admin') window.location.href = 'officer/admin-dashboard.html';
+      else if (selectedRole === 'SUO') window.location.href = 'officer/suo-dashboard.html';
+      else if (selectedRole === 'Cadet') window.location.href = 'cadet/dashboard.html';
+      else window.location.href = 'index.html';
     }, 1500);
   } else {
-    showToast('Invalid OTP. Please enter the correct OTP shown above.', 'error');
+    showToast('Invalid OTP. Please check your SMS and try again.', 'error');
   }
 }
 
 // ─── OTP Box Handling ───
 document.addEventListener('DOMContentLoaded', function() {
-  const boxes = document.querySelectorAll('.otp-box');
-
-  boxes.forEach(function(box, index) {
-    box.addEventListener('input', function(e) {
-      const val = e.target.value;
-      if (val && /^\d$/.test(val)) {
-        box.classList.add('filled');
-        if (index < 5) boxes[index + 1].focus();
-      } else {
-        box.value = '';
-        box.classList.remove('filled');
-      }
-    });
-
-    box.addEventListener('keydown', function(e) {
-      if (e.key === 'Backspace') {
-        if (!box.value && index > 0) {
-          boxes[index - 1].focus();
-          boxes[index - 1].value = '';
-          boxes[index - 1].classList.remove('filled');
+  var boxes = document.querySelectorAll('.otp-box');
+  for (var i = 0; i < boxes.length; i++) {
+    (function(index) {
+      boxes[index].addEventListener('input', function(e) {
+        var val = e.target.value;
+        if (val && /^\d$/.test(val)) {
+          boxes[index].classList.add('filled');
+          if (index < 5) boxes[index + 1].focus();
         } else {
-          box.value = '';
-          box.classList.remove('filled');
+          boxes[index].value = '';
+          boxes[index].classList.remove('filled');
         }
-      }
-    });
+      });
 
-    // Paste support
-    box.addEventListener('paste', function(e) {
-      e.preventDefault();
-      const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
-      if (/^\d{6}$/.test(pasteData)) {
-        for (let i = 0; i < 6; i++) {
-          boxes[i].value = pasteData[i];
-          boxes[i].classList.add('filled');
+      boxes[index].addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace') {
+          if (!boxes[index].value && index > 0) {
+            boxes[index - 1].focus();
+            boxes[index - 1].value = '';
+            boxes[index - 1].classList.remove('filled');
+          } else {
+            boxes[index].value = '';
+            boxes[index].classList.remove('filled');
+          }
         }
-        boxes[5].focus();
-      }
-    });
-  });
+      });
+
+      boxes[index].addEventListener('paste', function(e) {
+        e.preventDefault();
+        var pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+        if (/^\d{6}$/.test(pasteData)) {
+          for (var j = 0; j < 6; j++) {
+            boxes[j].value = pasteData[j];
+            boxes[j].classList.add('filled');
+          }
+          boxes[5].focus();
+        }
+      });
+    })(i);
+  }
 });
 
-// ─── Countdown Timer ───
+// ─── Countdown ───
 function startCountdown(seconds) {
-  const timerText = document.getElementById('timerText');
-  const resendBtn = document.getElementById('resendBtn');
-
+  var timerText = document.getElementById('timerText');
+  var resendBtn = document.getElementById('resendBtn');
   if (timerText) timerText.classList.remove('hidden');
   if (resendBtn) resendBtn.classList.add('hidden');
 
-  let remaining = seconds;
+  var remaining = seconds;
   updateTimerDisplay(remaining);
 
   if (countdownInterval) clearInterval(countdownInterval);
@@ -264,81 +245,74 @@ function startCountdown(seconds) {
 }
 
 function updateTimerDisplay(seconds) {
-  const el = document.getElementById('countdown');
+  var el = document.getElementById('countdown');
   if (!el) return;
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
+  var mins = Math.floor(seconds / 60);
+  var secs = seconds % 60;
   el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
 }
 
 // ─── Resend OTP ───
 function resendOTP() {
-  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-  
-  // Get mobile number based on role
-  let mobile = '';
-  switch (selectedRole) {
-    case 'Cadet': mobile = document.getElementById('cadetMobile').value.trim(); break;
-    case 'ANO': mobile = document.getElementById('anoMobile').value.trim(); break;
-    case 'CO': mobile = document.getElementById('coMobile').value.trim(); break;
-    case 'SUO': mobile = document.getElementById('suoMobile').value.trim(); break;
-  }
-  
-  // Send via Fast2SMS
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbxO1bRD8-WDYrh-42EWfYSpG6z36Ih78qcCsQ8B3VeYL8Ufj4OqZ34y6wWmm0ijFrPnsA/exec';
-  fetch(scriptURL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
-  
+  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
+
+  var mobile = '';
+  if (selectedRole === 'Cadet') mobile = document.getElementById('cadetMobile').value.trim();
+  else if (selectedRole === 'Admin') mobile = document.getElementById('adminMobile').value.trim();
+  else if (selectedRole === 'CO') mobile = document.getElementById('coMobile').value.trim();
+  else if (selectedRole === 'SUO') mobile = document.getElementById('suoMobile').value.trim();
+
+  try {
+    fetch(SCRIPT_URL + '?mobile=' + mobile + '&otp=' + generatedOTP, {mode: 'no-cors'});
+  } catch(err) {}
+
   clearOTPBoxes();
   startCountdown(45);
   showToast('New OTP sent to your mobile!', 'success');
-  document.querySelector('.otp-box[data-index="0"]').focus();
+  var firstBox = document.querySelector('.otp-box[data-index="0"]');
+  if (firstBox) firstBox.focus();
 }
 
-// ─── Clear OTP Boxes ───
 function clearOTPBoxes() {
-  document.querySelectorAll('.otp-box').forEach(function(box) {
-    box.value = '';
-    box.classList.remove('filled');
-  });
+  var boxes = document.querySelectorAll('.otp-box');
+  for (var i = 0; i < boxes.length; i++) {
+    boxes[i].value = '';
+    boxes[i].classList.remove('filled');
+  }
 }
 
-// ─── Toast Notification ───
+// ─── Toast ───
 function showToast(message, type) {
   type = type || 'success';
-  const toast = document.getElementById('toast') || createToast();
+  var toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    document.body.appendChild(toast);
+  }
   toast.className = 'toast toast-' + type + ' show';
   toast.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'times-circle') + '"></i> ' + message;
   setTimeout(function() { toast.classList.remove('show'); }, 3000);
 }
 
-function createToast() {
-  const toast = document.createElement('div');
-  toast.id = 'toast';
-  toast.className = 'toast';
-  document.body.appendChild(toast);
-  return toast;
-}
-
 // ─── Logout ───
 function logout() {
   localStorage.removeItem('ccp_user');
-  window.location.href = 'login.html';
+  window.location.href = '../login.html';
 }
 
-// ─── Protect Dashboard Pages ───
+// ─── Protect Pages ───
 function requireAuth(allowedRoles) {
-  const user = JSON.parse(localStorage.getItem('ccp_user') || 'null');
+  var user = JSON.parse(localStorage.getItem('ccp_user') || 'null');
   if (!user || !user.loggedIn) {
     window.location.href = '../login.html';
     return null;
   }
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    switch (user.role) {
-      case 'CO': window.location.href = '../officer/co-dashboard.html'; break;
-      case 'ANO': window.location.href = '../officer/ano-dashboard.html'; break;
-      case 'SUO': window.location.href = '../officer/suo-dashboard.html'; break;
-      case 'Cadet': window.location.href = '../cadet/dashboard.html'; break;
-    }
+  if (allowedRoles && allowedRoles.indexOf(user.role) === -1) {
+    if (user.role === 'CO') window.location.href = '../officer/co-dashboard.html';
+    else if (user.role === 'Admin') window.location.href = '../officer/admin-dashboard.html';
+    else if (user.role === 'SUO') window.location.href = '../officer/suo-dashboard.html';
+    else if (user.role === 'Cadet') window.location.href = '../cadet/dashboard.html';
     return null;
   }
   return user;
