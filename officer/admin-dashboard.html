@@ -105,38 +105,50 @@
 
   <!-- Settings Modal -->
   <div class="modal-overlay" id="settingsModal">
-    <div class="modal" style="max-width:500px;">
+    <div class="modal" style="max-width:600px;">
       <button class="modal-close" onclick="closeSettings()">&times;</button>
       <h3 style="margin-bottom:1.5rem;"><i class="fas fa-cog"></i> Admin Settings</h3>
       
       <!-- Current Info -->
       <div style="background:var(--bg);padding:1rem;border-radius:var(--radius);margin-bottom:1.5rem;">
-        <h5 style="margin-bottom:0.5rem;">Current Credentials</h5>
+        <h5 style="margin-bottom:0.5rem;">Logged in as</h5>
+        <p style="margin:0.25rem 0;font-size:0.9rem;"><strong>Name:</strong> <span id="currentName">Admin</span></p>
         <p style="margin:0.25rem 0;font-size:0.9rem;"><strong>Mobile:</strong> <span id="currentMobile">9876543210</span></p>
         <p style="margin:0.25rem 0;font-size:0.9rem;"><strong>Email:</strong> <span id="currentEmail">admin@ccp.com</span></p>
       </div>
 
-      <!-- Change Mobile -->
+      <!-- Change Own Credentials -->
       <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
-        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-phone"></i> Change Mobile Number</h5>
-        <div class="form-group" style="margin-bottom:0.75rem;"><input type="tel" id="newMobile" placeholder="Enter new mobile number" maxlength="10"></div>
-        <button class="btn btn-sm btn-primary" onclick="changeMobile()"><i class="fas fa-save"></i> Update Mobile</button>
-      </div>
-
-      <!-- Change Email -->
-      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
-        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-envelope"></i> Change Email</h5>
-        <div class="form-group" style="margin-bottom:0.75rem;"><input type="email" id="newEmail" placeholder="Enter new email"></div>
-        <button class="btn btn-sm btn-primary" onclick="changeEmail()"><i class="fas fa-save"></i> Update Email</button>
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-edit"></i> Update My Credentials</h5>
+        <div class="form-group" style="margin-bottom:0.5rem;"><label>Name</label><input type="text" id="editMyName" placeholder="Your name"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><label>Mobile</label><input type="tel" id="editMyMobile" placeholder="10 digit mobile" maxlength="10"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><label>Email</label><input type="email" id="editMyEmail" placeholder="your@email.com"></div>
+        <button class="btn btn-sm btn-primary" onclick="updateMyInfo()"><i class="fas fa-save"></i> Save Changes</button>
       </div>
 
       <!-- Change Password -->
-      <div>
+      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
         <h5 style="margin-bottom:0.75rem;"><i class="fas fa-lock"></i> Change Password</h5>
-        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="currentPass" placeholder="Current password"></div>
-        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="newPass" placeholder="New password"></div>
-        <div class="form-group" style="margin-bottom:0.75rem;"><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="currentPass" placeholder="Current password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newPass" placeholder="New password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
         <button class="btn btn-sm btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Update Password</button>
+      </div>
+
+      <!-- Add New Admin -->
+      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-user-plus"></i> Add New Admin</h5>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="text" id="newAdminName" placeholder="Admin name"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="tel" id="newAdminMobile" placeholder="Mobile number" maxlength="10"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="email" id="newAdminEmail" placeholder="Email (Gmail)"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newAdminPass" placeholder="Password"></div>
+        <button class="btn btn-sm btn-primary" onclick="addNewAdmin()"><i class="fas fa-plus"></i> Add Admin</button>
+      </div>
+
+      <!-- All Admins List -->
+      <div>
+        <h5 style="margin-bottom:0.75rem;"><i class="fas fa-users-cog"></i> All Admin Accounts</h5>
+        <div id="adminsList"></div>
       </div>
     </div>
   </div>
@@ -151,67 +163,130 @@
     }
     initSidebarToggle();
 
-    // Load current admin credentials
-    function loadAdminCreds() {
-      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
-      var mobile = creds.mobile || '9876543210';
-      var email = creds.email || 'admin@ccp.com';
+    // ─── ADMIN ACCOUNTS MANAGEMENT ───
+    function getAdmins() {
+      var admins = JSON.parse(localStorage.getItem('admin_accounts') || '[]');
+      if (admins.length === 0) {
+        admins = [{name:'Admin', mobile:'9876543210', email:'admin@ccp.com', password:'admin123'}];
+        localStorage.setItem('admin_accounts', JSON.stringify(admins));
+      }
+      return admins;
+    }
+
+    function saveAdmins(admins) { localStorage.setItem('admin_accounts', JSON.stringify(admins)); }
+
+    function getCurrentAdmin() {
+      var admins = getAdmins();
+      var u = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      for (var i = 0; i < admins.length; i++) {
+        if (admins[i].mobile === u.mobile || admins[i].email === u.email || admins[i].name === u.name) return i;
+      }
+      return 0;
+    }
+
+    function loadSettings() {
+      var admins = getAdmins();
+      var idx = getCurrentAdmin();
+      var me = admins[idx];
+      document.getElementById('currentName').textContent = me.name;
+      document.getElementById('currentMobile').textContent = me.mobile;
+      document.getElementById('currentEmail').textContent = me.email;
+      document.getElementById('editMyName').value = me.name;
+      document.getElementById('editMyMobile').value = me.mobile;
+      document.getElementById('editMyEmail').value = me.email;
+      renderAdminsList();
+    }
+
+    function showSettings() { loadSettings(); document.getElementById('settingsModal').classList.add('active'); }
+    function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
+
+    function updateMyInfo() {
+      var name = document.getElementById('editMyName').value.trim();
+      var mobile = document.getElementById('editMyMobile').value.trim();
+      var email = document.getElementById('editMyEmail').value.trim();
+      if (!name || !mobile) { showToast('Name and mobile required', 'error'); return; }
+      var admins = getAdmins();
+      var idx = getCurrentAdmin();
+      admins[idx].name = name;
+      admins[idx].mobile = mobile;
+      admins[idx].email = email;
+      saveAdmins(admins);
+      // Update current session
+      var u = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      u.name = name; u.mobile = mobile; u.email = email;
+      localStorage.setItem('ccp_user', JSON.stringify(u));
+      document.getElementById('userName').textContent = name;
+      document.getElementById('currentName').textContent = name;
       document.getElementById('currentMobile').textContent = mobile;
       document.getElementById('currentEmail').textContent = email;
-    }
-
-    function showSettings() {
-      loadAdminCreds();
-      document.getElementById('settingsModal').classList.add('active');
-    }
-
-    function closeSettings() {
-      document.getElementById('settingsModal').classList.remove('active');
-    }
-
-    function changeMobile() {
-      var newMob = document.getElementById('newMobile').value.trim();
-      if (!newMob || newMob.length < 10) { showToast('Enter valid 10-digit mobile number', 'error'); return; }
-      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
-      creds.mobile = newMob;
-      localStorage.setItem('admin_credentials', JSON.stringify(creds));
-      document.getElementById('currentMobile').textContent = newMob;
-      document.getElementById('newMobile').value = '';
-      showToast('Mobile number updated!', 'success');
-    }
-
-    function changeEmail() {
-      var newEm = document.getElementById('newEmail').value.trim();
-      if (!newEm || !newEm.includes('@')) { showToast('Enter valid email', 'error'); return; }
-      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
-      creds.email = newEm;
-      localStorage.setItem('admin_credentials', JSON.stringify(creds));
-      document.getElementById('currentEmail').textContent = newEm;
-      document.getElementById('newEmail').value = '';
-      showToast('Email updated!', 'success');
+      showToast('Credentials updated!', 'success');
     }
 
     function changePassword() {
       var current = document.getElementById('currentPass').value;
       var newP = document.getElementById('newPass').value;
       var confirm = document.getElementById('confirmPass').value;
-
-      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
-      var currentPassword = creds.password || 'admin123';
-
-      if (current !== currentPassword) { showToast('Current password is wrong!', 'error'); return; }
-      if (!newP || newP.length < 4) { showToast('New password must be at least 4 characters', 'error'); return; }
+      var admins = getAdmins();
+      var idx = getCurrentAdmin();
+      if (current !== admins[idx].password) { showToast('Current password wrong!', 'error'); return; }
+      if (!newP || newP.length < 4) { showToast('Min 4 characters needed', 'error'); return; }
       if (newP !== confirm) { showToast('Passwords do not match!', 'error'); return; }
-
-      creds.password = newP;
-      localStorage.setItem('admin_credentials', JSON.stringify(creds));
+      admins[idx].password = newP;
+      saveAdmins(admins);
       document.getElementById('currentPass').value = '';
       document.getElementById('newPass').value = '';
       document.getElementById('confirmPass').value = '';
-      showToast('Password changed successfully!', 'success');
+      showToast('Password changed!', 'success');
     }
 
-    loadAdminCreds();
+    function addNewAdmin() {
+      var name = document.getElementById('newAdminName').value.trim();
+      var mobile = document.getElementById('newAdminMobile').value.trim();
+      var email = document.getElementById('newAdminEmail').value.trim();
+      var pass = document.getElementById('newAdminPass').value;
+      if (!name || !mobile || !pass) { showToast('Name, mobile & password required', 'error'); return; }
+      if (mobile.length < 10) { showToast('Enter valid 10-digit mobile', 'error'); return; }
+      var admins = getAdmins();
+      // Check duplicate
+      for (var i = 0; i < admins.length; i++) {
+        if (admins[i].mobile === mobile) { showToast('Mobile already exists!', 'error'); return; }
+        if (email && admins[i].email === email) { showToast('Email already exists!', 'error'); return; }
+      }
+      admins.push({name:name, mobile:mobile, email:email, password:pass});
+      saveAdmins(admins);
+      document.getElementById('newAdminName').value = '';
+      document.getElementById('newAdminMobile').value = '';
+      document.getElementById('newAdminEmail').value = '';
+      document.getElementById('newAdminPass').value = '';
+      renderAdminsList();
+      showToast('New admin added! They can login now.', 'success');
+    }
+
+    function removeAdmin(idx) {
+      if (!confirm('Remove this admin?')) return;
+      var admins = getAdmins();
+      if (admins.length <= 1) { showToast('Cannot remove last admin!', 'error'); return; }
+      if (idx === getCurrentAdmin()) { showToast('Cannot remove yourself!', 'error'); return; }
+      admins.splice(idx, 1);
+      saveAdmins(admins);
+      renderAdminsList();
+      showToast('Admin removed.', 'success');
+    }
+
+    function renderAdminsList() {
+      var admins = getAdmins();
+      var myIdx = getCurrentAdmin();
+      var html = '';
+      for (var i = 0; i < admins.length; i++) {
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--bg);border-radius:var(--radius);margin-bottom:0.5rem;">' +
+          '<div><strong>' + admins[i].name + '</strong>' + (i === myIdx ? ' <span style="font-size:0.7rem;color:var(--accent);">(You)</span>' : '') + '<br><span style="font-size:0.8rem;color:var(--text-light);">' + admins[i].mobile + (admins[i].email ? ' | ' + admins[i].email : '') + '</span></div>' +
+          (i !== myIdx ? '<button onclick="removeAdmin(' + i + ')" style="background:#dc3545;color:#fff;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.8rem;"><i class="fas fa-trash"></i></button>' : '') +
+          '</div>';
+      }
+      document.getElementById('adminsList').innerHTML = html;
+    }
+
+    loadSettings();
   </script>
 </body>
 </html>

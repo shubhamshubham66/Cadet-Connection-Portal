@@ -114,10 +114,10 @@
       <!-- STEP 2b: Admin Login Form -->
       <div class="login-form-container hide" id="step2Admin">
         <div class="login-form-header"><h2>Admin Login</h2><p>Enter admin credentials</p></div>
-        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="adminMobile" placeholder="10 digit number" maxlength="10"></div>
+        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number or Gmail *</label><input type="text" id="adminMobileEmail" placeholder="Mobile number or Gmail"></div>
         <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="adminPassword" placeholder="Enter password"></div>
-        <button type="button" class="btn btn-primary mt-2" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Login</button>
-        <button type="button" class="btn btn-outline mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
+        <button type="button" class="btn btn-primary btn-block mt-2" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
       </div>
     </div>
   </div>
@@ -244,22 +244,37 @@
       }
     }
 
-    // Login Admin
+    // Login Admin (supports multiple admins, login via mobile OR email)
     function loginAdmin() {
-      var mobile = document.getElementById('adminMobile').value.trim();
+      var input = document.getElementById('adminMobileEmail').value.trim();
       var password = document.getElementById('adminPassword').value;
 
-      if (!mobile || !password) { toast('Please fill all fields', 'error'); return; }
+      if (!input || !password) { toast('Please fill all fields', 'error'); return; }
 
-      // Check admin credentials from localStorage (or default)
-      var creds = JSON.parse(localStorage.getItem('admin_credentials') || '{}');
-      var adminMobile = creds.mobile || '9876543210';
-      var adminPassword = creds.password || 'admin123';
+      // Get all admin accounts from localStorage
+      var admins = JSON.parse(localStorage.getItem('admin_accounts') || '[]');
 
-      if (mobile === adminMobile && password === adminPassword) {
+      // Default admin (always available)
+      if (admins.length === 0) {
+        admins = [{name:'Admin', mobile:'9876543210', email:'admin@ccp.com', password:'admin123'}];
+        localStorage.setItem('admin_accounts', JSON.stringify(admins));
+      }
+
+      // Find matching admin (by mobile or email)
+      var matchedAdmin = null;
+      for (var i = 0; i < admins.length; i++) {
+        if ((admins[i].mobile === input || admins[i].email === input) && admins[i].password === password) {
+          matchedAdmin = admins[i];
+          break;
+        }
+      }
+
+      if (matchedAdmin) {
         localStorage.setItem('ccp_user', JSON.stringify({
-          name: 'Admin',
+          name: matchedAdmin.name,
           role: 'Admin',
+          email: matchedAdmin.email,
+          mobile: matchedAdmin.mobile,
           college: '',
           loggedIn: true,
           loginTime: new Date().toISOString()
@@ -267,7 +282,7 @@
         toast('Login Successful! Redirecting...', 'success');
         setTimeout(function() { window.location.href = 'officer/admin-dashboard.html'; }, 1200);
       } else {
-        toast('Invalid admin credentials.', 'error');
+        toast('Invalid credentials. Check mobile/email and password.', 'error');
       }
     }
 
