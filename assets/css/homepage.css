@@ -566,10 +566,15 @@
 
 @media (max-width: 768px) {
   .carousel-wrapper {
-    border-radius: var(--radius);
+    border-radius: 0;
   }
   .carousel-dots .dot {
     width: 10px;
     height: 10px;
+  }
+  .carousel-slide img {
+    height: auto;
+    min-height: 180px;
+    object-fit: cover;
   }
 }

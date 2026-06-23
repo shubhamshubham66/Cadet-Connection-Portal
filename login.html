@@ -35,6 +35,22 @@
     .toast.show{opacity:1;}
     .toast-success{background:#2d5a27;}
     .toast-error{background:#dc3545;}
+    
+    /* Mobile Login Fix */
+    @media(max-width:768px){
+      html,body{height:auto!important;overflow:auto!important;}
+      .login-wrapper{grid-template-columns:1fr!important;height:auto!important;overflow:visible!important;}
+      .login-left{display:none!important;}
+      .login-right{height:auto!important;min-height:100vh;overflow:visible!important;padding:1.5rem!important;}
+      .role-cards{grid-template-columns:1fr 1fr!important;gap:0.75rem!important;}
+      .role-card{padding:1rem!important;}
+      .role-card i{font-size:1.5rem!important;}
+      .option-cards{flex-direction:column!important;gap:0.75rem!important;}
+      .option-card{padding:1rem!important;}
+      .login-form-header h2{font-size:1.4rem!important;}
+      .otp-inputs{gap:0.4rem!important;}
+      .otp-box{width:40px!important;height:45px!important;font-size:1.2rem!important;}
+    }
   </style>
 </head>
 <body class="login-body" style="height:100vh;overflow:hidden;padding:0;margin:0;">
