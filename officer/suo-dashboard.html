@@ -8,26 +8,40 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .page-section{display:none;} .page-section.active{display:block;}
+    .att-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1rem;border-bottom:1px solid var(--border);background:var(--white);border-radius:var(--radius);margin-bottom:0.5rem;}
+    .att-row:hover{background:rgba(45,90,39,0.02);}
+    .att-row .cadet-info{display:flex;align-items:center;gap:0.75rem;}
+    .att-row .cadet-info .avatar{width:36px;height:36px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700;font-size:0.8rem;}
+    .att-btn{padding:0.4rem 1rem;border-radius:50px;font-weight:700;font-size:0.8rem;cursor:pointer;border:none;}
+    .att-btn.present{background:#e8f5e9;color:#2d5a27;} .att-btn.present.selected{background:#2d5a27;color:#fff;}
+    .att-btn.absent{background:#fce4ec;color:#c62828;} .att-btn.absent.selected{background:#c62828;color:#fff;}
+    .announce-card{background:var(--white);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;border-left:4px solid var(--accent);box-shadow:var(--shadow);}
+    .announce-card .announce-date{font-size:0.75rem;color:var(--text-light);}
+    .announce-card h5{margin:0.5rem 0 0.25rem;}
+    .tab-btn{padding:0.5rem 1.25rem;border-radius:50px;font-size:0.85rem;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--white);color:var(--text);transition:var(--transition);}
+    .tab-btn.active{background:var(--primary);color:var(--white);border-color:var(--primary);}
+    .date-picker-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+  </style>
 </head>
 <body>
   <div class="dashboard-wrapper">
+
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div style="width:40px;height:40px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-user-graduate" style="color:#fff"></i></div>
-        <div>
-          <h3>CCP Panel</h3>
-          <span>Senior Under Officer</span>
-        </div>
+        <div><h3>CCP Panel</h3><span>Senior Under Officer</span></div>
       </div>
       <nav class="sidebar-menu">
-        <a href="suo-dashboard.html" class="active"><i class="fas fa-chart-pie"></i> My Overview</a>
-        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Mark Attendance</a>
-        <a href="#duty-roster"><i class="fas fa-calendar-day"></i> Duty Roster</a>
-        <a href="news.html"><i class="fas fa-newspaper"></i> Announcements</a>
-        <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
-        <a href="#certificates"><i class="fas fa-scroll"></i> My Certificates</a>
-        <a href="#profile"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="#" class="active" data-page="overview" onclick="showPage('overview',this)"><i class="fas fa-chart-pie"></i> My Overview</a>
+        <a href="#" data-page="attendance" onclick="showPage('attendance',this)"><i class="fas fa-clipboard-list"></i> Mark Attendance</a>
+        <a href="#" data-page="duty" onclick="showPage('duty',this)"><i class="fas fa-calendar-day"></i> Duty Roster</a>
+        <a href="#" data-page="announcements" onclick="showPage('announcements',this)"><i class="fas fa-bullhorn"></i> Announcements</a>
+        <a href="#" data-page="camps" onclick="showPage('camps',this)"><i class="fas fa-campground"></i> Camps</a>
+        <a href="#" data-page="certificates" onclick="showPage('certificates',this)"><i class="fas fa-scroll"></i> My Certificates</a>
+        <a href="#" data-page="profile" onclick="showPage('profile',this)"><i class="fas fa-user-circle"></i> My Profile</a>
         <div class="sidebar-divider"></div>
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </nav>
@@ -38,93 +52,388 @@
       <header class="dashboard-topbar">
         <div class="topbar-left">
           <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
-          <div>
-            <h2>SUO Dashboard</h2>
-            <div class="breadcrumb"><a href="../index.html">Home</a> / <span>SUO Dashboard</span></div>
-          </div>
+          <div><h2 id="pageTitle">My Overview</h2><div class="breadcrumb"><a href="../index.html">Home</a> / <span>SUO Dashboard</span></div></div>
         </div>
         <div class="topbar-right">
           <div class="topbar-notification"><i class="fas fa-bell"></i><span class="notif-badge">2</span></div>
           <div class="topbar-user">
             <div style="width:35px;height:35px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;border:2px solid var(--accent);">SUO</div>
-            <span id="userName">SUO Priya Sharma</span>
+            <span id="userName">SUO User</span>
           </div>
         </div>
       </header>
 
       <div class="dashboard-content">
-        <div class="welcome-banner">
-          <h2>Welcome, SUO Priya Sharma</h2>
-          <p>15th Tripura Bn NCC | Tripura University</p>
+
+        <!-- ═══ OVERVIEW PAGE ═══ -->
+        <div class="page-section active" id="page-overview">
+          <div class="welcome-banner">
+            <h2 id="welcomeText">Welcome, SUO</h2>
+            <p>15th Tripura Bn NCC | Tripura University</p>
+          </div>
+          <div class="grid grid-4 mb-4">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCadets">0</div><div class="stat-label">My Cadets</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-number" id="todayAtt">0%</div><div class="stat-label">Today's Attendance</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-bullhorn"></i></div><div class="stat-number" id="totalAnnounce">0</div><div class="stat-label">Announcements</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-campground"></i></div><div class="stat-number">2</div><div class="stat-label">Upcoming Camps</div></div>
+          </div>
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h4><i class="fas fa-clock"></i> Today's Quick Actions</h4></div>
+              <div style="display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem 0;">
+                <button class="btn btn-primary" onclick="showPage('attendance',document.querySelector('[data-page=attendance]'))"><i class="fas fa-clipboard-list"></i> Mark Today's Attendance</button>
+                <button class="btn btn-outline" onclick="showPage('announcements',document.querySelector('[data-page=announcements]'))"><i class="fas fa-bullhorn"></i> Post Announcement</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h4><i class="fas fa-bullhorn"></i> Recent Announcements</h4></div>
+              <div id="recentAnnouncements"></div>
+            </div>
+          </div>
         </div>
 
-        <!-- Stat Cards -->
-        <div class="grid grid-4 mb-4">
-          <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number">35</div><div class="stat-label">My Cadets</div></div>
-          <div class="stat-card"><div class="stat-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-number">92%</div><div class="stat-label">Today's Attendance</div></div>
-          <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div class="stat-number">3</div><div class="stat-label">Upcoming Duties</div></div>
-          <div class="stat-card"><div class="stat-icon"><i class="fas fa-certificate"></i></div><div class="stat-number">2</div><div class="stat-label">My Certificates</div></div>
-        </div>
 
-        <div class="grid grid-2">
-          <!-- Today's Duty Roster -->
+        <!-- ═══ ATTENDANCE PAGE ═══ -->
+        <div class="page-section" id="page-attendance">
+          <h3 class="mb-3"><i class="fas fa-clipboard-list"></i> Mark Attendance</h3>
+          <div class="date-picker-row">
+            <label style="font-weight:600;">Date:</label>
+            <input type="date" id="attDate" style="max-width:200px;">
+            <button class="btn btn-sm btn-primary" onclick="loadAttendance()"><i class="fas fa-sync"></i> Load</button>
+            <span class="badge badge-green" id="attSummary"></span>
+          </div>
           <div class="card">
-            <div class="card-header"><h4><i class="fas fa-calendar-day"></i> Today's Duty Roster</h4></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+              <h4>Cadets List — Tripura University</h4>
+              <div>
+                <button class="btn btn-sm btn-primary" onclick="markAllPresent()"><i class="fas fa-check-double"></i> All Present</button>
+                <button class="btn btn-sm btn-outline" onclick="markAllAbsent()" style="margin-left:0.5rem;"><i class="fas fa-times"></i> All Absent</button>
+              </div>
+            </div>
+            <div id="attendanceList"></div>
+            <button class="btn btn-primary btn-block mt-3" onclick="saveAttendance()"><i class="fas fa-save"></i> Save Attendance</button>
+          </div>
+          <!-- Attendance History -->
+          <div class="card mt-4">
+            <div class="card-header"><h4><i class="fas fa-history"></i> Attendance History (Last 7 Days)</h4></div>
             <div class="table-container" style="box-shadow:none;">
               <table>
-                <thead><tr><th>Time</th><th>Duty</th><th>Location</th></tr></thead>
+                <thead><tr><th>Date</th><th>Present</th><th>Absent</th><th>Total</th><th>%</th></tr></thead>
+                <tbody id="attHistory"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ═══ ANNOUNCEMENTS PAGE ═══ -->
+        <div class="page-section" id="page-announcements">
+          <h3 class="mb-3"><i class="fas fa-bullhorn"></i> Announcements</h3>
+          <!-- Post New -->
+          <div class="card mb-4">
+            <h4 style="margin-bottom:1rem;"><i class="fas fa-plus-circle"></i> Post New Announcement</h4>
+            <form onsubmit="postAnnouncement(event)">
+              <div class="form-group"><label>Title *</label><input type="text" id="annTitle" placeholder="Announcement title" required></div>
+              <div class="form-group"><label>Message *</label><textarea id="annMessage" rows="3" placeholder="Write your announcement here..." required style="resize:vertical;"></textarea></div>
+              <div class="form-group"><label>Priority</label><select id="annPriority"><option value="normal">Normal</option><option value="important">Important</option><option value="urgent">Urgent</option></select></div>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post Announcement</button>
+            </form>
+          </div>
+          <!-- All Announcements -->
+          <h4 class="mb-2"><i class="fas fa-list"></i> All Announcements</h4>
+          <div id="announcementsList"></div>
+        </div>
+
+        <!-- ═══ DUTY ROSTER PAGE ═══ -->
+        <div class="page-section" id="page-duty">
+          <h3 class="mb-3"><i class="fas fa-calendar-day"></i> Duty Roster</h3>
+          <div class="card">
+            <h4 style="margin-bottom:1rem;">This Week's Duties</h4>
+            <div class="table-container" style="box-shadow:none;">
+              <table>
+                <thead><tr><th>Day</th><th>Date</th><th>Duty</th><th>Time</th><th>Location</th></tr></thead>
                 <tbody>
-                  <tr><td>06:00</td><td>Morning Parade</td><td>College Ground</td></tr>
-                  <tr><td>10:00</td><td>Guard Duty</td><td>Main Gate</td></tr>
-                  <tr><td>14:00</td><td>Drill Practice</td><td>Parade Ground</td></tr>
-                  <tr><td>16:30</td><td>Camp Preparation</td><td>NCC Room</td></tr>
+                  <tr><td>Monday</td><td>23 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00-08:00</td><td>College Ground</td></tr>
+                  <tr><td>Tuesday</td><td>24 Jun</td><td><span class="badge badge-blue">Guard Duty</span></td><td>10:00-12:00</td><td>Main Gate</td></tr>
+                  <tr><td>Wednesday</td><td>25 Jun</td><td><span class="badge badge-gold">Camp Duty</span></td><td>08:00-16:00</td><td>NCC Office</td></tr>
+                  <tr><td>Thursday</td><td>26 Jun</td><td><span class="badge badge-green">Parade</span></td><td>06:00-08:00</td><td>Parade Ground</td></tr>
+                  <tr><td>Friday</td><td>27 Jun</td><td><span class="badge badge-blue">College Duty</span></td><td>09:00-11:00</td><td>Tripura University</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
+        </div>
 
-          <!-- Attendance Quick Mark -->
-          <div class="card">
-            <div class="card-header"><h4><i class="fas fa-clipboard-check"></i> Quick Attendance Mark</h4></div>
-            <div class="quick-attendance">
-              <div class="attendance-row"><span>Cdt. Rahul Das</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
-              <div class="attendance-row"><span>Cdt. Amit Roy</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
-              <div class="attendance-row"><span>Cdt. Suman Devi</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
-              <div class="attendance-row"><span>Cdt. Priya Deb</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
-              <div class="attendance-row"><span>Cdt. Rajib Saha</span><div><button class="btn btn-sm btn-primary" style="padding:0.3rem 0.8rem;">P</button> <button class="btn btn-sm" style="padding:0.3rem 0.8rem;background:#dc3545;color:#fff;">A</button></div></div>
+
+        <!-- ═══ CAMPS PAGE ═══ -->
+        <div class="page-section" id="page-camps">
+          <h3 class="mb-3"><i class="fas fa-campground"></i> Camps</h3>
+          <div class="grid grid-2">
+            <div class="card"><span class="badge badge-green" style="margin-bottom:0.75rem;">Registered</span><h4>Annual Training Camp (ATC)</h4><p class="text-muted"><i class="fas fa-calendar"></i> 15 Jul - 26 Jul 2025</p><p class="text-muted"><i class="fas fa-location-dot"></i> Agartala, Tripura</p></div>
+            <div class="card"><span class="badge badge-gold" style="margin-bottom:0.75rem;">Open for Registration</span><h4>CATC Shillong</h4><p class="text-muted"><i class="fas fa-calendar"></i> 05 Aug - 16 Aug 2025</p><p class="text-muted"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</p><button class="btn btn-primary btn-sm mt-2" onclick="alert('Registration Confirmed!')"><i class="fas fa-check"></i> Register</button></div>
+          </div>
+        </div>
+
+        <!-- ═══ CERTIFICATES PAGE ═══ -->
+        <div class="page-section" id="page-certificates">
+          <h3 class="mb-3"><i class="fas fa-scroll"></i> My Certificates</h3>
+          <div class="cert-card" style="background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;border-left:4px solid var(--accent);box-shadow:var(--shadow);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div><h4>NCC 'B' Certificate</h4><span class="badge badge-green">Earned — 10 Mar 2024</span></div>
+            <button class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Download</button>
+          </div>
+          <div class="cert-card" style="background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;border-left:4px solid var(--accent);box-shadow:var(--shadow);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div><h4>NCC 'C' Certificate</h4><span class="badge badge-gold">Exam Scheduled — Aug 2025</span></div>
+            <button class="btn btn-sm btn-outline" disabled>Pending</button>
+          </div>
+        </div>
+
+        <!-- ═══ PROFILE PAGE ═══ -->
+        <div class="page-section" id="page-profile">
+          <h3 class="mb-3"><i class="fas fa-user-circle"></i> My Profile</h3>
+          <div class="card" style="max-width:600px;">
+            <div style="text-align:center;margin-bottom:1.5rem;">
+              <div style="width:80px;height:80px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--primary);"><i class="fas fa-user"></i></div>
+              <h3 id="profileName">SUO User</h3>
+              <p class="text-muted">Senior Under Officer | 15th Tripura Bn NCC</p>
             </div>
-            <button class="btn btn-primary btn-sm btn-block mt-2"><i class="fas fa-save"></i> Submit Attendance</button>
+            <div style="display:grid;gap:0.75rem;font-size:0.9rem;">
+              <div><strong>Rank:</strong> Senior Under Officer (SUO)</div>
+              <div><strong>Battalion:</strong> 15th Tripura Bn NCC</div>
+              <div><strong>College:</strong> Tripura University</div>
+              <div><strong>Wing:</strong> Army</div>
+              <div><strong>Year:</strong> 3rd Year (SW)</div>
+              <div><strong>Enrolled:</strong> Aug 2022</div>
+            </div>
           </div>
         </div>
 
-        <!-- Upcoming Camps -->
-        <div class="card mt-4">
-          <div class="card-header"><h4><i class="fas fa-campground"></i> Upcoming Camps</h4></div>
-          <div class="table-container" style="box-shadow:none;">
-            <table>
-              <thead><tr><th>Camp Name</th><th>Date</th><th>Location</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td>Annual Training Camp</td><td>15 Jul - 26 Jul 2025</td><td>Agartala</td><td><span class="badge badge-green">Registered</span></td></tr>
-                <tr><td>CATC Shillong</td><td>05 Aug - 16 Aug 2025</td><td>Shillong</td><td><span class="badge badge-gold">Apply</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      </div><!-- end dashboard-content -->
     </main>
   </div>
+
 
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
+    // Auth
     const user = requireAuth(['SUO']);
-    if (user) document.getElementById('userName').textContent = user.name || 'SUO Priya Sharma';
+    if (user) {
+      document.getElementById('userName').textContent = user.name || 'SUO';
+      document.getElementById('welcomeText').textContent = 'Welcome, ' + (user.name || 'SUO');
+      document.getElementById('profileName').textContent = user.name || 'SUO';
+    }
     initSidebarToggle();
+
+    // Set today's date
+    document.getElementById('attDate').valueAsDate = new Date();
+
+    // ─── CADET DATA (stored in localStorage) ───
+    const defaultCadets = [
+      {id:1, name:'Rahul Das', regNo:'NCC/1045'},
+      {id:2, name:'Amit Roy', regNo:'NCC/1046'},
+      {id:3, name:'Suman Devi', regNo:'NCC/1047'},
+      {id:4, name:'Priya Deb', regNo:'NCC/1048'},
+      {id:5, name:'Rajib Saha', regNo:'NCC/1049'},
+      {id:6, name:'Monika Chakma', regNo:'NCC/1050'},
+      {id:7, name:'Dipankar Nath', regNo:'NCC/1051'},
+      {id:8, name:'Rupa Majumder', regNo:'NCC/1052'},
+      {id:9, name:'Bikash Debnath', regNo:'NCC/1053'},
+      {id:10, name:'Taniya Sarkar', regNo:'NCC/1054'}
+    ];
+
+    function getCadets() { return defaultCadets; }
+    function getAttendanceData() { return JSON.parse(localStorage.getItem('suo_attendance') || '{}'); }
+    function saveAttendanceData(data) { localStorage.setItem('suo_attendance', JSON.stringify(data)); }
+    function getAnnouncements() { return JSON.parse(localStorage.getItem('suo_announcements') || '[]'); }
+    function saveAnnouncements(data) { localStorage.setItem('suo_announcements', JSON.stringify(data)); }
+
+    // ─── PAGE NAVIGATION ───
+    function showPage(page, btn) {
+      document.querySelectorAll('.page-section').forEach(function(s){ s.classList.remove('active'); });
+      document.getElementById('page-' + page).classList.add('active');
+      document.querySelectorAll('.sidebar-menu a').forEach(function(a){ a.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const titles = {overview:'My Overview',attendance:'Mark Attendance',duty:'Duty Roster',announcements:'Announcements',camps:'Camps',certificates:'My Certificates',profile:'My Profile'};
+      document.getElementById('pageTitle').textContent = titles[page] || page;
+      if (page === 'attendance') loadAttendance();
+      if (page === 'announcements') renderAnnouncements();
+    }
+
+    // ─── ATTENDANCE ───
+    function loadAttendance() {
+      const cadets = getCadets();
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      const dayData = allData[date] || {};
+
+      let html = '';
+      cadets.forEach(function(c) {
+        const status = dayData[c.id] || '';
+        html += '<div class="att-row">' +
+          '<div class="cadet-info"><div class="avatar">' + c.name.split(' ').map(n=>n[0]).join('') + '</div>' +
+          '<div><strong>' + c.name + '</strong><br><span style="font-size:0.8rem;color:var(--text-light);">' + c.regNo + '</span></div></div>' +
+          '<div style="display:flex;gap:0.5rem;">' +
+          '<button class="att-btn present ' + (status==='P'?'selected':'') + '" onclick="markCadet(' + c.id + ',\'P\',this)">P</button>' +
+          '<button class="att-btn absent ' + (status==='A'?'selected':'') + '" onclick="markCadet(' + c.id + ',\'A\',this)">A</button>' +
+          '</div></div>';
+      });
+      document.getElementById('attendanceList').innerHTML = html;
+      updateAttSummary();
+      loadAttHistory();
+    }
+
+    function markCadet(id, status, btn) {
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      if (!allData[date]) allData[date] = {};
+      allData[date][id] = status;
+      saveAttendanceData(allData);
+      // Update UI
+      const row = btn.parentElement;
+      row.querySelectorAll('.att-btn').forEach(function(b){b.classList.remove('selected');});
+      btn.classList.add('selected');
+      updateAttSummary();
+    }
+
+    function markAllPresent() {
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      allData[date] = {};
+      getCadets().forEach(function(c){ allData[date][c.id] = 'P'; });
+      saveAttendanceData(allData);
+      loadAttendance();
+      showToast('All marked Present!', 'success');
+    }
+
+    function markAllAbsent() {
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      allData[date] = {};
+      getCadets().forEach(function(c){ allData[date][c.id] = 'A'; });
+      saveAttendanceData(allData);
+      loadAttendance();
+      showToast('All marked Absent!', 'success');
+    }
+
+    function saveAttendance() {
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      const dayData = allData[date] || {};
+      const total = getCadets().length;
+      const marked = Object.keys(dayData).length;
+      if (marked < total) {
+        showToast('Please mark attendance for all cadets!', 'error');
+        return;
+      }
+      showToast('Attendance saved for ' + date + '!', 'success');
+      updateOverviewStats();
+    }
+
+    function updateAttSummary() {
+      const date = document.getElementById('attDate').value;
+      const allData = getAttendanceData();
+      const dayData = allData[date] || {};
+      const total = getCadets().length;
+      let present = 0;
+      Object.values(dayData).forEach(function(v){if(v==='P') present++;});
+      const marked = Object.keys(dayData).length;
+      document.getElementById('attSummary').textContent = 'Present: ' + present + ' / ' + total + ' (' + (total>0?Math.round(present/total*100):0) + '%)';
+    }
+
+    function loadAttHistory() {
+      const allData = getAttendanceData();
+      const total = getCadets().length;
+      const dates = Object.keys(allData).sort().reverse().slice(0, 7);
+      let html = '';
+      dates.forEach(function(d) {
+        let p = 0, a = 0;
+        Object.values(allData[d]).forEach(function(v){if(v==='P')p++;else a++;});
+        html += '<tr><td>' + d + '</td><td>' + p + '</td><td>' + a + '</td><td>' + total + '</td><td><span class="badge ' + (Math.round(p/total*100)>=80?'badge-green':'badge-red') + '">' + Math.round(p/total*100) + '%</span></td></tr>';
+      });
+      if (!html) html = '<tr><td colspan="5" style="text-align:center;color:var(--text-light);">No attendance records yet</td></tr>';
+      document.getElementById('attHistory').innerHTML = html;
+    }
+
+    // ─── ANNOUNCEMENTS ───
+    function postAnnouncement(e) {
+      e.preventDefault();
+      const title = document.getElementById('annTitle').value.trim();
+      const message = document.getElementById('annMessage').value.trim();
+      const priority = document.getElementById('annPriority').value;
+      if (!title || !message) return;
+
+      const announcements = getAnnouncements();
+      announcements.unshift({
+        id: Date.now(),
+        title: title,
+        message: message,
+        priority: priority,
+        date: new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}),
+        time: new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'})
+      });
+      saveAnnouncements(announcements);
+      document.getElementById('annTitle').value = '';
+      document.getElementById('annMessage').value = '';
+      document.getElementById('annPriority').value = 'normal';
+      renderAnnouncements();
+      showToast('Announcement posted!', 'success');
+      updateOverviewStats();
+    }
+
+    function renderAnnouncements() {
+      const announcements = getAnnouncements();
+      let html = '';
+      announcements.forEach(function(a) {
+        const borderColor = a.priority==='urgent'?'#dc3545':a.priority==='important'?'var(--accent)':'var(--primary)';
+        html += '<div class="announce-card" style="border-left-color:' + borderColor + ';">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<span class="announce-date"><i class="fas fa-clock"></i> ' + a.date + ' • ' + a.time + '</span>' +
+          '<span class="badge ' + (a.priority==='urgent'?'badge-red':a.priority==='important'?'badge-gold':'badge-green') + '">' + a.priority + '</span>' +
+          '</div>' +
+          '<h5>' + a.title + '</h5>' +
+          '<p style="margin:0;font-size:0.9rem;color:var(--text-light);">' + a.message + '</p>' +
+          '<button style="margin-top:0.5rem;font-size:0.75rem;color:#dc3545;background:none;border:none;cursor:pointer;" onclick="deleteAnnouncement(' + a.id + ')"><i class="fas fa-trash"></i> Delete</button>' +
+          '</div>';
+      });
+      if (!html) html = '<p class="text-muted text-center">No announcements yet. Post one above!</p>';
+      document.getElementById('announcementsList').innerHTML = html;
+
+      // Update recent on overview
+      const recent = announcements.slice(0, 3).map(function(a) {
+        return '<div style="padding:0.5rem 0;border-bottom:1px solid var(--border);"><strong style="font-size:0.85rem;">' + a.title + '</strong><p style="margin:0;font-size:0.8rem;color:var(--text-light);">' + a.date + '</p></div>';
+      }).join('');
+      document.getElementById('recentAnnouncements').innerHTML = recent || '<p class="text-muted text-sm">No announcements yet</p>';
+    }
+
+    function deleteAnnouncement(id) {
+      if (!confirm('Delete this announcement?')) return;
+      let announcements = getAnnouncements();
+      announcements = announcements.filter(function(a){return a.id !== id;});
+      saveAnnouncements(announcements);
+      renderAnnouncements();
+      showToast('Announcement deleted', 'success');
+      updateOverviewStats();
+    }
+
+    // ─── UPDATE OVERVIEW STATS ───
+    function updateOverviewStats() {
+      const cadets = getCadets();
+      document.getElementById('totalCadets').textContent = cadets.length;
+      document.getElementById('totalAnnounce').textContent = getAnnouncements().length;
+
+      const today = new Date().toISOString().split('T')[0];
+      const allData = getAttendanceData();
+      const dayData = allData[today] || {};
+      let present = 0;
+      Object.values(dayData).forEach(function(v){if(v==='P') present++;});
+      const pct = cadets.length > 0 ? Math.round(present/cadets.length*100) : 0;
+      document.getElementById('todayAtt').textContent = pct + '%';
+    }
+
+    // ─── INIT ───
+    loadAttendance();
+    renderAnnouncements();
+    updateOverviewStats();
   </script>
-  <style>
-    .attendance-row { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border); }
-    .attendance-row:last-child { border-bottom:none; }
-    .attendance-row span { font-weight:500; font-size:0.9rem; }
-  </style>
 </body>
 </html>
