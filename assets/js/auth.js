@@ -105,8 +105,9 @@ function sendOTP(e) {
     case 'SUO':
       name = document.getElementById('suoName').value.trim();
       const suoId = document.getElementById('suoId').value.trim();
+      const suoCollege = document.getElementById('suoCollege').value.trim();
       mobile = document.getElementById('suoMobile').value.trim();
-      if (!name || !suoId || !mobile) {
+      if (!name || !suoId || !suoCollege || !mobile) {
         showToast('Please fill all required fields', 'error');
         valid = false;
       }
@@ -155,17 +156,19 @@ function verifyOTP() {
   if (enteredOTP === generatedOTP) {
     // Get name based on role
     let userName = '';
+    let userCollege = '';
     switch (selectedRole) {
-      case 'Cadet': userName = document.getElementById('cadetName').value.trim(); break;
+      case 'Cadet': userName = document.getElementById('cadetName').value.trim(); userCollege = document.getElementById('cadetCollege').value.trim(); break;
       case 'ANO': userName = document.getElementById('anoName').value.trim(); break;
       case 'CO': userName = document.getElementById('coName').value.trim(); break;
-      case 'SUO': userName = document.getElementById('suoName').value.trim(); break;
+      case 'SUO': userName = document.getElementById('suoName').value.trim(); userCollege = document.getElementById('suoCollege').value.trim(); break;
     }
 
     // Save to localStorage
     const userData = {
       name: userName,
       role: selectedRole,
+      college: userCollege,
       loggedIn: true,
       loginTime: new Date().toISOString()
     };

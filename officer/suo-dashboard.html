@@ -69,7 +69,7 @@
         <div class="page-section active" id="page-overview">
           <div class="welcome-banner">
             <h2 id="welcomeText">Welcome, SUO</h2>
-            <p>15th Tripura Bn NCC | Tripura University</p>
+            <p>15th Tripura Bn NCC | <span id="collegeBanner">College</span></p>
           </div>
           <div class="grid grid-4 mb-4">
             <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number" id="totalCadets">0</div><div class="stat-label">My Cadets</div></div>
@@ -104,7 +104,7 @@
           </div>
           <div class="card">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
-              <h4>Cadets List — Tripura University</h4>
+              <h4>Cadets List — <span id="attCollegeName">My College</span></h4>
               <div>
                 <button class="btn btn-sm btn-primary" onclick="markAllPresent()"><i class="fas fa-check-double"></i> All Present</button>
                 <button class="btn btn-sm btn-outline" onclick="markAllAbsent()" style="margin-left:0.5rem;"><i class="fas fa-times"></i> All Absent</button>
@@ -199,7 +199,7 @@
             <div style="display:grid;gap:0.75rem;font-size:0.9rem;">
               <div><strong>Rank:</strong> Senior Under Officer (SUO)</div>
               <div><strong>Battalion:</strong> 15th Tripura Bn NCC</div>
-              <div><strong>College:</strong> Tripura University</div>
+              <div><strong>College:</strong> <span id="profileCollege">My College</span></div>
               <div><strong>Wing:</strong> Army</div>
               <div><strong>Year:</strong> 3rd Year (SW)</div>
               <div><strong>Enrolled:</strong> Aug 2022</div>
@@ -221,6 +221,10 @@
       document.getElementById('userName').textContent = user.name || 'SUO';
       document.getElementById('welcomeText').textContent = 'Welcome, ' + (user.name || 'SUO');
       document.getElementById('profileName').textContent = user.name || 'SUO';
+      const college = user.college || 'My College';
+      document.getElementById('collegeBanner').textContent = college;
+      document.getElementById('attCollegeName').textContent = college;
+      document.getElementById('profileCollege').textContent = college;
     }
     initSidebarToggle();
 
@@ -242,10 +246,22 @@
     ];
 
     function getCadets() { return defaultCadets; }
-    function getAttendanceData() { return JSON.parse(localStorage.getItem('suo_attendance') || '{}'); }
-    function saveAttendanceData(data) { localStorage.setItem('suo_attendance', JSON.stringify(data)); }
-    function getAnnouncements() { return JSON.parse(localStorage.getItem('suo_announcements') || '[]'); }
-    function saveAnnouncements(data) { localStorage.setItem('suo_announcements', JSON.stringify(data)); }
+    function getAttendanceData() {
+      const college = (user && user.college) || 'default';
+      return JSON.parse(localStorage.getItem('suo_attendance_' + college) || '{}');
+    }
+    function saveAttendanceData(data) {
+      const college = (user && user.college) || 'default';
+      localStorage.setItem('suo_attendance_' + college, JSON.stringify(data));
+    }
+    function getAnnouncements() {
+      const college = (user && user.college) || 'default';
+      return JSON.parse(localStorage.getItem('suo_announcements_' + college) || '[]');
+    }
+    function saveAnnouncements(data) {
+      const college = (user && user.college) || 'default';
+      localStorage.setItem('suo_announcements_' + college, JSON.stringify(data));
+    }
 
     // ─── PAGE NAVIGATION ───
     function showPage(page, btn) {
