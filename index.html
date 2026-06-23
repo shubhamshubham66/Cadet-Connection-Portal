@@ -92,14 +92,26 @@
     </div>
   </section>
 
-  <!-- Achievements / Highlights Section -->
+  <!-- Achievements / Highlights Section — Auto Scroll Carousel -->
   <section class="section section-light">
     <div class="container">
       <div class="section-title" data-aos="fade-up">
         <h2>15 Tripura BN NCC Secures 2nd Rank in NE Directorate; Ramthakur College, NIT Agartala Shine</h2>
       </div>
-      <div style="max-width:900px;margin:0 auto;" data-aos="fade-up">
-        <img src="assets/images/achievement-banner.png" alt="15 Tripura BN NCC Achievement" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);margin-bottom:1.5rem;">
+      <!-- Auto-scrolling Carousel -->
+      <div class="carousel-wrapper" data-aos="fade-up">
+        <div class="carousel-track" id="achieveCarousel">
+          <div class="carousel-slide">
+            <img src="assets/images/achievement-banner.png" alt="Achievement 1">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/images/achievement-banner2.png" alt="Achievement 2">
+          </div>
+        </div>
+        <div class="carousel-dots" id="carouselDots">
+          <span class="dot active" onclick="goToSlide(0)"></span>
+          <span class="dot" onclick="goToSlide(1)"></span>
+        </div>
       </div>
       <!-- Dynamic achievements from admin -->
       <div id="homeAchievements" data-aos="fade-up" style="max-width:900px;margin:1.5rem auto 0;"></div>
@@ -354,7 +366,42 @@
       initCounterObserver();
       loadHomeNews();
       loadHomeAchievements();
+      initCarousel();
     });
+
+    // ─── Auto-scroll Carousel ───
+    var currentSlide = 0;
+    var totalSlides = 2;
+    var carouselInterval;
+
+    function initCarousel() {
+      carouselInterval = setInterval(function() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      }, 4000); // Auto-scroll every 4 seconds
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+      // Reset auto-scroll timer
+      clearInterval(carouselInterval);
+      carouselInterval = setInterval(function() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      }, 4000);
+    }
+
+    function updateCarousel() {
+      var track = document.getElementById('achieveCarousel');
+      if (track) track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+      // Update dots
+      var dots = document.querySelectorAll('.carousel-dots .dot');
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.remove('active');
+      }
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }
 
     function loadHomeAchievements() {
       var awards = JSON.parse(localStorage.getItem('co_awards') || '[]');
