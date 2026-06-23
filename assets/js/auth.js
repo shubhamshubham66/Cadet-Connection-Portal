@@ -24,7 +24,13 @@ function showToast(message, type) {
 // ─── Logout ───
 function logout() {
   localStorage.removeItem('ccp_user');
-  window.location.href = '../login.html';
+  // Detect if we are in a subfolder or root
+  var path = window.location.pathname;
+  if (path.indexOf('/officer/') !== -1 || path.indexOf('/cadet/') !== -1) {
+    window.location.href = '../index.html';
+  } else {
+    window.location.href = 'index.html';
+  }
 }
 
 // ─── Protect Pages ───
