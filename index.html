@@ -57,6 +57,20 @@
     <div class="mobile-overlay"></div>
   </nav>
 
+  <!-- Live Ticker -->
+  <div class="live-ticker">
+    <div class="ticker-badge"><i class="fas fa-bolt"></i> LIVE</div>
+    <div class="ticker-wrap">
+      <div class="ticker-content" id="tickerContent">
+        <span>🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025</span>
+        <span>🏆 15th Tripura BN secures 2nd Rank in NE Directorate</span>
+        <span>📢 B Certificate Exam scheduled — 15 Aug 2025</span>
+        <span>🪖 NCC Day Celebration — 28 November 2025</span>
+        <span>⭐ NIT Agartala & Ramthakur College Shine in NER</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <section class="hero-section" style="background: linear-gradient(135deg, rgba(26,58,22,0.85), rgba(45,90,39,0.8)), url('assets/images/ncc-banner.jpg') center/cover no-repeat;">
     <div class="hero-bg-pattern"></div>
@@ -380,7 +394,34 @@
       loadHomeAchievements();
       initCarousel();
       loadAnnounceBadge();
+      loadTickerContent();
     });
+
+    // ─── Live Ticker Dynamic Content ───
+    function loadTickerContent() {
+      var news = JSON.parse(localStorage.getItem('co_news') || '[]');
+      var ticker = document.getElementById('tickerContent');
+      if (!ticker) return;
+
+      var items = [];
+      if (news.length > 0) {
+        for (var i = 0; i < Math.min(news.length, 5); i++) {
+          var icon = news[i].priority === 'urgent' ? '🚨' : news[i].priority === 'important' ? '⭐' : '📢';
+          items.push(icon + ' ' + news[i].title);
+        }
+      } else {
+        items = ['🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025', '🏆 15th Tripura BN secures 2nd Rank in NE Directorate', '📢 B Certificate Exam — 15 Aug 2025', '🪖 NCC Day — 28 November 2025', '⭐ NIT Agartala & Ramthakur College Shine'];
+      }
+
+      // Duplicate for infinite scroll
+      var html = '';
+      for (var j = 0; j < 2; j++) {
+        for (var k = 0; k < items.length; k++) {
+          html += '<span>' + items[k] + '</span>';
+        }
+      }
+      ticker.innerHTML = html;
+    }
 
     // ─── Announcements Panel ───
     function toggleAnnouncementsPanel() {

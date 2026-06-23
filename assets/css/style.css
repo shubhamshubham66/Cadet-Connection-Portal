@@ -608,3 +608,68 @@ tbody tr:hover {
   .container { padding: 0 1rem; }
   .section { padding: 2.5rem 0; }
 }
+
+
+
+/* ═══════════════════════════════════════════
+   FULL MOBILE UI/UX POLISH
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* ─── General Mobile ─── */
+  body { font-size: 14px; }
+  .container { padding: 0 1rem; }
+  .section { padding: 2.5rem 0; }
+  .section-title h2 { font-size: 1.4rem; }
+  .section-title p { font-size: 0.9rem; }
+
+  /* ─── Cards Mobile ─── */
+  .card { padding: 1.25rem; border-radius: 10px; }
+  .stat-card { padding: 0.9rem 0.5rem; }
+  .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .stat-card .stat-number { font-size: 1.2rem; }
+  .stat-card .stat-label { font-size: 0.7rem; }
+
+  /* ─── Buttons Mobile ─── */
+  .btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
+  .btn-lg { padding: 0.75rem 1.25rem; font-size: 0.9rem; }
+
+  /* ─── Tables Mobile ─── */
+  .table-container { border-radius: 8px; }
+  table { font-size: 0.8rem; }
+  th, td { padding: 0.6rem 0.5rem; }
+
+  /* ─── Modal Mobile ─── */
+  .modal-overlay { padding: 0.75rem; }
+  .modal { padding: 1.25rem; border-radius: 12px; max-height: 90vh; }
+
+  /* ─── Footer Mobile ─── */
+  .footer { padding: 2rem 0 0; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem; }
+  .footer-bottom { padding: 1rem 0; }
+
+  /* ─── Smooth touch scrolling ─── */
+  * { -webkit-tap-highlight-color: transparent; }
+  input, select, textarea { font-size: 16px !important; /* prevents zoom on iOS */ }
+
+  /* ─── Hide long text on mobile ─── */
+  .breadcrumb { display: none; }
+
+  /* ─── Grid fixes ─── */
+  .grid-2, .grid-3 { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  .grid-4 { grid-template-columns: 1fr 1fr !important; gap: 0.75rem !important; }
+}
+
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
+  .stat-card { padding: 0.75rem 0.4rem; }
+  .stat-card .stat-number { font-size: 1.1rem; }
+  .hero-content h1 { font-size: 1.6rem !important; }
+  .hero-subtitle { font-size: 0.9rem !important; }
+  .hero-motto { font-size: 1rem !important; }
+  .hero-buttons { flex-direction: column; gap: 0.75rem; }
+  .hero-emblem { width: 70px; height: 70px; }
+  .hero-emblem img { width: 55px !important; height: 55px !important; }
+  .section-title h2 { font-size: 1.2rem; }
+  .footer-social { justify-content: center; }
+}
