@@ -9,22 +9,18 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/login.css">
   <style>
-    html, body { height:100vh!important; overflow:hidden!important; padding:0!important; margin:0!important; }
-    .login-right { overflow-y:scroll!important; height:100vh!important; padding-top:1.5rem!important; }
-    .back-home { position:relative!important; top:auto!important; left:auto!important; margin-bottom:1.5rem; }
-    .login-form-container { padding-bottom:3rem; }
-    .hidden { display:none!important; }
+    html,body{height:100vh!important;overflow:hidden!important;padding:0!important;margin:0!important;}
+    .login-right{overflow-y:scroll!important;height:100vh!important;padding-top:1.5rem!important;}
+    .back-home{position:relative!important;top:auto!important;left:auto!important;margin-bottom:1.5rem;}
+    .login-form-container{padding-bottom:3rem;}
+    .hide{display:none!important;}
   </style>
 </head>
 <body class="login-body" style="height:100vh;overflow:hidden;padding:0;margin:0;">
-
   <div class="login-wrapper" style="display:grid;grid-template-columns:1fr 1fr;height:100vh;overflow:hidden;">
-    <!-- Left Panel -->
     <div class="login-left">
       <div class="login-left-content">
-        <div class="login-emblem">
-          <i class="fas fa-shield-alt"></i>
-        </div>
+        <div class="login-emblem"><i class="fas fa-shield-alt"></i></div>
         <h1>Cadet Connection Portal</h1>
         <p class="login-motto">"Unity and Discipline"</p>
         <p class="login-desc">Official NCC NER Region Digital Platform<br>15th Tripura Bn NCC</p>
@@ -37,190 +33,203 @@
       </div>
     </div>
 
-    <!-- Right Panel (Login Form) -->
     <div class="login-right" style="overflow-y:scroll;height:100vh;padding:2rem 3rem;">
       <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-      <!-- Step 1: Select Role -->
+      <!-- STEP 1: Role Select -->
       <div class="login-form-container" id="step1">
-        <div class="login-form-header">
-          <h2>Welcome</h2>
-          <p>Select your role to continue</p>
-        </div>
+        <div class="login-form-header"><h2>Welcome</h2><p>Select your role to continue</p></div>
         <div class="role-cards">
-          <div class="role-card" onclick="selectRole('Cadet')">
-            <i class="fas fa-user-graduate"></i>
-            <h4>Cadet</h4>
-            <p>NCC Cadet Login</p>
-          </div>
-          <div class="role-card" onclick="selectRole('SUO')">
-            <i class="fas fa-user-shield"></i>
-            <h4>SUO</h4>
-            <p>Senior Under Officer</p>
-          </div>
-          <div class="role-card" onclick="selectRole('Admin')">
-            <i class="fas fa-user-tie"></i>
-            <h4>Admin</h4>
-            <p>Full Management Access</p>
-          </div>
-          <div class="role-card" onclick="selectRole('CO')">
-            <i class="fas fa-star"></i>
-            <h4>CO</h4>
-            <p>Commanding Officer</p>
-          </div>
+          <div class="role-card" onclick="pickRole('Cadet')"><i class="fas fa-user-graduate"></i><h4>Cadet</h4><p>NCC Cadet Login</p></div>
+          <div class="role-card" onclick="pickRole('SUO')"><i class="fas fa-user-shield"></i><h4>SUO</h4><p>Senior Under Officer</p></div>
+          <div class="role-card" onclick="pickRole('Admin')"><i class="fas fa-user-tie"></i><h4>Admin</h4><p>Full Management Access</p></div>
+          <div class="role-card" onclick="pickRole('CO')"><i class="fas fa-star"></i><h4>CO</h4><p>Commanding Officer</p></div>
         </div>
       </div>
 
-      <!-- Step 2: Enter Details (changes based on role) -->
-      <div class="login-form-container hidden" id="step2">
-        <div class="login-form-header">
-          <h2 id="step2Title">Cadet Registration</h2>
-          <p id="step2Desc">Fill your details to get OTP</p>
+      <!-- STEP 2: Form -->
+      <div class="login-form-container hide" id="step2">
+        <div class="login-form-header"><h2 id="step2Title">Login</h2><p id="step2Desc">Fill details</p></div>
+
+        <div id="cadetFields" class="hide">
+          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="cadetName" placeholder="Enter your full name"></div>
+          <div class="form-group"><label><i class="fas fa-id-badge"></i> Regimental Number *</label><input type="text" id="cadetRegNo" placeholder="NCC/NER/TR/15/2024/XXXX"></div>
+          <div class="form-group"><label><i class="fas fa-building-flag"></i> Battalion Name *</label><input type="text" id="cadetBn" placeholder="e.g., 15th Tripura Bn NCC"></div>
+          <div class="form-group"><label><i class="fas fa-school"></i> College / School *</label><input type="text" id="cadetCollege" placeholder="Enter college or school"></div>
+          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="cadetMobile" placeholder="10 digit number" maxlength="10"></div>
+          <div class="form-group"><label><i class="fas fa-envelope"></i> Email (Optional)</label><input type="email" id="cadetEmail" placeholder="your@email.com"></div>
+          <div class="form-group"><label><i class="fas fa-calendar"></i> Date of Birth *</label><input type="date" id="cadetDob"></div>
+          <div class="form-group"><label><i class="fas fa-venus-mars"></i> Gender *</label><select id="cadetGender"><option value="">Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+          <div class="form-group"><label><i class="fas fa-camera"></i> Photo *</label><input type="file" id="cadetPhoto" accept="image/*" style="padding:0.5rem;"></div>
         </div>
-        <form id="detailsForm" onsubmit="sendOTP(event)">
 
-          <!-- Cadet Fields -->
-          <div id="cadetFields" class="hidden">
-            <div class="form-group">
-              <label><i class="fas fa-user"></i> Full Name *</label>
-              <input type="text" id="cadetName" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-id-badge"></i> Regimental Number *</label>
-              <input type="text" id="cadetRegNo" placeholder="NCC/NER/TR/15/2024/XXXX">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-building-flag"></i> Battalion Name *</label>
-              <input type="text" id="cadetBn" placeholder="e.g., 15th Tripura Bn NCC">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-school"></i> College / School Name *</label>
-              <input type="text" id="cadetCollege" placeholder="Enter your college or school">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-phone"></i> Mobile Number *</label>
-              <input type="tel" id="cadetMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-envelope"></i> Email (Optional)</label>
-              <input type="email" id="cadetEmail" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-calendar"></i> Date of Birth *</label>
-              <input type="date" id="cadetDob">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-venus-mars"></i> Gender *</label>
-              <select id="cadetGender" required>
-                <option value="" disabled selected>Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-camera"></i> Photo *</label>
-              <input type="file" id="cadetPhoto" accept="image/*" style="padding:0.5rem;">
-            </div>
+        <div id="adminFields" class="hide">
+          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="adminName" placeholder="Enter your full name"></div>
+          <div class="form-group"><label><i class="fas fa-id-badge"></i> Admin ID *</label><input type="text" id="adminId" placeholder="Admin ID number"></div>
+          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="adminMobile" placeholder="10 digit number" maxlength="10"></div>
+        </div>
+
+        <div id="coFields" class="hide">
+          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="coName" placeholder="Enter your full name"></div>
+          <div class="form-group"><label><i class="fas fa-id-badge"></i> CO ID *</label><input type="text" id="coId" placeholder="CO ID number"></div>
+          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="coMobile" placeholder="10 digit number" maxlength="10"></div>
+        </div>
+
+        <div id="suoFields" class="hide">
+          <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="suoName" placeholder="Enter your full name"></div>
+          <div class="form-group"><label><i class="fas fa-id-badge"></i> SUO ID *</label><input type="text" id="suoId" placeholder="SUO ID number"></div>
+          <div class="form-group"><label><i class="fas fa-school"></i> College Name *</label><input type="text" id="suoCollege" placeholder="e.g., Tripura University"></div>
+          <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="suoMobile" placeholder="10 digit number" maxlength="10"></div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-block btn-lg mt-2" id="sendOtpBtn"><i class="fas fa-paper-plane"></i> Send OTP</button>
+        <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
+
+        <!-- OTP SECTION -->
+        <div id="otpBox" class="hide" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #ddd;">
+          <div style="background:rgba(45,90,39,0.05);border:1px solid #2d5a27;border-radius:8px;padding:1rem;margin-bottom:1.5rem;text-align:center;">
+            <p style="margin:0;font-weight:700;color:#2d5a27;"><i class="fas fa-check-circle"></i> OTP Generated!</p>
+            <p style="margin:0.5rem 0 0;font-size:2rem;font-weight:900;letter-spacing:5px;color:#1c1c1c;" id="otpDisplay">------</p>
+            <p style="margin:0.25rem 0 0;font-size:0.8rem;color:#555;">Enter this OTP below to verify</p>
           </div>
-
-          <!-- Admin Fields -->
-          <div id="adminFields" class="hidden">
-            <div class="form-group">
-              <label><i class="fas fa-user"></i> Full Name *</label>
-              <input type="text" id="adminName" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-id-badge"></i> Admin ID *</label>
-              <input type="text" id="adminId" placeholder="Admin ID number">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-phone"></i> Mobile Number *</label>
-              <input type="tel" id="adminMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
-            </div>
-          </div>
-
-          <!-- CO Fields -->
-          <div id="coFields" class="hidden">
-            <div class="form-group">
-              <label><i class="fas fa-user"></i> Full Name *</label>
-              <input type="text" id="coName" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-id-badge"></i> CO ID *</label>
-              <input type="text" id="coId" placeholder="CO ID number">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-phone"></i> Mobile Number *</label>
-              <input type="tel" id="coMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
-            </div>
-          </div>
-
-          <!-- SUO Fields -->
-          <div id="suoFields" class="hidden">
-            <div class="form-group">
-              <label><i class="fas fa-user"></i> Full Name *</label>
-              <input type="text" id="suoName" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-id-badge"></i> SUO ID *</label>
-              <input type="text" id="suoId" placeholder="SUO ID number">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-school"></i> College Name *</label>
-              <input type="text" id="suoCollege" placeholder="e.g., Tripura University">
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-phone"></i> Mobile Number *</label>
-              <input type="tel" id="suoMobile" placeholder="+91 XXXXX XXXXX" maxlength="10">
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block btn-lg mt-2">
-            <i class="fas fa-paper-plane"></i> Send OTP
-          </button>
-          <button type="button" class="btn btn-outline btn-block mt-2" onclick="goToStep1()">
-            <i class="fas fa-arrow-left"></i> Change Role
-          </button>
-        </form>
-
-        <!-- OTP Section (shows on same page after send) -->
-        <div id="otpSection" class="hidden" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--border);">
-          <div style="background:rgba(45,90,39,0.05);border:1px solid var(--primary);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;text-align:center;">
-            <p style="margin:0;font-weight:700;color:var(--primary);"><i class="fas fa-check-circle"></i> OTP Generated!</p>
-            <p style="margin:0.5rem 0 0;font-size:2rem;font-weight:900;letter-spacing:5px;color:var(--dark);" id="otpNote"></p>
-            <p style="margin:0.25rem 0 0;font-size:0.8rem;color:var(--text-light);" id="otpSubNote">Enter this OTP below to verify</p>
-          </div>
-
           <div class="otp-inputs">
-            <input type="text" maxlength="1" class="otp-box" data-index="0" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" data-index="1" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" data-index="2" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" data-index="3" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" data-index="4" autocomplete="off">
-            <input type="text" maxlength="1" class="otp-box" data-index="5" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
+            <input type="text" maxlength="1" class="otp-box" autocomplete="off">
           </div>
-
-          <div class="otp-timer">
-            <span id="timerText">Resend OTP in <strong id="countdown">0:45</strong></span>
-            <button type="button" id="resendBtn" class="resend-btn hidden" onclick="resendOTP()">Resend OTP</button>
-          </div>
-
-          <button type="button" class="btn btn-primary btn-block btn-lg" onclick="verifyOTP()">
-            <i class="fas fa-check-circle"></i> Verify & Login
-          </button>
+          <button type="button" class="btn btn-primary btn-block btn-lg mt-2" id="verifyBtn"><i class="fas fa-check-circle"></i> Verify & Login</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <script src="assets/js/auth.js"></script>
   <script>
-    // Fallback: ensure sendOTP is attached to form
-    document.getElementById('detailsForm').onsubmit = function(e) { sendOTP(e); };
+    var myRole = '';
+    var myOTP = '';
+
+    function pickRole(role) {
+      myRole = role;
+      document.getElementById('step1').classList.add('hide');
+      document.getElementById('step2').classList.remove('hide');
+      document.getElementById('cadetFields').classList.add('hide');
+      document.getElementById('adminFields').classList.add('hide');
+      document.getElementById('coFields').classList.add('hide');
+      document.getElementById('suoFields').classList.add('hide');
+      document.getElementById('otpBox').classList.add('hide');
+
+      if (role === 'Cadet') { document.getElementById('cadetFields').classList.remove('hide'); document.getElementById('step2Title').textContent='Cadet Login'; document.getElementById('step2Desc').textContent='Fill your details'; }
+      else if (role === 'Admin') { document.getElementById('adminFields').classList.remove('hide'); document.getElementById('step2Title').textContent='Admin Login'; document.getElementById('step2Desc').textContent='Enter admin credentials'; }
+      else if (role === 'CO') { document.getElementById('coFields').classList.remove('hide'); document.getElementById('step2Title').textContent='CO Login'; document.getElementById('step2Desc').textContent='Commanding Officer access'; }
+      else if (role === 'SUO') { document.getElementById('suoFields').classList.remove('hide'); document.getElementById('step2Title').textContent='SUO Login'; document.getElementById('step2Desc').textContent='Senior Under Officer access'; }
+    }
+
+    function goBack() {
+      document.getElementById('step2').classList.add('hide');
+      document.getElementById('step1').classList.remove('hide');
+      document.getElementById('otpBox').classList.add('hide');
+    }
+
+    // SEND OTP
+    document.getElementById('sendOtpBtn').onclick = function() {
+      var mobile = '';
+      var name = '';
+
+      if (myRole === 'Cadet') {
+        name = document.getElementById('cadetName').value.trim();
+        mobile = document.getElementById('cadetMobile').value.trim();
+        var r = document.getElementById('cadetRegNo').value.trim();
+        var b = document.getElementById('cadetBn').value.trim();
+        var c = document.getElementById('cadetCollege').value.trim();
+        var d = document.getElementById('cadetDob').value;
+        var g = document.getElementById('cadetGender').value;
+        var p = document.getElementById('cadetPhoto').files.length;
+        if (!name || !r || !b || !c || !mobile || !d || !g || !p) { toast('Please fill all fields & upload photo','error'); return; }
+      } else if (myRole === 'Admin') {
+        name = document.getElementById('adminName').value.trim();
+        mobile = document.getElementById('adminMobile').value.trim();
+        var aid = document.getElementById('adminId').value.trim();
+        if (!name || !aid || !mobile) { toast('Please fill all fields','error'); return; }
+      } else if (myRole === 'CO') {
+        name = document.getElementById('coName').value.trim();
+        mobile = document.getElementById('coMobile').value.trim();
+        var cid = document.getElementById('coId').value.trim();
+        if (!name || !cid || !mobile) { toast('Please fill all fields','error'); return; }
+      } else if (myRole === 'SUO') {
+        name = document.getElementById('suoName').value.trim();
+        mobile = document.getElementById('suoMobile').value.trim();
+        var sid = document.getElementById('suoId').value.trim();
+        var sc = document.getElementById('suoCollege').value.trim();
+        if (!name || !sid || !sc || !mobile) { toast('Please fill all fields','error'); return; }
+      }
+
+      if (mobile.length < 10) { toast('Enter valid 10-digit mobile','error'); return; }
+
+      // Generate & show OTP
+      myOTP = String(Math.floor(100000 + Math.random() * 900000));
+      document.getElementById('otpDisplay').textContent = myOTP;
+      document.getElementById('otpBox').classList.remove('hide');
+      document.getElementById('otpBox').scrollIntoView({behavior:'smooth'});
+      toast('OTP Generated!','success');
+
+      // Focus first box
+      setTimeout(function(){ document.querySelectorAll('.otp-box')[0].focus(); }, 300);
+    };
+
+    // VERIFY OTP
+    document.getElementById('verifyBtn').onclick = function() {
+      var boxes = document.querySelectorAll('.otp-box');
+      var entered = '';
+      for (var i=0; i<boxes.length; i++) entered += boxes[i].value;
+
+      if (entered.length !== 6) { toast('Enter complete 6-digit OTP','error'); return; }
+
+      if (entered === myOTP) {
+        var userName = '';
+        var userCollege = '';
+        if (myRole === 'Cadet') { userName = document.getElementById('cadetName').value.trim(); userCollege = document.getElementById('cadetCollege').value.trim(); }
+        else if (myRole === 'Admin') { userName = document.getElementById('adminName').value.trim(); }
+        else if (myRole === 'CO') { userName = document.getElementById('coName').value.trim(); }
+        else if (myRole === 'SUO') { userName = document.getElementById('suoName').value.trim(); userCollege = document.getElementById('suoCollege').value.trim(); }
+
+        localStorage.setItem('ccp_user', JSON.stringify({name:userName, role:myRole, college:userCollege, loggedIn:true}));
+        toast('Login Successful! Redirecting...','success');
+
+        setTimeout(function(){
+          if (myRole==='CO') window.location.href='officer/co-dashboard.html';
+          else if (myRole==='Admin') window.location.href='officer/admin-dashboard.html';
+          else if (myRole==='SUO') window.location.href='officer/suo-dashboard.html';
+          else window.location.href='cadet/dashboard.html';
+        }, 1200);
+      } else {
+        toast('Invalid OTP! Check and try again.','error');
+      }
+    };
+
+    // OTP BOX AUTO-MOVE
+    var otpBoxes = document.querySelectorAll('.otp-box');
+    for (var i=0; i<otpBoxes.length; i++) {
+      (function(idx){
+        otpBoxes[idx].addEventListener('input', function(){
+          if (this.value && idx < 5) otpBoxes[idx+1].focus();
+        });
+        otpBoxes[idx].addEventListener('keydown', function(e){
+          if (e.key==='Backspace' && !this.value && idx > 0) { otpBoxes[idx-1].focus(); otpBoxes[idx-1].value=''; }
+        });
+      })(i);
+    }
+
+    // TOAST
+    function toast(msg, type) {
+      var t = document.getElementById('toast');
+      t.className = 'toast toast-' + (type||'success') + ' show';
+      t.innerHTML = '<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+'"></i> ' + msg;
+      setTimeout(function(){ t.classList.remove('show'); }, 3000);
+    }
   </script>
 </body>
 </html>
