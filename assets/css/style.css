@@ -164,6 +164,17 @@ p {
   border-radius: var(--radius);
   transition: var(--transition);
   border: 2px solid transparent;
+  /* Accessibility: minimum touch target */
+  min-height: 44px;
+  min-width: 44px;
+  -webkit-tap-highlight-color: transparent;
+  /* Focus visibility */
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .btn-primary {
@@ -221,6 +232,15 @@ p {
 .btn-sm {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
+  min-height: 36px;
+}
+
+/* Ensure btn-sm still hits 44px on mobile */
+@media (max-width: 768px) {
+  .btn-sm {
+    min-height: 44px;
+    padding: 0.6rem 1rem;
+  }
 }
 
 .btn-lg {
@@ -672,4 +692,340 @@ tbody tr:hover {
   .hero-emblem img { width: 55px !important; height: 55px !important; }
   .section-title h2 { font-size: 1.2rem; }
   .footer-social { justify-content: center; }
+}
+
+
+
+/* ═══════════════════════════════════════════
+   ACCESSIBILITY & VISUAL CONSISTENCY PATCH
+   ═══════════════════════════════════════════ */
+
+/* ─── Focus states (keyboard navigation) ─── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Minimum touch targets for all interactive elements ─── */
+a, button, [role="button"], label[for], .card[onclick], .bn-card,
+.feature-card, .quick-action-btn, .sidebar-menu a, .nav-link {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Interactive clickable cards */
+.clickable-item {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Consistent heading hierarchy ─── */
+.page-heading {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--dark);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.section-heading {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  color: var(--dark);
+  font-weight: 700;
+}
+
+/* ─── Consistent card design ─── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ─── Consistent icon usage ─── */
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-circle-sm {
+  width: 36px;
+  height: 36px;
+}
+
+.icon-circle-lg {
+  width: 64px;
+  height: 64px;
+}
+
+.icon-circle-green {
+  background: rgba(45, 90, 39, 0.1);
+  color: var(--primary);
+}
+
+.icon-circle-gold {
+  background: rgba(200, 169, 81, 0.15);
+  color: #9a7d2e;
+}
+
+/* ─── Consistent spacing system ─── */
+.space-y-1 > * + * { margin-top: 0.5rem; }
+.space-y-2 > * + * { margin-top: 1rem; }
+.space-y-3 > * + * { margin-top: 1.5rem; }
+.space-y-4 > * + * { margin-top: 2rem; }
+
+/* ─── Quick Action Cards (Dashboard) ─── */
+.quick-card-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.quick-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow);
+  min-height: 90px;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.quick-card:hover,
+.quick-card:focus-visible {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  color: var(--primary);
+}
+
+.quick-card .qc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: var(--transition);
+}
+
+.quick-card:hover .qc-icon {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, var(--dark), var(--primary));
+}
+
+.quick-card .qc-icon i {
+  font-size: 1.1rem;
+  color: var(--white);
+}
+
+.quick-card .qc-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  transition: var(--transition);
+}
+
+.quick-card:hover .qc-label {
+  color: var(--primary);
+}
+
+@media (max-width: 992px) {
+  .quick-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .quick-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .quick-card {
+    padding: 1rem 0.5rem;
+    min-height: 80px;
+  }
+
+  .quick-card .qc-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .quick-card .qc-icon i {
+    font-size: 0.9rem;
+  }
+
+  .quick-card .qc-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* ─── Ticker clickable items ─── */
+.ticker-content a,
+.ticker-content span.ticker-link {
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.ticker-content a:hover,
+.ticker-content span.ticker-link:hover {
+  color: #fff;
+  background: rgba(200, 169, 81, 0.2);
+}
+
+/* ─── NCC Official Emblem in hero ─── */
+.hero-emblem-official {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 2rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 30px rgba(200, 169, 81, 0.3);
+  padding: 8px;
+}
+
+.hero-emblem-official img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+@media (max-width: 480px) {
+  .hero-emblem-official {
+    width: 80px;
+    height: 80px;
+  }
+  .hero-emblem-official img {
+    width: 62px;
+    height: 62px;
+  }
+}
+
+/* ─── Unity & Discipline accent strip ─── */
+.unity-strip {
+  background: var(--accent);
+  color: var(--dark);
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ─── Responsive tables → cards on mobile ─── */
+@media (max-width: 640px) {
+  .table-responsive-cards thead {
+    display: none;
+  }
+
+  .table-responsive-cards tbody tr {
+    display: block;
+    background: var(--white);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    border: 1px solid var(--border);
+  }
+
+  .table-responsive-cards tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.85rem;
+  }
+
+  .table-responsive-cards tbody td:last-child {
+    border-bottom: none;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+  }
+
+  .table-responsive-cards tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+}
+
+/* ─── Color contrast improvements ─── */
+.text-muted,
+.text-light,
+p {
+  color: #4a4a4a; /* improved contrast from #555 */
+}
+
+.badge-green { color: #1a4a16; }   /* darkened for contrast */
+.badge-gold  { color: #7a5f1a; }   /* darkened for contrast */
+
+/* ─── Image lazy-load blur-up effect ─── */
+img[loading="lazy"] {
+  transition: filter 0.3s ease;
+}
+
+/* ─── Reduced motion respect ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Print: hide nav/footer ─── */
+@media print {
+  .navbar, .live-ticker, .footer, .quick-actions,
+  .quick-card-grid, .sidebar { display: none !important; }
+  body { padding-top: 0 !important; }
 }

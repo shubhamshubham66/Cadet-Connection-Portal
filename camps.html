@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Camps | Cadet Connection Portal</title>
+  <meta name="description" content="NCC NER Region Camps — Registration, details and status for all camps.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -11,573 +12,397 @@
   <link rel="stylesheet" href="assets/css/navbar.css">
   <link rel="stylesheet" href="assets/css/homepage.css">
   <style>
-    .camp-status-badge{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;}
-    .badge-live{background:#dc3545;color:#fff;animation:pulse-live 1.5s infinite;}
-    .badge-upcoming{background:#fd7e14;color:#fff;}
-    .badge-completed{background:#6c757d;color:#fff;}
-    @keyframes pulse-live{0%,100%{opacity:1;}50%{opacity:0.6;}}
-    .live-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse-live 1s infinite;}
-    .camp-progress{background:rgba(0,0,0,0.1);border-radius:20px;height:8px;overflow:hidden;margin-top:0.5rem;}
-    .camp-progress-bar{height:100%;background:var(--primary);border-radius:20px;transition:width 0.5s;}
-    .camp-card{border-left:4px solid var(--primary);transition:transform 0.2s,box-shadow 0.2s;}
-    .camp-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.1);}
-    .camp-card-live{border-left-color:#dc3545;}
-    .camp-card-upcoming{border-left-color:#fd7e14;}
-    .camp-card-basic{border-left-color:#28a745;}
-    .camp-card-advance{border-left-color:#007bff;}
-    .camp-card-special{border-left-color:#6f42c1;}
-    .camp-card-past{border-left-color:#6c757d;opacity:0.85;}
-    .camp-meta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:0.75rem;}
-    .camp-meta-item{display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:#666;}
-    .camp-meta-item i{color:var(--primary);width:16px;}
-    .camp-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;}
-    .camp-day-counter{text-align:center;background:var(--primary);color:#fff;border-radius:var(--radius);padding:0.75rem 1.25rem;min-width:80px;}
-    .camp-day-counter .day-num{font-size:1.8rem;font-weight:900;line-height:1;}
-    .camp-day-counter .day-label{font-size:0.7rem;opacity:0.8;margin-top:0.2rem;}
-    .seats-info{display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;}
-    .seats-bar{flex:1;background:#e9ecef;border-radius:10px;height:6px;overflow:hidden;}
-    .seats-bar-fill{height:100%;border-radius:10px;background:var(--primary);}
-    .seats-text{font-size:0.75rem;color:#666;white-space:nowrap;}
-    .camp-type-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem;}
-    .section-tabs{display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;}
-    .section-tab{padding:0.5rem 1.25rem;border-radius:20px;border:2px solid var(--primary);color:var(--primary);font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;text-decoration:none;}
-    .section-tab:hover,.section-tab.active{background:var(--primary);color:#fff;}
+    /* ── Camp Card ── */
+    .camp-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .camp-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    .camp-card-header {
+      padding: 1.25rem 1.5rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .camp-card-header h4 { font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--dark); line-height: 1.3; }
+    .camp-card-body { padding: 1.25rem 1.5rem; flex: 1; }
+    .camp-card-footer { padding: 1rem 1.5rem; background: rgba(45,90,39,0.03); border-top: 1px solid rgba(0,0,0,0.06); }
+    /* Status badges */
+    .status-open    { background:#e6f4ea; color:#1a6e35; border:1px solid #a8d5b5; }
+    .status-live    { background:#fdecea; color:#c62828; border:1px solid #f5a9a9; animation:pulse-live 1.5s infinite; }
+    .status-closed  { background:#f5f5f5; color:#616161; border:1px solid #ddd; }
+    .status-upcoming{ background:#fff3e0; color:#e65100; border:1px solid #ffcc80; }
+    .status-completed{background:#e8eaf6; color:#283593; border:1px solid #9fa8da;}
+    @keyframes pulse-live { 0%,100%{opacity:1} 50%{opacity:.65} }
+    .camp-status-tag {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.3rem 0.75rem; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+    /* Info rows */
+    .camp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .camp-info-item { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; }
+    .camp-info-item i { color: var(--primary); width: 15px; text-align: center; flex-shrink:0; margin-top:2px; }
+    .camp-info-item span { color: #4a4a4a; line-height: 1.4; }
+    .camp-info-item strong { color: var(--dark); display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); margin-bottom: 1px; }
+    /* Wing badge */
+    .wing-army   { background:#e8f5e9; color:#2e7d32; }
+    .wing-navy   { background:#e3f2fd; color:#1565c0; }
+    .wing-air    { background:#e8eaf6; color:#283593; }
+    .wing-combined{background:#f3e5f5; color:#6a1b9a;}
+    .wing-badge  { display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.6rem; border-radius:10px; font-size:0.72rem; font-weight:700; }
+    /* Filter bar */
+    .filter-bar { background:var(--white); border-radius:var(--radius-lg); padding:1.25rem 1.5rem; box-shadow:var(--shadow); margin-bottom:2rem; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; }
+    .filter-bar input, .filter-bar select { flex:1; min-width:160px; max-width:260px; padding:0.6rem 1rem; border:1.5px solid var(--border); border-radius:var(--radius); font-size:0.88rem; background:var(--bg); }
+    .filter-bar input:focus,.filter-bar select:focus { border-color:var(--primary); outline:none; background:#fff; }
+    .filter-btn { padding:0.6rem 1.25rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius); font-weight:600; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.4rem; min-height:44px; }
+    .filter-btn:hover { background:var(--dark); }
+    /* Section divider */
+    .section-divider { display:flex; align-items:center; gap:1rem; margin:2.5rem 0 1.5rem; }
+    .section-divider h3 { white-space:nowrap; color:var(--dark); font-size:1.15rem; }
+    .section-divider::after { content:''; flex:1; height:2px; background:var(--border); border-radius:1px; }
+    /* Empty state */
+    .empty-state { text-align:center; padding:3rem 1rem; color:var(--text-light); }
+    .empty-state i { font-size:3rem; color:var(--border); margin-bottom:1rem; }
+    @media(max-width:640px) {
+      .camp-info-grid { grid-template-columns:1fr; }
+      .camp-card-header { flex-wrap:wrap; }
+      .filter-bar { flex-direction:column; }
+      .filter-bar input,.filter-bar select { max-width:100%; }
+    }
   </style>
 </head>
-<body>
-  <nav class="navbar"><div class="nav-container"><a href="index.html" class="navbar-brand"><div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div></a><div class="nav-menu"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="activities.html" class="nav-link">Activities</a><a href="events.html" class="nav-link">Events</a><a href="gallery.html" class="nav-link">Gallery</a><a href="camps.html" class="nav-link active">Camps</a><a href="login.html" class="nav-link nav-login-btn">Login</a></div><div class="nav-hamburger"><span></span><span></span><span></span></div></div><div class="mobile-overlay"></div></nav>
 
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="navbar-brand" aria-label="Cadet Connection Portal Home">
+        <img src="assets/images/ncc-emblem.png" alt="NCC Official Emblem" loading="eager" style="object-fit:contain;">
+        <div class="navbar-brand-text"><h1>Cadet Connection Portal</h1><span>NCC NER Region</span></div>
+      </a>
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="activities.html" class="nav-link">Activities</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="camps.html" class="nav-link active" aria-current="page">Camps</a>
+        <a href="login.html" class="nav-link nav-login-btn">Login</a>
+      </div>
+      <div class="nav-profile">
+        <div class="nav-profile-btn" title="Profile" tabindex="0" role="button" aria-label="User profile menu"><i class="fas fa-user" aria-hidden="true"></i></div>
+        <div class="nav-profile-dropdown" role="menu">
+          <a href="cadet/dashboard.html" role="menuitem"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> My Dashboard</a>
+          <a href="cadet/profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> My Profile</a>
+          <div class="dropdown-divider"></div>
+          <a href="#" onclick="logout()" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
+        </div>
+      </div>
+      <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-overlay" aria-hidden="true"></div>
+  </nav>
 
   <!-- Hero Banner -->
-  <section style="background:linear-gradient(135deg,var(--dark) 0%,var(--primary) 100%);padding:7rem 0 3rem;text-align:center;color:#fff;position:relative;overflow:hidden;">
-    <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.05;background:url('assets/images/ncc-emblem.png') center/300px no-repeat;"></div>
+  <section style="background:linear-gradient(135deg,var(--dark) 0%,var(--primary) 100%);padding:7rem 0 4rem;text-align:center;color:#fff;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;opacity:0.06;background:url('assets/images/ncc-emblem.png') center/280px no-repeat;" aria-hidden="true"></div>
     <div class="container" style="position:relative;z-index:1;">
-      <h1 data-aos="fade-up" style="color:#fff;font-size:2.5rem;margin-bottom:0.5rem;"><i class="fas fa-campground"></i> NCC Camps — NER Region</h1>
-      <p data-aos="fade-up" data-aos-delay="100" style="color:rgba(255,255,255,0.75);font-size:1.1rem;">Training, Discipline & National Integration through Camp Life</p>
-      <div class="section-tabs" data-aos="fade-up" data-aos-delay="200" style="margin-top:1.5rem;">
-        <a href="#ongoing" class="section-tab active"><i class="fas fa-signal"></i> Live</a>
-        <a href="#upcoming" class="section-tab"><i class="fas fa-clock"></i> Upcoming</a>
-        <a href="#basic" class="section-tab"><i class="fas fa-campground"></i> Basic</a>
-        <a href="#advance" class="section-tab"><i class="fas fa-star"></i> Advance</a>
-        <a href="#special" class="section-tab"><i class="fas fa-crown"></i> Special Entry</a>
-        <a href="#archive" class="section-tab"><i class="fas fa-archive"></i> Archive</a>
+      <h1 data-aos="fade-up" style="color:#fff;font-size:clamp(1.75rem,4vw,2.75rem);margin-bottom:0.5rem;">
+        <i class="fas fa-campground" aria-hidden="true"></i> NCC Camps — NER Region
+      </h1>
+      <p data-aos="fade-up" data-aos-delay="100" style="color:rgba(255,255,255,0.78);font-size:1.05rem;margin-bottom:2rem;">
+        Training, Discipline &amp; National Integration through Camp Life
+      </p>
+      <!-- Quick filter tabs -->
+      <div data-aos="fade-up" data-aos-delay="150" style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;">
+        <button class="filter-tab-btn active" data-filter="all" onclick="filterByTab(this,'all')" style="padding:0.45rem 1.2rem;border-radius:20px;border:2px solid rgba(255,255,255,0.6);color:#fff;background:rgba(255,255,255,0.15);font-weight:600;font-size:0.82rem;cursor:pointer;transition:all .2s;">All Camps</button>
+        <button class="filter-tab-btn" data-filter="live" onclick="filterByTab(this,'live')" style="padding:0.45rem 1.2rem;border-radius:20px;border:2px solid rgba(220,53,69,0.7);color:#ff8a80;background:rgba(220,53,69,0.15);font-weight:600;font-size:0.82rem;cursor:pointer;transition:all .2s;">🔴 Live</button>
+        <button class="filter-tab-btn" data-filter="open" onclick="filterByTab(this,'open')" style="padding:0.45rem 1.2rem;border-radius:20px;border:2px solid rgba(200,169,81,0.7);color:#ffd54f;background:rgba(200,169,81,0.15);font-weight:600;font-size:0.82rem;cursor:pointer;transition:all .2s;">📋 Registration Open</button>
+        <button class="filter-tab-btn" data-filter="upcoming" onclick="filterByTab(this,'upcoming')" style="padding:0.45rem 1.2rem;border-radius:20px;border:2px solid rgba(255,255,255,0.4);color:rgba(255,255,255,.85);background:rgba(255,255,255,0.08);font-weight:600;font-size:0.82rem;cursor:pointer;transition:all .2s;">🕐 Upcoming</button>
+        <button class="filter-tab-btn" data-filter="completed" onclick="filterByTab(this,'completed')" style="padding:0.45rem 1.2rem;border-radius:20px;border:2px solid rgba(255,255,255,0.4);color:rgba(255,255,255,.85);background:rgba(255,255,255,0.08);font-weight:600;font-size:0.82rem;cursor:pointer;transition:all .2s;">✅ Completed</button>
       </div>
     </div>
   </section>
 
 
-  <!-- ═══ SECTION 1: ONGOING CAMPS (LIVE STATUS) ═══ -->
-  <section class="section section-light" id="ongoing">
+  <!-- Main Content -->
+  <section class="section" style="padding-top:2.5rem;">
     <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><span class="camp-status-badge badge-live"><span class="live-dot"></span> LIVE</span> Ongoing Camps</h2>
-        <p>Currently running camps with real-time status</p>
+
+      <!-- Search & Filter Bar -->
+      <div class="filter-bar" data-aos="fade-up">
+        <i class="fas fa-search" style="color:var(--text-light);" aria-hidden="true"></i>
+        <input type="text" id="campSearch" placeholder="Search camp name, location, commandant…" oninput="renderCamps()" aria-label="Search camps">
+        <select id="wingFilter" onchange="renderCamps()" aria-label="Filter by wing">
+          <option value="">All Wings</option>
+          <option value="Army">Army</option>
+          <option value="Navy">Navy</option>
+          <option value="Air Force">Air Force</option>
+          <option value="Combined">Combined</option>
+        </select>
+        <select id="statusFilter" onchange="renderCamps()" aria-label="Filter by status">
+          <option value="">All Status</option>
+          <option value="live">Live</option>
+          <option value="open">Registration Open</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
+        </select>
+        <button class="filter-btn" onclick="clearFilters()"><i class="fas fa-times" aria-hidden="true"></i> Clear</button>
       </div>
 
-      <!-- Live Camp 1 -->
-      <div class="card camp-card camp-card-live" data-aos="fade-up" style="max-width:900px;margin:0 auto 1.5rem;">
-        <div class="camp-header">
-          <div>
-            <span class="camp-status-badge badge-live"><span class="live-dot"></span> IN PROGRESS</span>
-            <h3 style="margin-top:0.5rem;">Pre-RDC Selection Camp</h3>
-            <div class="camp-meta">
-              <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 20 Jun – 30 Jun 2025</span>
-              <span class="camp-meta-item"><i class="fas fa-location-dot"></i> NER Directorate HQ, Shillong</span>
-              <span class="camp-meta-item"><i class="fas fa-users"></i> 45 Cadets</span>
-              <span class="camp-meta-item"><i class="fas fa-user-tie"></i> CO: Col. R.K. Sharma</span>
-            </div>
-            <div class="camp-progress" style="max-width:300px;margin-top:0.75rem;">
-              <div class="camp-progress-bar" style="width:40%;"></div>
-            </div>
-            <p class="text-muted text-sm" style="margin-top:0.3rem;">Day 4 of 10 completed</p>
-          </div>
-          <div class="camp-day-counter">
-            <div class="day-num">4</div>
-            <div class="day-label">of 10 Days</div>
-          </div>
-        </div>
-        <hr style="margin:1rem 0;border-color:rgba(0,0,0,0.05);">
-        <div style="display:flex;flex-wrap:wrap;gap:1rem;">
-          <span class="text-sm"><strong>Today's Schedule:</strong> 0500 PT | 0700 Drill | 1000 Map Reading | 1400 Firing Practice | 1700 Games</span>
-        </div>
+      <!-- Stats summary -->
+      <div class="grid grid-4 mb-4" data-aos="fade-up" id="campStats">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-signal" aria-hidden="true"></i></div><div class="stat-number" id="statLive">2</div><div class="stat-label">Live Now</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-clipboard-list" aria-hidden="true"></i></div><div class="stat-number" id="statOpen">3</div><div class="stat-label">Registration Open</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock" aria-hidden="true"></i></div><div class="stat-number" id="statUpcoming">4</div><div class="stat-label">Upcoming</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div><div class="stat-number" id="statCompleted">3</div><div class="stat-label">Completed</div></div>
       </div>
 
-      <!-- Live Camp 2 -->
-      <div class="card camp-card camp-card-live" data-aos="fade-up" data-aos-delay="100" style="max-width:900px;margin:0 auto;">
-        <div class="camp-header">
-          <div>
-            <span class="camp-status-badge badge-live"><span class="live-dot"></span> IN PROGRESS</span>
-            <h3 style="margin-top:0.5rem;">Social Service Camp – Flood Relief</h3>
-            <div class="camp-meta">
-              <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 18 Jun – 25 Jun 2025</span>
-              <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Dhubri, Assam</span>
-              <span class="camp-meta-item"><i class="fas fa-users"></i> 60 Cadets</span>
-              <span class="camp-meta-item"><i class="fas fa-user-tie"></i> CO: Maj. P. Das</span>
-            </div>
-            <div class="camp-progress" style="max-width:300px;margin-top:0.75rem;">
-              <div class="camp-progress-bar" style="width:71%;"></div>
-            </div>
-            <p class="text-muted text-sm" style="margin-top:0.3rem;">Day 5 of 7 completed</p>
-          </div>
-          <div class="camp-day-counter">
-            <div class="day-num">5</div>
-            <div class="day-label">of 7 Days</div>
-          </div>
-        </div>
+      <!-- Camp Cards Grid -->
+      <div id="campsGrid" class="grid grid-3" data-aos="fade-up"></div>
+      <div id="emptyState" class="empty-state hidden">
+        <i class="fas fa-campground" aria-hidden="true"></i>
+        <h4>No camps found</h4>
+        <p>Try adjusting your search or filters.</p>
       </div>
 
     </div>
   </section>
 
-
-  <!-- ═══ SECTION 2: UPCOMING CAMPS + REGISTRATION ═══ -->
-  <section class="section" id="upcoming">
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
     <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><i class="fas fa-clock" style="color:#fd7e14;"></i> Upcoming Camps + Registration</h2>
-        <p>Register for upcoming camps through your cadet dashboard</p>
-      </div>
-      <div class="grid grid-3" data-aos="fade-up">
-
-        <!-- Upcoming 1 -->
-        <div class="card camp-card camp-card-upcoming">
-          <span class="camp-status-badge badge-upcoming">Registration Open</span>
-          <h4 style="margin-top:0.75rem;">Annual Training Camp (ATC)</h4>
-          <span class="text-sm" style="background:#e8f5e9;color:#2e7d32;padding:0.2rem 0.6rem;border-radius:10px;font-weight:600;">Army Wing | Basic</span>
-          <div class="camp-meta" style="flex-direction:column;gap:0.4rem;margin-top:1rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 15 Jul – 26 Jul 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Agartala, Tripura</span>
-            <span class="camp-meta-item"><i class="fas fa-clock"></i> 12 Days Duration</span>
-            <span class="camp-meta-item"><i class="fas fa-graduation-cap"></i> Eligibility: All 1st & 2nd Year Cadets</span>
-          </div>
-          <div class="seats-info" style="margin-top:1rem;">
-            <div class="seats-bar"><div class="seats-bar-fill" style="width:80%;background:#fd7e14;"></div></div>
-            <span class="seats-text">120/150 Seats</span>
-          </div>
-          <p class="text-sm text-muted" style="margin-top:0.5rem;"><i class="fas fa-exclamation-circle" style="color:#fd7e14;"></i> Last date: 05 Jul 2025</p>
-          <a href="login.html" class="btn btn-primary btn-sm btn-block" style="margin-top:1rem;"><i class="fas fa-sign-in-alt"></i> Login to Register</a>
-        </div>
-
-        <!-- Upcoming 2 -->
-        <div class="card camp-card camp-card-upcoming">
-          <span class="camp-status-badge badge-upcoming">Registration Open</span>
-          <h4 style="margin-top:0.75rem;">Combined Annual Training Camp (CATC)</h4>
-          <span class="text-sm" style="background:#e3f2fd;color:#1565c0;padding:0.2rem 0.6rem;border-radius:10px;font-weight:600;">Combined | All Wings</span>
-          <div class="camp-meta" style="flex-direction:column;gap:0.4rem;margin-top:1rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 05 Aug – 16 Aug 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</span>
-            <span class="camp-meta-item"><i class="fas fa-clock"></i> 12 Days Duration</span>
-            <span class="camp-meta-item"><i class="fas fa-graduation-cap"></i> Eligibility: All NCC Cadets (SW/JW/SD/JD)</span>
-          </div>
-          <div class="seats-info" style="margin-top:1rem;">
-            <div class="seats-bar"><div class="seats-bar-fill" style="width:40%;background:#28a745;"></div></div>
-            <span class="seats-text">80/200 Seats</span>
-          </div>
-          <p class="text-sm text-muted" style="margin-top:0.5rem;"><i class="fas fa-exclamation-circle" style="color:#fd7e14;"></i> Last date: 25 Jul 2025</p>
-          <a href="login.html" class="btn btn-primary btn-sm btn-block" style="margin-top:1rem;"><i class="fas fa-sign-in-alt"></i> Login to Register</a>
-        </div>
-
-        <!-- Upcoming 3 -->
-        <div class="card camp-card camp-card-upcoming">
-          <span class="camp-status-badge badge-upcoming">Registration Open</span>
-          <h4 style="margin-top:0.75rem;">Adventure Training Camp</h4>
-          <span class="text-sm" style="background:#fff3e0;color:#e65100;padding:0.2rem 0.6rem;border-radius:10px;font-weight:600;">Adventure | Special</span>
-          <div class="camp-meta" style="flex-direction:column;gap:0.4rem;margin-top:1rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 01 Sep – 07 Sep 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Tawang, Arunachal Pradesh</span>
-            <span class="camp-meta-item"><i class="fas fa-clock"></i> 7 Days Duration</span>
-            <span class="camp-meta-item"><i class="fas fa-graduation-cap"></i> Eligibility: B/C Certificate Holders</span>
-          </div>
-          <div class="seats-info" style="margin-top:1rem;">
-            <div class="seats-bar"><div class="seats-bar-fill" style="width:25%;background:#28a745;"></div></div>
-            <span class="seats-text">10/40 Seats</span>
-          </div>
-          <p class="text-sm text-muted" style="margin-top:0.5rem;"><i class="fas fa-exclamation-circle" style="color:#fd7e14;"></i> Last date: 15 Aug 2025</p>
-          <a href="login.html" class="btn btn-primary btn-sm btn-block" style="margin-top:1rem;"><i class="fas fa-sign-in-alt"></i> Login to Register</a>
-        </div>
-
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cadet Connection Portal | NCC NER Region. All Rights Reserved.</p>
+        <p class="jai-hind">Jai Hind!</p>
       </div>
     </div>
-  </section>
+  </footer>
 
-
-  <!-- ═══ SECTION 3: BASIC CAMP DETAILS ═══ -->
-  <section class="section section-light" id="basic">
-    <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><i class="fas fa-campground" style="color:#28a745;"></i> Basic Camp Details</h2>
-        <p>Foundation camps for all NCC cadets — ATC & CATC</p>
-      </div>
-      <div class="grid grid-2" data-aos="fade-up" style="gap:2rem;">
-
-        <!-- ATC -->
-        <div class="card camp-card camp-card-basic" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e8f5e9;color:#28a745;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-campground"></i></div>
-            <div><h3 style="margin:0;">ATC – Annual Training Camp</h3><p class="text-muted text-sm" style="margin:0;">Battalion Level | 12 Days</p></div>
-          </div>
-          <p class="text-sm">The Annual Training Camp is the most fundamental camp of NCC training. Conducted at Battalion level, it covers basic military training, drill, weapon handling, map reading, field craft, and physical fitness.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#28a745;"></i> Training Syllabus:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>Physical Training & Obstacle Course</li>
-            <li>Drill (Open/Close Order, Ceremonial)</li>
-            <li>Weapon Training (.22 Rifle Firing)</li>
-            <li>Map Reading & Field Signals</li>
-            <li>First Aid & Health & Hygiene</li>
-            <li>National Integration & Personality Development</li>
-          </ul>
-          <h5 style="margin-top:1rem;margin-bottom:0.5rem;"><i class="fas fa-clock" style="color:#28a745;"></i> Daily Routine:</h5>
-          <div style="font-size:0.8rem;color:#555;background:#f8f9fa;padding:0.75rem;border-radius:8px;">
-            0500 - Reveille | 0530 - PT | 0700 - Breakfast | 0800 - Drill | 1000 - Classes | 1300 - Lunch | 1400 - Practical | 1600 - Games | 1900 - Roll Call | 2100 - Lights Off
-          </div>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e8f5e9;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: All cadets</span>
-            <span class="text-sm" style="background:#e8f5e9;padding:0.3rem 0.7rem;border-radius:10px;">Mandatory for B/C Cert</span>
-          </div>
-        </div>
-
-        <!-- CATC -->
-        <div class="card camp-card camp-card-basic" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e8f5e9;color:#28a745;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-users"></i></div>
-            <div><h3 style="margin:0;">CATC – Combined Annual Training Camp</h3><p class="text-muted text-sm" style="margin:0;">Group/Directorate Level | 12 Days</p></div>
-          </div>
-          <p class="text-sm">CATC brings together cadets from multiple battalions for combined training. It provides exposure to inter-BN activities, competitions, and national integration through interactions with cadets from different states and backgrounds.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#28a745;"></i> Key Activities:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>Inter-BN Drill Competition</li>
-            <li>Combined Arms Demonstration</li>
-            <li>Cultural Programme & Group Dance</li>
-            <li>Best Cadet Competition</li>
-            <li>Firing Competition (Individual & Team)</li>
-            <li>National Integration Lectures</li>
-          </ul>
-          <h5 style="margin-top:1rem;margin-bottom:0.5rem;"><i class="fas fa-trophy" style="color:#28a745;"></i> Competitions:</h5>
-          <div style="font-size:0.8rem;color:#555;background:#f8f9fa;padding:0.75rem;border-radius:8px;">
-            Best Cadet (SD/SW/JD/JW) | Best Drill Squad | Tent Pitching | Map Reading Race | Cross Country | Tug of War | Cultural Night Trophy
-          </div>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e8f5e9;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: All cadets</span>
-            <span class="text-sm" style="background:#e8f5e9;padding:0.3rem 0.7rem;border-radius:10px;">Selection for higher camps</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══ SECTION 4: ADVANCE CAMP DETAILS ═══ -->
-  <section class="section" id="advance">
-    <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><i class="fas fa-star" style="color:#007bff;"></i> Advance Camp Details</h2>
-        <p>Advanced training for selected cadets — Leadership & Specialized Skills</p>
-      </div>
-      <div class="grid grid-2" data-aos="fade-up" style="gap:2rem;">
-
-        <!-- Advanced Leadership Camp -->
-        <div class="card camp-card camp-card-advance" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e3f2fd;color:#1565c0;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-chess-king"></i></div>
-            <div><h3 style="margin:0;">Advanced Leadership Camp (ALC)</h3><p class="text-muted text-sm" style="margin:0;">Directorate Level | 12 Days</p></div>
-          </div>
-          <p class="text-sm">ALC develops leadership qualities and advanced military skills in selected Senior Division/Wing cadets. Cadets learn to lead under pressure, make tactical decisions, and manage teams effectively.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#1565c0;"></i> Training Modules:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>Leadership & Management Exercises</li>
-            <li>Tactical Operations & Strategy</li>
-            <li>Advanced Weapon Handling (7.62mm SLR)</li>
-            <li>Night Navigation & Patrolling</li>
-            <li>Communication & Radio Procedures</li>
-            <li>Group Planning Exercises (GPE)</li>
-          </ul>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: 2nd/3rd Year SD/SW</span>
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Selection: Based on CATC performance</span>
-          </div>
-        </div>
-
-        <!-- Adventure Camp -->
-        <div class="card camp-card camp-card-advance" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e3f2fd;color:#1565c0;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-mountain"></i></div>
-            <div><h3 style="margin:0;">Adventure Training Camp</h3><p class="text-muted text-sm" style="margin:0;">Directorate/National Level | 7-10 Days</p></div>
-          </div>
-          <p class="text-sm">Designed to build courage, team spirit, and endurance. Cadets participate in challenging outdoor activities in difficult terrains. NER region camps are conducted in the Himalayan foothills and NE terrain.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#1565c0;"></i> Activities:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>High Altitude Trekking (8000-12000 ft)</li>
-            <li>Rock Climbing & Rappelling</li>
-            <li>River Crossing & Rafting</li>
-            <li>Cycle Expedition</li>
-            <li>Parasailing & Para-jumping</li>
-            <li>Survival Techniques & Jungle Craft</li>
-          </ul>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: B/C Cert holders</span>
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Medical fitness mandatory</span>
-          </div>
-        </div>
-
-        <!-- NIC Camp -->
-        <div class="card camp-card camp-card-advance" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e3f2fd;color:#1565c0;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-handshake"></i></div>
-            <div><h3 style="margin:0;">National Integration Camp (NIC)</h3><p class="text-muted text-sm" style="margin:0;">National Level | 12 Days</p></div>
-          </div>
-          <p class="text-sm">NIC promotes national unity by bringing cadets from all 17 NCC Directorates across India together. Cadets experience different cultures, languages, and traditions while building lifelong bonds.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#1565c0;"></i> Key Features:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>Inter-Directorate Cultural Exchange</li>
-            <li>State Presentations & Folk Dance</li>
-            <li>Heritage Visits & Excursions</li>
-            <li>Unity Relay & Group Activities</li>
-            <li>Panel Discussions on National Issues</li>
-            <li>Community Development Projects</li>
-          </ul>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: Selected from CATC</span>
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">All India participation</span>
-          </div>
-        </div>
-
-        <!-- Vayu Sainik Camp -->
-        <div class="card camp-card camp-card-advance" style="padding:2rem;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-            <div class="camp-type-icon" style="background:#e3f2fd;color:#1565c0;margin:0;width:50px;height:50px;font-size:1.2rem;"><i class="fas fa-plane"></i></div>
-            <div><h3 style="margin:0;">Vayu Sainik Camp (VSC)</h3><p class="text-muted text-sm" style="margin:0;">National Level | 10 Days</p></div>
-          </div>
-          <p class="text-sm">National level camp for Air Wing cadets. Features aeromodelling competitions, flying orientation, and air force familiarization. Top cadets get gliding experience at Air Force stations.</p>
-          <h5 style="margin-top:1.25rem;margin-bottom:0.5rem;"><i class="fas fa-list-check" style="color:#1565c0;"></i> Activities:</h5>
-          <ul style="font-size:0.85rem;color:#555;padding-left:1.2rem;">
-            <li>Aeromodelling & Flight Simulation</li>
-            <li>Gliding & Microlite Flying</li>
-            <li>Air Force Station Visit</li>
-            <li>Aerospace Lectures</li>
-            <li>Inter-Directorate Competition</li>
-            <li>Best Air Cadet Selection</li>
-          </ul>
-          <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Eligibility: Air Wing cadets only</span>
-            <span class="text-sm" style="background:#e3f2fd;padding:0.3rem 0.7rem;border-radius:10px;">Selection through Directorate</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══ SECTION 5: SPECIAL ENTRY CAMPS (RDC/TSC) ═══ -->
-  <section class="section section-light" id="special">
-    <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><i class="fas fa-crown" style="color:#6f42c1;"></i> Special Entry Camps (RDC / TSC)</h2>
-        <p>Prestigious national-level camps — Only the best cadets are selected</p>
-      </div>
-
-      <!-- RDC -->
-      <div class="card camp-card camp-card-special" data-aos="fade-up" style="padding:2rem;max-width:950px;margin:0 auto 2rem;background:linear-gradient(135deg,#f8f0ff 0%,#fff 100%);">
-        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-          <div class="camp-type-icon" style="background:#ede7f6;color:#6f42c1;margin:0;width:60px;height:60px;font-size:1.5rem;"><i class="fas fa-flag"></i></div>
-          <div>
-            <h3 style="margin:0;color:#6f42c1;">Republic Day Camp (RDC)</h3>
-            <p class="text-muted text-sm" style="margin:0;">National Level | Delhi | Jan-Feb every year</p>
-          </div>
-        </div>
-        <p class="text-sm">The most prestigious camp of NCC. Selected cadets participate in the Republic Day Parade on Rajpath (Kartavya Path), New Delhi. Only 2-3 cadets from each Directorate are selected through a rigorous multi-stage selection process spanning 6+ months.</p>
-
-        <div class="grid grid-2" style="margin-top:1.5rem;gap:1.5rem;">
-          <div>
-            <h5 style="margin-bottom:0.5rem;color:#6f42c1;"><i class="fas fa-route"></i> Selection Process:</h5>
-            <ol style="font-size:0.82rem;color:#555;padding-left:1.2rem;">
-              <li>BN Level Selection (Inter-Company)</li>
-              <li>Group HQ Level Camp</li>
-              <li>Directorate Level (Pre-RDC Camp)</li>
-              <li>Inter-Directorate Competition</li>
-              <li>Final Selection at Delhi</li>
-            </ol>
-          </div>
-          <div>
-            <h5 style="margin-bottom:0.5rem;color:#6f42c1;"><i class="fas fa-star"></i> Selection Criteria:</h5>
-            <ul style="font-size:0.82rem;color:#555;padding-left:1.2rem;">
-              <li>Drill perfection (40% weightage)</li>
-              <li>Physical fitness & turnout</li>
-              <li>GK & NCC knowledge</li>
-              <li>Personality & leadership</li>
-              <li>Minimum height: 5'4" (M) / 5'1" (F)</li>
-            </ul>
-          </div>
-        </div>
-        <div style="margin-top:1.25rem;background:#ede7f6;padding:0.75rem 1rem;border-radius:8px;font-size:0.82rem;">
-          <strong><i class="fas fa-gift" style="color:#6f42c1;"></i> Benefits:</strong> PM Rally attendance, DG's Commendation Card, Direct entry for SSB interview, Certificate of Excellence, Life-changing experience
-        </div>
-      </div>
-
-      <!-- TSC -->
-      <div class="card camp-card camp-card-special" data-aos="fade-up" data-aos-delay="100" style="padding:2rem;max-width:950px;margin:0 auto 2rem;background:linear-gradient(135deg,#fff8e1 0%,#fff 100%);">
-        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-          <div class="camp-type-icon" style="background:#fff3e0;color:#e65100;margin:0;width:60px;height:60px;font-size:1.5rem;"><i class="fas fa-medal"></i></div>
-          <div>
-            <h3 style="margin:0;color:#e65100;">Thal Sainik Camp (TSC)</h3>
-            <p class="text-muted text-sm" style="margin:0;">National Level | Delhi | Sep-Oct every year</p>
-          </div>
-        </div>
-        <p class="text-sm">TSC is the ultimate inter-directorate competition camp for Army Wing cadets. Directorates compete in various military-oriented competitions. NER has consistently performed well in obstacle courses and firing events.</p>
-
-        <div class="grid grid-2" style="margin-top:1.5rem;gap:1.5rem;">
-          <div>
-            <h5 style="margin-bottom:0.5rem;color:#e65100;"><i class="fas fa-trophy"></i> Competitions:</h5>
-            <ul style="font-size:0.82rem;color:#555;padding-left:1.2rem;">
-              <li>Obstacle Course (Individual & Team)</li>
-              <li>Firing (.22 Rifle - Individual & Team)</li>
-              <li>Line Area Competition</li>
-              <li>Health & Hygiene</li>
-              <li>Map Reading Race</li>
-              <li>Best Cadet Competition</li>
-            </ul>
-          </div>
-          <div>
-            <h5 style="margin-bottom:0.5rem;color:#e65100;"><i class="fas fa-user-check"></i> Selection Criteria:</h5>
-            <ul style="font-size:0.82rem;color:#555;padding-left:1.2rem;">
-              <li>Outstanding physical fitness</li>
-              <li>Firing expertise (20/20 grouping)</li>
-              <li>Obstacle course timing</li>
-              <li>Overall camp performance</li>
-              <li>Discipline & bearing</li>
-            </ul>
-          </div>
-        </div>
-        <div style="margin-top:1.25rem;background:#fff3e0;padding:0.75rem 1rem;border-radius:8px;font-size:0.82rem;">
-          <strong><i class="fas fa-gift" style="color:#e65100;"></i> Benefits:</strong> DG's Commendation, National recognition, Certificate for C-Exam bonus marks, Direct SSB recommendation eligibility
-        </div>
-      </div>
-
-      <!-- Other Special Camps -->
-      <div class="grid grid-3" data-aos="fade-up" data-aos-delay="200">
-        <div class="card camp-card camp-card-special text-center" style="padding:1.5rem;">
-          <div class="camp-type-icon" style="background:#ede7f6;color:#6f42c1;"><i class="fas fa-ship"></i></div>
-          <h5>Nau Sainik Camp (NSC)</h5>
-          <p class="text-sm text-muted">National level camp for Naval Wing cadets. Boat pulling, seamanship & naval exercises.</p>
-        </div>
-        <div class="card camp-card camp-card-special text-center" style="padding:1.5rem;">
-          <div class="camp-type-icon" style="background:#ede7f6;color:#6f42c1;"><i class="fas fa-bullseye"></i></div>
-          <h5>All India Shooting Camp</h5>
-          <p class="text-sm text-muted">National shooting competition. Top marksmen from each Directorate compete at national level.</p>
-        </div>
-        <div class="card camp-card camp-card-special text-center" style="padding:1.5rem;">
-          <div class="camp-type-icon" style="background:#ede7f6;color:#6f42c1;"><i class="fas fa-globe-asia"></i></div>
-          <h5>Youth Exchange Programme (YEP)</h5>
-          <p class="text-sm text-muted">International exposure — Selected cadets visit friendly nations (UK, Singapore, Russia, etc.)</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ═══ SECTION 6: PAST CAMPS ARCHIVE ═══ -->
-  <section class="section" id="archive">
-    <div class="container">
-      <div class="section-title" data-aos="fade-up">
-        <h2><i class="fas fa-archive" style="color:#6c757d;"></i> Past Camps Archive</h2>
-        <p>Records of previously conducted camps — NER Region</p>
-      </div>
-
-      <!-- Year Filter -->
-      <div style="text-align:center;margin-bottom:2rem;" data-aos="fade-up">
-        <span class="section-tab active" style="font-size:0.8rem;padding:0.4rem 1rem;">2025</span>
-        <span class="section-tab" style="font-size:0.8rem;padding:0.4rem 1rem;">2024</span>
-        <span class="section-tab" style="font-size:0.8rem;padding:0.4rem 1rem;">2023</span>
-        <span class="section-tab" style="font-size:0.8rem;padding:0.4rem 1rem;">2022</span>
-      </div>
-
-      <div class="grid grid-3" data-aos="fade-up">
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">ATC – 1 NER BN</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 10 – 21 Jan 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Guwahati, Assam</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 140 Cadets attended</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> Best Cadet – Cdt. Ananya Borah (SD), Best Drill Squad – Charlie Coy, Firing Top Score – 48/50</p>
-        </div>
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">CATC – NER Directorate</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 01 – 12 Feb 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Shillong, Meghalaya</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 200 Cadets attended</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> Inter-BN Drill – 2 NER BN Winners, Cultural Night, National Integration Program</p>
-        </div>
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">Pre-TSC Selection Camp</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 15 – 25 Mar 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Dimapur, Nagaland</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 50 Cadets attended</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> 15 cadets selected for Directorate-level, Obstacle Course record – 2:45 min</p>
-        </div>
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">Social Service Camp</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 01 – 07 Apr 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Imphal, Manipur</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 80 Cadets attended</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> Tree plantation (500+ saplings), Blood donation camp, Village cleanliness drive</p>
-        </div>
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">RDC 2025 – Delhi</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 01 Jan – 29 Jan 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Delhi Cantonment</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 3 NER Cadets participated</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> NER contingent praised by DG NCC, PM Rally attendance, National TV coverage</p>
-        </div>
-
-        <div class="card camp-card camp-card-past">
-          <span class="camp-status-badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
-          <h4 style="margin-top:0.75rem;">Adventure Camp – Tawang</h4>
-          <div class="camp-meta" style="flex-direction:column;gap:0.3rem;margin-top:0.75rem;">
-            <span class="camp-meta-item"><i class="fas fa-calendar-alt"></i> 10 – 17 May 2025</span>
-            <span class="camp-meta-item"><i class="fas fa-location-dot"></i> Tawang, Arunachal Pradesh</span>
-            <span class="camp-meta-item"><i class="fas fa-users"></i> 30 Cadets attended</span>
-          </div>
-          <p class="text-sm" style="margin-top:0.75rem;"><strong>Highlights:</strong> High altitude trek to 12,000 ft, Rock climbing, War memorial visit, Monastery expedition</p>
-        </div>
-
-      </div>
-
-      <!-- Stats -->
-      <div style="margin-top:3rem;background:linear-gradient(135deg,var(--primary),var(--dark));border-radius:var(--radius-lg);padding:2rem;color:#fff;text-align:center;" data-aos="fade-up">
-        <h4 style="color:#fff;margin-bottom:1.5rem;">NER Region Camp Statistics – 2024-25</h4>
-        <div class="grid grid-4" style="gap:1rem;">
-          <div><div style="font-size:2.5rem;font-weight:900;">24</div><div style="font-size:0.8rem;opacity:0.8;">Total Camps Conducted</div></div>
-          <div><div style="font-size:2.5rem;font-weight:900;">3,200+</div><div style="font-size:0.8rem;opacity:0.8;">Cadets Trained</div></div>
-          <div><div style="font-size:2.5rem;font-weight:900;">8</div><div style="font-size:0.8rem;opacity:0.8;">National Level Selections</div></div>
-          <div><div style="font-size:2.5rem;font-weight:900;">3</div><div style="font-size:0.8rem;opacity:0.8;">RDC Representations</div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2025 Cadet Connection Portal | NCC NER Region</p><p class="jai-hind">Jai Hind!</p></div></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
+
+  <script>
+  // ── Camp data: Only the required fields ──
+  var CAMPS = [
+    {
+      id:1, name:'Pre-RDC Selection Camp', wing:'Army', status:'live',
+      location:'NER Directorate HQ, Shillong, Meghalaya',
+      battalion:'NER Directorate NCC',
+      strength:45, commandant:'Col. R.K. Sharma',
+      duration:'20 Jun – 30 Jun 2025 (10 Days)',
+      regStatus:'Closed — Ongoing'
+    },
+    {
+      id:2, name:'Social Service Camp – Flood Relief', wing:'Combined', status:'live',
+      location:'Dhubri, Assam',
+      battalion:'1st Assam Bn NCC',
+      strength:60, commandant:'Maj. P. Das',
+      duration:'18 Jun – 25 Jun 2025 (7 Days)',
+      regStatus:'Closed — Ongoing'
+    },
+    {
+      id:3, name:'Annual Training Camp (ATC)', wing:'Army', status:'open',
+      location:'Agartala, Tripura',
+      battalion:'15th Tripura Bn NCC',
+      strength:150, commandant:'Capt. A. Deb',
+      duration:'15 Jul – 26 Jul 2025 (12 Days)',
+      regStatus:'Open — Last date: 05 Jul 2025'
+    },
+    {
+      id:4, name:'Combined Annual Training Camp (CATC)', wing:'Combined', status:'open',
+      location:'Shillong, Meghalaya',
+      battalion:'1st Meghalaya Bn NCC',
+      strength:200, commandant:'Lt. Col. S. Barua',
+      duration:'05 Aug – 16 Aug 2025 (12 Days)',
+      regStatus:'Open — Last date: 25 Jul 2025'
+    },
+    {
+      id:5, name:'Adventure Training Camp', wing:'Army', status:'open',
+      location:'Tawang, Arunachal Pradesh',
+      battalion:'1st Arunachal Bn NCC',
+      strength:40, commandant:'Maj. T. Rino',
+      duration:'01 Sep – 07 Sep 2025 (7 Days)',
+      regStatus:'Open — Last date: 15 Aug 2025'
+    },
+    {
+      id:6, name:'Thal Sainik Camp (TSC)', wing:'Army', status:'upcoming',
+      location:'Delhi Cantt, New Delhi',
+      battalion:'NCC Directorate General',
+      strength:20, commandant:'Col. (DG NCC)',
+      duration:'20 Sep – 30 Sep 2025 (10 Days)',
+      regStatus:'Upcoming — Selection in progress'
+    },
+    {
+      id:7, name:'Republic Day Camp (RDC)', wing:'Army', status:'upcoming',
+      location:'Delhi Cantt, New Delhi',
+      battalion:'NCC Directorate General',
+      strength:5, commandant:'Brig. (DG NCC)',
+      duration:'01 Jan – 31 Jan 2026 (31 Days)',
+      regStatus:'Upcoming — Pre-RDC selection required'
+    },
+    {
+      id:8, name:'Vayu Sainik Camp (VSC)', wing:'Air Force', status:'upcoming',
+      location:'Chandigarh Air Force Station',
+      battalion:'NCC Directorate General',
+      strength:10, commandant:'Sqn. Ldr. (DG NCC)',
+      duration:'10 Oct – 20 Oct 2025 (10 Days)',
+      regStatus:'Upcoming — Selection in progress'
+    },
+    {
+      id:9, name:'National Integration Camp (NIC)', wing:'Combined', status:'upcoming',
+      location:'Guwahati, Assam',
+      battalion:'NER Directorate NCC',
+      strength:30, commandant:'Brig. V. Singh',
+      duration:'15 Nov – 26 Nov 2025 (12 Days)',
+      regStatus:'Upcoming — Details awaited'
+    },
+    {
+      id:10, name:'Advanced Leadership Camp (ALC)', wing:'Army', status:'completed',
+      location:'Shillong, Meghalaya',
+      battalion:'NER Directorate NCC',
+      strength:50, commandant:'Col. M. Rao',
+      duration:'10 Mar – 21 Mar 2025 (12 Days)',
+      regStatus:'Completed'
+    },
+    {
+      id:11, name:'Annual Training Camp (ATC) — Jan Cycle', wing:'Army', status:'completed',
+      location:'Agartala, Tripura',
+      battalion:'15th Tripura Bn NCC',
+      strength:130, commandant:'Capt. A. Deb',
+      duration:'15 Jan – 26 Jan 2025 (12 Days)',
+      regStatus:'Completed'
+    },
+    {
+      id:12, name:'Social Service Camp — Republic Day', wing:'Combined', status:'completed',
+      location:'Agartala, Tripura',
+      battalion:'15th Tripura Bn NCC',
+      strength:80, commandant:'Maj. R. Chakraborty',
+      duration:'24 Jan – 26 Jan 2025 (3 Days)',
+      regStatus:'Completed'
+    }
+  ];
+
+  var activeTabFilter = 'all';
+
+  function getStatusLabel(status) {
+    var map = {
+      live:     ['status-live',      '<span class="live-dot"></span> Live Now'],
+      open:     ['status-open',      '<i class="fas fa-door-open"></i> Registration Open'],
+      upcoming: ['status-upcoming',  '<i class="fas fa-clock"></i> Upcoming'],
+      completed:['status-completed', '<i class="fas fa-check-circle"></i> Completed']
+    };
+    return map[status] || map['upcoming'];
+  }
+
+  function getWingClass(wing) {
+    var map = { Army:'wing-army', Navy:'wing-navy', 'Air Force':'wing-air', Combined:'wing-combined' };
+    return map[wing] || 'wing-army';
+  }
+
+  function buildCampCard(c) {
+    var sl = getStatusLabel(c.status);
+    var wc = getWingClass(c.wing);
+    var regBtn = '';
+    if (c.status === 'open') {
+      regBtn = '<a href="login.html" class="btn btn-primary btn-sm btn-block" style="margin-top:0.25rem;"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login to Register</a>';
+    } else if (c.status === 'live') {
+      regBtn = '<span class="btn btn-sm btn-block" style="background:#fdecea;color:#c62828;border:1px solid #f5a9a9;cursor:default;margin-top:0.25rem;"><i class="fas fa-signal" aria-hidden="true"></i> Camp In Progress</span>';
+    } else if (c.status === 'upcoming') {
+      regBtn = '<span class="btn btn-sm btn-block" style="background:#fff3e0;color:#e65100;border:1px solid #ffcc80;cursor:default;margin-top:0.25rem;"><i class="fas fa-clock" aria-hidden="true"></i> Registration Not Yet Open</span>';
+    } else {
+      regBtn = '<span class="btn btn-sm btn-block" style="background:#e8eaf6;color:#283593;border:1px solid #9fa8da;cursor:default;margin-top:0.25rem;"><i class="fas fa-check-circle" aria-hidden="true"></i> Camp Completed</span>';
+    }
+    return '<article class="camp-card" data-status="'+c.status+'" data-wing="'+c.wing+'">' +
+      '<div class="camp-card-header">' +
+        '<div>' +
+          '<span class="camp-status-tag '+sl[0]+'">'+sl[1]+'</span>' +
+          '<h4 style="margin-top:0.5rem;">'+c.name+'</h4>' +
+          '<span class="wing-badge '+wc+'"><i class="fas fa-shield-alt" aria-hidden="true"></i> '+c.wing+'</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="camp-card-body">' +
+        '<div class="camp-info-grid">' +
+          '<div class="camp-info-item"><i class="fas fa-location-dot" aria-hidden="true"></i><div><strong>Location</strong><span>'+c.location+'</span></div></div>' +
+          '<div class="camp-info-item"><i class="fas fa-building-flag" aria-hidden="true"></i><div><strong>Conducting Battalion</strong><span>'+c.battalion+'</span></div></div>' +
+          '<div class="camp-info-item"><i class="fas fa-users" aria-hidden="true"></i><div><strong>Camp Strength</strong><span>'+c.strength+' Cadets</span></div></div>' +
+          '<div class="camp-info-item"><i class="fas fa-user-tie" aria-hidden="true"></i><div><strong>Camp Commandant</strong><span>'+c.commandant+'</span></div></div>' +
+          '<div class="camp-info-item" style="grid-column:1/-1;"><i class="fas fa-calendar-alt" aria-hidden="true"></i><div><strong>Duration</strong><span>'+c.duration+'</span></div></div>' +
+          '<div class="camp-info-item" style="grid-column:1/-1;"><i class="fas fa-info-circle" aria-hidden="true"></i><div><strong>Registration Status</strong><span>'+c.regStatus+'</span></div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="camp-card-footer">'+regBtn+'</div>' +
+    '</article>';
+  }
+
+  function renderCamps() {
+    var q      = (document.getElementById('campSearch').value || '').toLowerCase();
+    var wing   = document.getElementById('wingFilter').value;
+    var status = document.getElementById('statusFilter').value || activeTabFilter;
+    if (status === 'all') status = '';
+
+    var filtered = CAMPS.filter(function(c) {
+      var matchQ = !q || c.name.toLowerCase().includes(q) ||
+                   c.location.toLowerCase().includes(q) ||
+                   c.commandant.toLowerCase().includes(q) ||
+                   c.battalion.toLowerCase().includes(q);
+      var matchW = !wing   || c.wing   === wing;
+      var matchS = !status || c.status === status;
+      return matchQ && matchW && matchS;
+    });
+
+    var grid = document.getElementById('campsGrid');
+    var empty = document.getElementById('emptyState');
+    if (filtered.length === 0) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+    } else {
+      empty.classList.add('hidden');
+      grid.innerHTML = filtered.map(buildCampCard).join('');
+    }
+    updateStats();
+  }
+
+  function updateStats() {
+    document.getElementById('statLive').textContent      = CAMPS.filter(function(c){return c.status==='live'}).length;
+    document.getElementById('statOpen').textContent      = CAMPS.filter(function(c){return c.status==='open'}).length;
+    document.getElementById('statUpcoming').textContent  = CAMPS.filter(function(c){return c.status==='upcoming'}).length;
+    document.getElementById('statCompleted').textContent = CAMPS.filter(function(c){return c.status==='completed'}).length;
+  }
+
+  function filterByTab(btn, filter) {
+    activeTabFilter = filter;
+    document.querySelectorAll('.filter-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('statusFilter').value = '';
+    renderCamps();
+  }
+
+  function clearFilters() {
+    document.getElementById('campSearch').value = '';
+    document.getElementById('wingFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    activeTabFilter = 'all';
+    document.querySelectorAll('.filter-tab-btn').forEach(function(b,i){ b.classList.toggle('active', i===0); });
+    renderCamps();
+  }
+
+  // Init
+  if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 });
+  renderCamps();
+  </script>
 </body>
 </html>
