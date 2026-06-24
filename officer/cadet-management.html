@@ -58,7 +58,7 @@
         <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
         <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
-        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Institute Management</a>
         <a href="cadet-management.html" class="active"><i class="fas fa-users"></i> Cadet Management</a>
         <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
         <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
@@ -100,14 +100,14 @@
         </div>
 
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search by name, reg no, college..." oninput="renderTable()">
+          <input type="text" id="searchInput" placeholder="Search by name, reg no, institute..." oninput="renderTable()">
         </div>
 
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>#</th><th>Name</th><th>Reg No</th><th>College</th><th>Year</th><th>Gender</th><th>Attendance%</th><th>Actions</th>
+                <th>#</th><th>Name</th><th>Reg No</th><th>Institute</th><th>Year</th><th>Gender</th><th>Attendance%</th><th>Actions</th>
               </tr>
             </thead>
             <tbody id="cadetTableBody"></tbody>
@@ -129,7 +129,7 @@
           <div class="form-group"><label>Reg No *</label><input type="text" id="fRegNo" required></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>College *</label><input type="text" id="fCollege" required></div>
+          <div class="form-group"><label>Institute *</label><input type="text" id="fCollege" required></div>
           <div class="form-group"><label>Battalion</label><input type="text" id="fBn" value="15th Tripura Bn NCC"></div>
         </div>
         <div class="form-row">
@@ -342,7 +342,7 @@
       document.getElementById('viewDetails').innerHTML =
         '<div><strong>Name:</strong> '+c.name+'</div>'+
         '<div><strong>Reg No:</strong> '+c.regNo+'</div>'+
-        '<div><strong>College:</strong> '+c.college+'</div>'+
+        '<div><strong>Institute:</strong> '+c.college+'</div>'+
         '<div><strong>Battalion:</strong> '+(c.bn||'N/A')+'</div>'+
         '<div><strong>Year:</strong> '+c.year+'</div>'+
         '<div><strong>Gender:</strong> '+c.gender+'</div>'+

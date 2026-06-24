@@ -57,7 +57,7 @@
         <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
         <a href="bn-management.html"><i class="fas fa-building-flag"></i> Battalion Management</a>
-        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Institute Management</a>
         <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
         <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
         <a href="camps.html" class="active"><i class="fas fa-campground"></i> Camp Management</a>
@@ -233,7 +233,7 @@
         html += '<h4 style="margin:0;"><i class="fas fa-campground" style="color:var(--primary);margin-right:0.5rem;"></i>' + campName + '</h4>';
         html += '<span style="background:var(--primary);color:#fff;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:700;">' + campRegs.length + ' Registered</span>';
         html += '</div>';
-        html += '<div class="table-container"><table><thead><tr><th>Cadet Name</th><th>College</th><th>Mobile</th><th>Registered On</th><th>Status</th></tr></thead><tbody>';
+        html += '<div class="table-container"><table><thead><tr><th>Cadet Name</th><th>Institute</th><th>Mobile</th><th>Registered On</th><th>Status</th></tr></thead><tbody>';
         campRegs.forEach(function(r) {
           html += '<tr><td><strong>' + r.cadetName + '</strong></td><td>' + (r.cadetCollege || '-') + '</td><td>' + (r.cadetMobile || '-') + '</td><td>' + (r.registeredOn || '-') + '</td><td><span class="badge badge-green" style="background:rgba(45,90,39,0.1);color:var(--primary);padding:0.2rem 0.6rem;border-radius:10px;font-size:0.75rem;">' + r.status + '</span></td></tr>';
         });

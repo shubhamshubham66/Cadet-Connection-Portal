@@ -17,8 +17,8 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="navbar-brand">
-        <img src="assets/images/ncc-logo.jpg" alt="NCC Logo" style="border-radius:50%;">
+      <a href="index.html" class="navbar-brand" aria-label="Cadet Connection Portal Home">
+        <img src="assets/images/ncc-emblem.png" alt="NCC Official Emblem" loading="eager" style="border-radius:0;object-fit:contain;">
         <div class="navbar-brand-text">
           <h1>Cadet Connection Portal</h1>
           <span>NCC NER Region</span>
@@ -42,48 +42,56 @@
           <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </div>
-      <!-- Announcements Bell Icon -->
-      <div class="nav-announce-btn" title="Announcements" onclick="toggleAnnouncementsPanel()" style="width:38px;height:38px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;margin-left:0.5rem;border:2px solid var(--accent);transition:all 0.3s;">
-        <i class="fas fa-bullhorn" style="color:#fff;font-size:0.85rem;"></i>
-        <span id="announceBadge" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#dc3545;color:#fff;font-size:0.6rem;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;">0</span>
+      <!-- Announcements Bell — wrapped in announce-wrapper for correct dropdown anchoring -->
+      <div class="announce-wrapper">
+        <div class="nav-announce-btn" id="announceToggleBtn" title="Announcements" onclick="toggleAnnouncementsPanel()" aria-label="Announcements" aria-expanded="false" style="width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;border:2px solid var(--accent);transition:all 0.3s;-webkit-tap-highlight-color:transparent;">
+          <i class="fas fa-bullhorn" style="color:#fff;font-size:0.9rem;" aria-hidden="true"></i>
+          <span id="announceBadge" aria-live="polite" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#dc3545;color:#fff;font-size:0.6rem;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;">0</span>
+        </div>
+        <!-- Announcements Panel — uses .announce-panel class for proper positioning -->
+        <div id="announcePanel" class="announce-panel" role="dialog" aria-label="Latest Announcements">
+          <h4 style="margin-bottom:1rem;font-size:1rem;color:#1a3a16;display:flex;align-items:center;gap:0.5rem;"><i class="fas fa-bullhorn" style="color:#c8a951;" aria-hidden="true"></i> Latest Announcements</h4>
+          <div id="announcePanelContent"></div>
+        </div>
       </div>
-      <!-- Announcements Panel -->
-      <div id="announcePanel" style="display:none;position:absolute;top:55px;right:0;width:320px;max-height:400px;overflow-y:auto;background:#fff;border-radius:12px;box-shadow:0 5px 30px rgba(0,0,0,0.15);z-index:9999;padding:1rem;border:1px solid #ddd;">
-        <h4 style="margin-bottom:1rem;font-size:1rem;color:#1a3a16;"><i class="fas fa-bullhorn" style="color:#c8a951;"></i> Latest Announcements</h4>
-        <div id="announcePanelContent"></div>
-      </div>
-      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+      <div class="nav-hamburger" role="button" aria-label="Toggle navigation" aria-expanded="false" tabindex="0"><span></span><span></span><span></span></div>
     </div>
     <div class="mobile-overlay"></div>
   </nav>
 
-  <!-- Live Ticker -->
-  <div class="live-ticker">
-    <div class="ticker-badge"><i class="fas fa-bolt"></i> LIVE</div>
+  <!-- Live Ticker — items are clickable links -->
+  <div class="live-ticker" role="marquee" aria-label="Live announcements">
+    <div class="ticker-badge" aria-hidden="true"><i class="fas fa-bolt"></i> LIVE</div>
     <div class="ticker-wrap">
       <div class="ticker-content" id="tickerContent">
-        <span>🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025</span>
-        <span>🏆 15th Tripura BN secures 2nd Rank in NE Directorate</span>
-        <span>📢 B Certificate Exam scheduled — 15 Aug 2025</span>
-        <span>🪖 NCC Day Celebration — 28 November 2025</span>
-        <span>⭐ NIT Agartala & Ramthakur College Shine in NER</span>
+        <a href="camps.html" class="ticker-link">🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025</a>
+        <a href="about.html#achievements" class="ticker-link">🏆 15th Tripura BN secures 2nd Rank in NE Directorate</a>
+        <a href="events.html" class="ticker-link">📢 B Certificate Exam scheduled — 15 Aug 2025</a>
+        <a href="activities.html" class="ticker-link">🪖 NCC Day Celebration — 28 November 2025</a>
+        <a href="about.html#achievements" class="ticker-link">⭐ NIT Agartala &amp; Ramthakur College Shine in NER</a>
+        <a href="camps.html" class="ticker-link">🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025</a>
+        <a href="about.html#achievements" class="ticker-link">🏆 15th Tripura BN secures 2nd Rank in NE Directorate</a>
+        <a href="events.html" class="ticker-link">📢 B Certificate Exam scheduled — 15 Aug 2025</a>
+        <a href="activities.html" class="ticker-link">🪖 NCC Day Celebration — 28 November 2025</a>
+        <a href="about.html#achievements" class="ticker-link">⭐ NIT Agartala &amp; Ramthakur College Shine in NER</a>
       </div>
     </div>
   </div>
 
   <!-- Hero Section -->
-  <section class="hero-section" style="background: linear-gradient(135deg, rgba(26,58,22,0.85), rgba(45,90,39,0.8)), url('assets/images/ncc-banner.jpg') center/cover no-repeat;">
-    <div class="hero-bg-pattern"></div>
+  <section class="hero-section" style="background: linear-gradient(135deg, rgba(26,58,22,0.88), rgba(45,90,39,0.82)), url('assets/images/ncc-banner.jpg') center/cover no-repeat;">
+    <div class="hero-bg-pattern" aria-hidden="true"></div>
     <div class="hero-content" data-aos="fade-up">
-      <div class="hero-emblem">
-        <img src="assets/images/ncc-logo.jpg" alt="NCC Logo" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">
+      <div class="hero-emblem-official" role="img" aria-label="NCC Official Emblem">
+        <img src="assets/images/ncc-emblem.png" alt="NCC Official Emblem" loading="eager">
       </div>
       <h1>Cadet Connection Portal</h1>
       <p class="hero-subtitle">Official NCC NER Region Digital Platform</p>
       <div class="hero-motto">"Unity and Discipline"</div>
+      <p style="color:rgba(255,255,255,0.65);font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem;">"Ekta aur Anushasan" &nbsp;|&nbsp; 15th Tripura Bn NCC</p>
       <div class="hero-buttons">
-        <a href="login.html" class="btn btn-secondary btn-lg"><i class="fas fa-sign-in-alt"></i> Cadet Login</a>
-        <a href="#features" class="btn btn-white btn-lg"><i class="fas fa-compass"></i> Explore Portal</a>
+        <a href="login.html" class="btn btn-secondary btn-lg"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Cadet Login</a>
+        <a href="#features" class="btn btn-white btn-lg"><i class="fas fa-compass" aria-hidden="true"></i> Explore Portal</a>
       </div>
     </div>
   </section>
@@ -91,28 +99,28 @@
   <!-- Stats Bar -->
   <section class="stats-section">
     <div class="container">
-      <div class="stats-grid" data-aos="fade-up">
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-users"></i></div>
-          <div class="stat-number"><span class="counter" data-target="5000">0</span>+</div>
-          <div class="stat-label">Total Cadets</div>
+        <div class="stats-grid" data-aos="fade-up">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+            <div class="stat-number"><span class="counter" data-target="5000">0</span>+</div>
+            <div class="stat-label">Total Cadets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-building-flag" aria-hidden="true"></i></div>
+            <div class="stat-number"><span class="counter" data-target="10">0</span>+</div>
+            <div class="stat-label">Active Battalions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-campground" aria-hidden="true"></i></div>
+            <div class="stat-number"><span class="counter" data-target="200">0</span>+</div>
+            <div class="stat-label">Camps Conducted</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-certificate" aria-hidden="true"></i></div>
+            <div class="stat-number"><span class="counter" data-target="3000">0</span>+</div>
+            <div class="stat-label">Certificates Issued</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-building-flag"></i></div>
-          <div class="stat-number"><span class="counter" data-target="10">0</span>+</div>
-          <div class="stat-label">Active Battalions</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-campground"></i></div>
-          <div class="stat-number"><span class="counter" data-target="200">0</span>+</div>
-          <div class="stat-label">Camps Conducted</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-certificate"></i></div>
-          <div class="stat-number"><span class="counter" data-target="3000">0</span>+</div>
-          <div class="stat-label">Certificates Issued</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -345,7 +353,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <h3><img src="assets/images/ncc-logo.jpg" alt="NCC" style="width:30px;height:30px;border-radius:50%;display:inline;vertical-align:middle;margin-right:0.5rem;"> Cadet Connection Portal</h3>
+          <h3><img src="assets/images/ncc-emblem.png" alt="NCC" loading="lazy" style="width:28px;height:28px;object-fit:contain;display:inline;vertical-align:middle;margin-right:0.5rem;filter:brightness(0) invert(1);"> Cadet Connection Portal</h3>
           <p>Official NCC NER Region Digital Platform serving all North Eastern battalions.</p>
           <div class="footer-motto">"Unity and Discipline"</div>
         </div>
@@ -398,6 +406,30 @@
     });
 
     // ─── Live Ticker Dynamic Content ───
+    var TICKER_LINKS = {
+      'camp': 'camps.html',
+      'atc': 'camps.html',
+      'catc': 'camps.html',
+      'certificate': 'cadet/certificates.html',
+      'exam': 'events.html',
+      'ncc day': 'activities.html',
+      'achievement': 'about.html#achievements',
+      'rank': 'about.html#achievements',
+      'shine': 'about.html#achievements',
+      'event': 'events.html',
+      'notice': 'events.html',
+      'rally': 'activities.html',
+      'default': 'events.html'
+    };
+
+    function getTickerLink(text) {
+      var lower = text.toLowerCase();
+      for (var key in TICKER_LINKS) {
+        if (key !== 'default' && lower.indexOf(key) !== -1) return TICKER_LINKS[key];
+      }
+      return TICKER_LINKS['default'];
+    }
+
     function loadTickerContent() {
       var news = JSON.parse(localStorage.getItem('co_news') || '[]');
       var ticker = document.getElementById('tickerContent');
@@ -407,17 +439,23 @@
       if (news.length > 0) {
         for (var i = 0; i < Math.min(news.length, 5); i++) {
           var icon = news[i].priority === 'urgent' ? '🚨' : news[i].priority === 'important' ? '⭐' : '📢';
-          items.push(icon + ' ' + news[i].title);
+          items.push({ text: icon + ' ' + news[i].title, link: 'events.html' });
         }
       } else {
-        items = ['🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025', '🏆 15th Tripura BN secures 2nd Rank in NE Directorate', '📢 B Certificate Exam — 15 Aug 2025', '🪖 NCC Day — 28 November 2025', '⭐ NIT Agartala & Ramthakur College Shine'];
+        items = [
+          { text: '🏕️ ATC Camp Registration Open — 15 Jul to 26 Jul 2025', link: 'camps.html' },
+          { text: '🏆 15th Tripura BN secures 2nd Rank in NE Directorate', link: 'about.html#achievements' },
+          { text: '📢 B Certificate Exam — 15 Aug 2025', link: 'events.html' },
+          { text: '🪖 NCC Day — 28 November 2025', link: 'activities.html' },
+          { text: '⭐ NIT Agartala & Ramthakur College Shine', link: 'about.html#achievements' }
+        ];
       }
 
-      // Duplicate for infinite scroll
+      // Duplicate for seamless infinite scroll
       var html = '';
       for (var j = 0; j < 2; j++) {
         for (var k = 0; k < items.length; k++) {
-          html += '<span>' + items[k] + '</span>';
+          html += '<a href="' + items[k].link + '" class="ticker-link">' + items[k].text + '</a>';
         }
       }
       ticker.innerHTML = html;
@@ -426,17 +464,23 @@
     // ─── Announcements Panel ───
     function toggleAnnouncementsPanel() {
       var panel = document.getElementById('announcePanel');
-      if (panel.style.display === 'none' || !panel.style.display) {
-        panel.style.display = 'block';
-        loadAnnouncePanel();
+      var btn   = document.getElementById('announceToggleBtn');
+      if (!panel) return;
+      var isOpen = panel.classList.contains('show');
+      if (isOpen) {
+        panel.classList.remove('show');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
       } else {
-        panel.style.display = 'none';
+        panel.classList.add('show');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+        loadAnnouncePanel();
       }
     }
 
     function loadAnnounceBadge() {
       var news = JSON.parse(localStorage.getItem('co_news') || '[]');
       var badge = document.getElementById('announceBadge');
+      if (!badge) return;
       if (news.length > 0) {
         badge.style.display = 'flex';
         badge.textContent = news.length > 9 ? '9+' : news.length;
@@ -446,6 +490,7 @@
     function loadAnnouncePanel() {
       var news = JSON.parse(localStorage.getItem('co_news') || '[]');
       var container = document.getElementById('announcePanelContent');
+      if (!container) return;
       if (news.length === 0) {
         container.innerHTML = '<p style="color:#666;font-size:0.85rem;text-align:center;padding:1rem 0;">No announcements yet</p>';
         return;
@@ -455,10 +500,11 @@
       for (var i = 0; i < latest.length; i++) {
         var n = latest[i];
         var borderColor = n.priority === 'urgent' ? '#dc3545' : n.priority === 'important' ? '#c8a951' : '#2d5a27';
-        html += '<div style="padding:0.6rem;margin-bottom:0.5rem;border-left:3px solid ' + borderColor + ';background:rgba(45,90,39,0.03);border-radius:6px;">' +
-          '<strong style="font-size:0.85rem;display:block;">' + n.title + '</strong>' +
+        var link = 'events.html';
+        html += '<a href="' + link + '" style="display:block;padding:0.6rem;margin-bottom:0.5rem;border-left:3px solid ' + borderColor + ';background:rgba(45,90,39,0.03);border-radius:6px;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(45,90,39,0.07)\'" onmouseout="this.style.background=\'rgba(45,90,39,0.03)\'">' +
+          '<strong style="font-size:0.85rem;display:block;color:#1c1c1c;">' + n.title + '</strong>' +
           '<span style="font-size:0.7rem;color:#666;">' + (n.date || '') + '</span>' +
-          '</div>';
+          '</a>';
       }
       container.innerHTML = html;
     }
@@ -466,9 +512,11 @@
     // Close panel on outside click
     document.addEventListener('click', function(e) {
       var panel = document.getElementById('announcePanel');
-      var btn = document.querySelector('.nav-announce-btn');
-      if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
-        panel.style.display = 'none';
+      var wrapper = document.querySelector('.announce-wrapper');
+      if (panel && wrapper && !wrapper.contains(e.target)) {
+        panel.classList.remove('show');
+        var btn = document.getElementById('announceToggleBtn');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
       }
     });
 

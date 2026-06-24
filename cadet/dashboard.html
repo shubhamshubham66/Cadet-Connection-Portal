@@ -15,7 +15,7 @@
       <div class="sidebar-header">
         <div class="cadet-avatar"><i class="fas fa-user"></i></div>
         <div class="cadet-name" id="cadetName">Cadet</div>
-        <div class="cadet-rank">Cadet | <span id="sidebarCollege">College</span></div>
+        <div class="cadet-rank">Cadet | <span id="sidebarCollege">Institute</span></div>
       </div>
       <nav class="sidebar-menu">
         <a href="dashboard.html" class="active"><i class="fas fa-home"></i> My Dashboard</a>
@@ -44,7 +44,35 @@
       <div class="cadet-content">
         <div class="welcome-banner">
           <h2 id="welcomeText">Welcome, Cdt. Rahul Das</h2>
-          <p>Cadet | <span id="userCollege">College</span> | 15th Tripura Bn NCC</p>
+          <p>Cadet | <span id="userCollege">Institute</span> | 15th Tripura Bn NCC</p>
+        </div>
+
+        <!-- Quick Action Cards -->
+        <div class="quick-card-grid" data-aos="fade-up">
+          <a href="attendance.html" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-clipboard-list"></i></div>
+            <span class="qc-label">Attendance</span>
+          </a>
+          <a href="camps.html" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-campground"></i></div>
+            <span class="qc-label">Camps</span>
+          </a>
+          <a href="certificates.html" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-scroll"></i></div>
+            <span class="qc-label">Certificates</span>
+          </a>
+          <a href="../activities.html" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-trophy"></i></div>
+            <span class="qc-label">Achievements</span>
+          </a>
+          <a href="../events.html" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-calendar-alt"></i></div>
+            <span class="qc-label">Events</span>
+          </a>
+          <a href="../events.html#notices" class="quick-card">
+            <div class="qc-icon"><i class="fas fa-bullhorn"></i></div>
+            <span class="qc-label">Notices</span>
+          </a>
         </div>
 
         <div class="grid grid-4 mb-4">
@@ -92,8 +120,8 @@
       document.getElementById('cadetName').textContent = user.name;
       document.getElementById('topName').textContent = user.name;
       document.getElementById('welcomeText').textContent = 'Welcome, ' + user.name;
-      document.getElementById('userCollege').textContent = user.college || 'My College';
-      document.getElementById('sidebarCollege').textContent = user.college || 'My College';
+      document.getElementById('userCollege').textContent = user.college || 'My Institute';
+      document.getElementById('sidebarCollege').textContent = user.college || 'My Institute';
     }
 
     // Load notifications from admin news

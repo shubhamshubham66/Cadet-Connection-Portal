@@ -59,7 +59,7 @@
         <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
         <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
         <a href="bn-management.html" class="active"><i class="fas fa-building-flag"></i> Battalion Management</a>
-        <a href="college-management.html"><i class="fas fa-school"></i> College Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Institute Management</a>
         <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
         <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
         <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
@@ -106,7 +106,7 @@
 
         <div class="table-container">
           <table>
-            <thead><tr><th>#</th><th>Battalion Name</th><th>State</th><th>City</th><th>CO</th><th>Cadets</th><th>Colleges</th><th>Actions</th></tr></thead>
+            <thead><tr><th>#</th><th>Battalion Name</th><th>State</th><th>City</th><th>CO</th><th>Cadets</th><th>Institutes</th><th>Actions</th></tr></thead>
             <tbody id="bnTableBody"></tbody>
           </table>
         </div>
@@ -189,7 +189,7 @@
       document.getElementById('statsRow').innerHTML =
         '<div class="mini-stat"><i class="fas fa-building-flag"></i><div><div class="num">'+bns.length+'</div><div class="lbl">Battalions</div></div></div>'+
         '<div class="mini-stat"><i class="fas fa-users"></i><div><div class="num">'+totalCadets+'</div><div class="lbl">Total Cadets</div></div></div>'+
-        '<div class="mini-stat"><i class="fas fa-school"></i><div><div class="num">'+totalColleges+'</div><div class="lbl">Total Colleges</div></div></div>'+
+        '<div class="mini-stat"><i class="fas fa-school"></i><div><div class="num">'+totalColleges+'</div><div class="lbl">Total Institutes</div></div></div>'+
         '<div class="mini-stat"><i class="fas fa-map-marked-alt"></i><div><div class="num">NER</div><div class="lbl">Region</div></div></div>';
     }
 
