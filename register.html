@@ -288,6 +288,7 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="assets/js/api.js"></script>
   <script>
     // Toggle password
     function togglePwd(id, btn) {
@@ -342,7 +343,7 @@
     }
 
     // Register
-    function handleRegister(e) {
+    async function handleRegister(e) {
       e.preventDefault();
       var pwd = document.getElementById('regPassword').value;
       var confirmPwd = document.getElementById('regConfirmPwd').value;
@@ -370,20 +371,41 @@
       }
 
       // Save
-      cadets.push({
+      var data = {
         name: document.getElementById('regName').value.trim(),
         rank: document.getElementById('regRank').value,
         wing: document.getElementById('regWing').value,
-        regNo: document.getElementById('regRegNo').value.trim(),
+        regimentNo: document.getElementById('regRegNo').value.trim(),
         battalion: document.getElementById('regBattalion').value.trim(),
-        college: document.getElementById('regInstitute').value.trim(),
+        institute: document.getElementById('regInstitute').value.trim(),
         mobile: mobile,
         email: email,
         password: pwd,
         dob: document.getElementById('regDob').value,
-        gender: document.getElementById('regGender').value,
-        registeredAt: new Date().toISOString()
-      });
+        gender: document.getElementById('regGender').value
+      };
+
+      // Try API first, fallback to localStorage
+      if (typeof API !== 'undefined' && API.BASE_URL) {
+        try {
+          var result = await API.registerCadet(data);
+          if (result.success) {
+            showToast(result.message, 'success');
+            setTimeout(function() { window.location.href = 'login.html'; }, 2000);
+            return false;
+          } else {
+            showToast(result.message || 'Registration failed', 'error');
+            return false;
+          }
+        } catch(e) {
+          // API not available, fallback to localStorage
+          console.log('API not available, using localStorage');
+        }
+      }
+
+      // localStorage fallback
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      cadets.push({...data, registeredAt: new Date().toISOString()});
       localStorage.setItem('registered_cadets', JSON.stringify(cadets));
 
       showToast('Registration successful! Redirecting to login...', 'success');
