@@ -91,50 +91,26 @@
     <div class="login-right" style="overflow-y:scroll;height:100vh;padding:2rem 3rem;">
       <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-      <!-- STEP 1: Role Select -->
+      <!-- STEP 1: Cadet Login Direct -->
       <div class="login-form-container" id="step1">
-        <div class="login-form-header"><h2>Welcome</h2><p>Select your role to continue</p></div>
-        <div class="role-cards">
-          <div class="role-card" onclick="pickRole('Cadet')"><i class="fas fa-user-graduate"></i><h4>Cadet</h4><p>NCC Cadet Login</p></div>
-          <div class="role-card" onclick="pickRole('Admin')"><i class="fas fa-user-tie"></i><h4>Admin</h4><p>Full Management Access</p></div>
-        </div>
-      </div>
-
-      <!-- STEP 2a: Cadet Options -->
-      <div class="login-form-container hide" id="step2Cadet">
-        <div class="login-form-header"><h2>Cadet Access</h2><p>Choose an option</p></div>
+        <div class="login-form-header"><h2>Welcome</h2><p>Login to your cadet account or register</p></div>
         <div class="option-cards">
-          <div class="option-card" onclick="window.location.href='register.html'">
-            <i class="fas fa-user-plus"></i>
-            <h4>Register</h4>
-            <p>New cadet? Create account</p>
-          </div>
           <div class="option-card" onclick="showCadetLogin()">
             <i class="fas fa-sign-in-alt"></i>
             <h4>Login</h4>
             <p>Already registered? Sign in</p>
           </div>
+          <div class="option-card" onclick="window.location.href='register.html'">
+            <i class="fas fa-user-plus"></i>
+            <h4>Register</h4>
+            <p>New cadet? Create account</p>
+          </div>
         </div>
-        <button type="button" class="btn btn-outline mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
       </div>
 
-      <!-- STEP 3a: Cadet Register Form -->
-      <div class="login-form-container hide" id="step3Register">
-        <div class="login-form-header"><h2>Cadet Registration</h2><p>Fill your details to create account</p></div>
-        <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="regName" placeholder="Enter your full name"></div>
-        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="regMobile" placeholder="10 digit number" maxlength="10"></div>
-        <div class="form-group"><label><i class="fas fa-envelope"></i> Email *</label><input type="email" id="regEmail" placeholder="your@email.com"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="regPassword" placeholder="Create a strong password" oninput="checkPasswordStrength(this.value)"><button type="button" class="toggle-pass" onclick="togglePass('regPassword',this)"><i class="fas fa-eye"></i></button></div><div class="strength-meter"><div class="bar" id="strengthBar"></div></div><div class="strength-label" id="strengthLabel"></div><div class="pwd-requirements" id="pwdReqs"><div class="req" id="reqLen"><i class="fas fa-circle"></i> Minimum 8 characters</div><div class="req" id="reqUpper"><i class="fas fa-circle"></i> At least one uppercase letter (A-Z)</div><div class="req" id="reqLower"><i class="fas fa-circle"></i> At least one lowercase letter (a-z)</div><div class="req" id="reqNum"><i class="fas fa-circle"></i> At least one number (0-9)</div><div class="req" id="reqSpecial"><i class="fas fa-circle"></i> At least one special character (!@#$%^&*)</div></div></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Confirm Password *</label><div class="password-wrapper"><input type="password" id="regConfirmPassword" placeholder="Confirm password"><button type="button" class="toggle-pass" onclick="togglePass('regConfirmPassword',this)"><i class="fas fa-eye"></i></button></div></div>
-        <div class="form-group"><label><i class="fas fa-id-badge"></i> Regiment No *</label><input type="text" id="regRegNo" placeholder="NCC/NER/TR/15/2024/XXXX"></div>
-        <div class="form-group"><label><i class="fas fa-building-flag"></i> Battalion *</label><input type="text" id="regBattalion" placeholder="e.g., 15th Tripura Bn NCC"></div>
-        <div class="form-group"><label><i class="fas fa-school"></i> Institute *</label><input type="text" id="regCollege" placeholder="Enter your institute name"></div>
-        <div class="form-group"><label><i class="fas fa-calendar"></i> Date of Birth *</label><input type="date" id="regDob"></div>
-        <div class="form-group"><label><i class="fas fa-venus-mars"></i> Gender *</label><select id="regGender"><option value="">Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
-        <div class="form-group"><label><i class="fas fa-camera"></i> Photo *</label><input type="file" id="regPhoto" accept="image/*" style="padding:0.5rem;"></div>
-        <button type="button" class="btn btn-primary mt-2" onclick="registerCadet()"><i class="fas fa-user-plus"></i> Register</button>
-        <button type="button" class="btn btn-outline mt-2" onclick="backToCadetOptions()"><i class="fas fa-arrow-left"></i> Back</button>
-      </div>
+
+
+
 
       <!-- STEP 3b: Cadet Login Form -->
       <div class="login-form-container hide" id="step3Login">
@@ -142,57 +118,28 @@
         <div class="form-group"><label><i class="fas fa-phone"></i> Mobile / Email *</label><input type="text" id="loginCadetId" placeholder="Mobile number or email"></div>
         <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="loginCadetPassword" placeholder="Enter your password"><button type="button" class="toggle-pass" onclick="togglePass('loginCadetPassword',this)"><i class="fas fa-eye"></i></button></div></div>
         <button type="button" class="btn btn-primary mt-2" onclick="loginCadet()"><i class="fas fa-sign-in-alt"></i> Login</button>
-        <button type="button" class="btn btn-outline mt-2" onclick="backToCadetOptions()"><i class="fas fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-outline mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+        <p style="text-align:center;margin-top:1rem;font-size:0.85rem;color:#666;">Don't have an account? <a href="register.html" style="color:#2d5a27;font-weight:700;">Register here</a></p>
       </div>
 
-      <!-- STEP 2b: Admin Login Form -->
-      <div class="login-form-container hide" id="step2Admin">
-        <div class="login-form-header"><h2>Admin Login</h2><p>Enter admin credentials</p></div>
-        <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number or Gmail *</label><input type="text" id="adminMobileEmail" placeholder="Mobile number or Gmail"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="adminPassword" placeholder="Enter password"><button type="button" class="toggle-pass" onclick="togglePass('adminPassword',this)"><i class="fas fa-eye"></i></button></div></div>
-        <button type="button" class="btn btn-primary btn-block mt-2" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Login</button>
-        <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
-      </div>
+
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    function pickRole(role) {
+    function showCadetLogin() {
       document.getElementById('step1').classList.add('hide');
-      if (role === 'Cadet') {
-        document.getElementById('step2Cadet').classList.remove('hide');
-      } else if (role === 'Admin') {
-        document.getElementById('step2Admin').classList.remove('hide');
-      }
+      document.getElementById('step3Login').classList.remove('hide');
     }
 
     function goBack() {
       document.getElementById('step1').classList.remove('hide');
-      document.getElementById('step2Cadet').classList.add('hide');
-      document.getElementById('step2Admin').classList.add('hide');
-      document.getElementById('step3Register').classList.add('hide');
       document.getElementById('step3Login').classList.add('hide');
     }
 
-    function backToCadetOptions() {
-      document.getElementById('step3Register').classList.add('hide');
-      document.getElementById('step3Login').classList.add('hide');
-      document.getElementById('step2Cadet').classList.remove('hide');
-    }
-
-    function showCadetRegister() {
-      document.getElementById('step2Cadet').classList.add('hide');
-      document.getElementById('step3Register').classList.remove('hide');
-    }
-
-    function showCadetLogin() {
-      document.getElementById('step2Cadet').classList.add('hide');
-      document.getElementById('step3Login').classList.remove('hide');
-    }
-
-    // ─── Password Strength & Validation ───
+    // Toggle password visibility
     function togglePass(id, btn) {
       var input = document.getElementById(id);
       if (input.type === 'password') {
@@ -202,117 +149,6 @@
         input.type = 'password';
         btn.innerHTML = '<i class="fas fa-eye"></i>';
       }
-    }
-
-    function checkPasswordStrength(pwd) {
-      var hasLen = pwd.length >= 8;
-      var hasUpper = /[A-Z]/.test(pwd);
-      var hasLower = /[a-z]/.test(pwd);
-      var hasNum = /[0-9]/.test(pwd);
-      var hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
-
-      // Update requirement indicators
-      setReq('reqLen', hasLen);
-      setReq('reqUpper', hasUpper);
-      setReq('reqLower', hasLower);
-      setReq('reqNum', hasNum);
-      setReq('reqSpecial', hasSpecial);
-
-      // Calculate score
-      var score = 0;
-      if (hasLen) score++;
-      if (hasUpper) score++;
-      if (hasLower) score++;
-      if (hasNum) score++;
-      if (hasSpecial) score++;
-      if (pwd.length >= 12) score++;
-
-      // Update strength bar
-      var bar = document.getElementById('strengthBar');
-      var label = document.getElementById('strengthLabel');
-      var levels = [
-        { width: '0%', color: '#eee', text: '', cls: '' },
-        { width: '20%', color: '#dc3545', text: 'Very Weak — Dangerous!', cls: 'weak' },
-        { width: '40%', color: '#fd7e14', text: 'Weak — Not secure', cls: 'fair' },
-        { width: '60%', color: '#ffc107', text: 'Fair — Could be stronger', cls: 'good' },
-        { width: '80%', color: '#28a745', text: 'Strong — Good security', cls: 'strong' },
-        { width: '100%', color: '#155724', text: 'Very Strong — Excellent!', cls: 'very-strong' }
-      ];
-
-      var lvl = pwd.length === 0 ? 0 : Math.min(score, 5);
-      bar.style.width = levels[lvl].width;
-      bar.style.background = levels[lvl].color;
-      label.textContent = levels[lvl].text;
-      label.className = 'strength-label ' + levels[lvl].cls;
-    }
-
-    function setReq(id, pass) {
-      var el = document.getElementById(id);
-      if (pass) {
-        el.classList.add('pass');
-        el.querySelector('i').className = 'fas fa-check-circle';
-      } else {
-        el.classList.remove('pass');
-        el.querySelector('i').className = 'fas fa-circle';
-      }
-    }
-
-    function isPasswordStrong(pwd) {
-      return pwd.length >= 8 && /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
-    }
-
-    // Register Cadet
-    function registerCadet() {
-      var name = document.getElementById('regName').value.trim();
-      var mobile = document.getElementById('regMobile').value.trim();
-      var email = document.getElementById('regEmail').value.trim();
-      var password = document.getElementById('regPassword').value;
-      var confirmPassword = document.getElementById('regConfirmPassword').value;
-      var regNo = document.getElementById('regRegNo').value.trim();
-      var battalion = document.getElementById('regBattalion').value.trim();
-      var college = document.getElementById('regCollege').value.trim();
-      var dob = document.getElementById('regDob').value;
-      var gender = document.getElementById('regGender').value;
-      var photo = document.getElementById('regPhoto').files.length;
-
-      if (!name || !mobile || !email || !password || !confirmPassword || !regNo || !battalion || !college || !dob || !gender || !photo) {
-        toast('Please fill all fields and upload photo', 'error');
-        return;
-      }
-      if (mobile.length < 10) { toast('Enter valid 10-digit mobile', 'error'); return; }
-      if (!isPasswordStrong(password)) { toast('Password must have 8+ chars, uppercase, lowercase, number & special character', 'error'); return; }
-      if (password !== confirmPassword) { toast('Passwords do not match', 'error'); return; }
-
-      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
-
-      // Check if already registered
-      for (var i = 0; i < cadets.length; i++) {
-        if (cadets[i].mobile === mobile || cadets[i].email === email) {
-          toast('This mobile or email is already registered. Please login.', 'error');
-          return;
-        }
-      }
-
-      cadets.push({
-        name: name,
-        mobile: mobile,
-        email: email,
-        password: password,
-        regNo: regNo,
-        battalion: battalion,
-        college: college,
-        dob: dob,
-        gender: gender,
-        registeredAt: new Date().toISOString()
-      });
-
-      localStorage.setItem('registered_cadets', JSON.stringify(cadets));
-      toast('Registration successful! Please login now.', 'success');
-
-      setTimeout(function() {
-        document.getElementById('step3Register').classList.add('hide');
-        document.getElementById('step3Login').classList.remove('hide');
-      }, 1500);
     }
 
     // Login Cadet
@@ -342,48 +178,6 @@
         }));
         toast('Login Successful! Redirecting...', 'success');
         setTimeout(function() { window.location.href = 'cadet/dashboard.html'; }, 1200);
-      } else {
-        toast('Invalid credentials. Check mobile/email and password.', 'error');
-      }
-    }
-
-    // Login Admin (supports multiple admins, login via mobile OR email)
-    function loginAdmin() {
-      var input = document.getElementById('adminMobileEmail').value.trim();
-      var password = document.getElementById('adminPassword').value;
-
-      if (!input || !password) { toast('Please fill all fields', 'error'); return; }
-
-      // Get all admin accounts from localStorage
-      var admins = JSON.parse(localStorage.getItem('admin_accounts') || '[]');
-
-      // Default admin (always available)
-      if (admins.length === 0) {
-        admins = [{name:'Admin', mobile:'9876543210', email:'admin@ccp.com', password:'admin123'}];
-        localStorage.setItem('admin_accounts', JSON.stringify(admins));
-      }
-
-      // Find matching admin (by mobile or email)
-      var matchedAdmin = null;
-      for (var i = 0; i < admins.length; i++) {
-        if ((admins[i].mobile === input || admins[i].email === input) && admins[i].password === password) {
-          matchedAdmin = admins[i];
-          break;
-        }
-      }
-
-      if (matchedAdmin) {
-        localStorage.setItem('ccp_user', JSON.stringify({
-          name: matchedAdmin.name,
-          role: 'Admin',
-          email: matchedAdmin.email,
-          mobile: matchedAdmin.mobile,
-          college: '',
-          loggedIn: true,
-          loginTime: new Date().toISOString()
-        }));
-        toast('Login Successful! Redirecting...', 'success');
-        setTimeout(function() { window.location.href = 'officer/admin-dashboard.html'; }, 1200);
       } else {
         toast('Invalid credentials. Check mobile/email and password.', 'error');
       }
