@@ -107,7 +107,7 @@
           <table>
             <thead>
               <tr>
-                <th>#</th><th>Name</th><th>Reg No</th><th>Institute</th><th>Year</th><th>Gender</th><th>Attendance%</th><th>Actions</th>
+                <th>#</th><th>Name</th><th>Rank</th><th>Reg No</th><th>Institute</th><th>Battalion</th><th>Mobile</th><th>Gender</th><th>Actions</th>
               </tr>
             </thead>
             <tbody id="cadetTableBody"></tbody>
@@ -196,7 +196,6 @@
       var registered = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
       for (var i = 0; i < registered.length; i++) {
         var r = registered[i];
-        // Check if already exists in cadets list (by mobile or regNo)
         var exists = false;
         for (var j = 0; j < cadets.length; j++) {
           if (cadets[j].mobile === r.mobile || cadets[j].regNo === r.regNo) { exists = true; break; }
@@ -205,14 +204,16 @@
           cadets.push({
             id: Date.now() + i,
             name: r.name,
-            regNo: r.regNo || 'N/A',
-            college: r.college || 'N/A',
-            bn: r.battalion || '15th Tripura Bn NCC',
+            regNo: r.regNo || r.regimentNo || 'N/A',
+            college: r.college || r.institute || 'N/A',
+            bn: r.battalion || 'N/A',
             year: '1st Year',
             gender: r.gender || 'N/A',
             dob: r.dob || 'N/A',
             mobile: r.mobile,
             email: r.email || '',
+            rank: r.rank || 'Cadet',
+            wing: r.wing || 'SD',
             blood: 'N/A',
             attendance: 0,
             registeredAt: r.registeredAt || ''
@@ -220,7 +221,18 @@
         }
       }
 
-      // Save merged data
+      // Filter by BN Admin's assigned battalion
+      var currentUser = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      if (currentUser.role === 'BnAdmin' && currentUser.assignedBattalion) {
+        cadets = cadets.filter(function(c) {
+          return c.bn === currentUser.assignedBattalion || c.battalion === currentUser.assignedBattalion;
+        });
+      } else if (currentUser.role === 'CollegeAdmin' && currentUser.assignedInstitute) {
+        cadets = cadets.filter(function(c) {
+          return c.college === currentUser.assignedInstitute || c.institute === currentUser.assignedInstitute;
+        });
+      }
+
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cadets));
       return cadets;
     }
@@ -250,10 +262,9 @@
       }
       var html = '';
       cadets.forEach(function(c,i){
-        var attClass = c.attendance>=85?'badge-success':c.attendance>=70?'badge-warning':'badge-danger';
-        html += '<tr><td>'+(i+1)+'</td><td>'+c.name+'</td><td>'+c.regNo+'</td><td>'+c.college+'</td><td>'+c.year+'</td><td>'+c.gender+'</td><td><span class="badge '+attClass+'">'+c.attendance+'%</span></td><td class="actions-cell"><button class="btn btn-sm btn-outline" onclick="viewCadet('+c.id+')" title="View"><i class="fas fa-eye"></i></button> <button class="btn btn-sm btn-primary" onclick="editCadet('+c.id+')" title="Edit"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteCadet('+c.id+')" title="Delete"><i class="fas fa-trash"></i></button></td></tr>';
+        html += '<tr><td>'+(i+1)+'</td><td><strong>'+c.name+'</strong></td><td>'+(c.rank||'Cadet')+'</td><td>'+c.regNo+'</td><td>'+c.college+'</td><td>'+(c.bn||c.battalion||'N/A')+'</td><td>'+(c.mobile||'N/A')+'</td><td>'+c.gender+'</td><td class="actions-cell"><button class="btn btn-sm btn-outline" onclick="viewCadet('+c.id+')" title="View"><i class="fas fa-eye"></i></button> <button class="btn btn-sm btn-primary" onclick="editCadet('+c.id+')" title="Edit"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteCadet('+c.id+')" title="Delete"><i class="fas fa-trash"></i></button></td></tr>';
       });
-      document.getElementById('cadetTableBody').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:2rem;">No cadets found</td></tr>';
+      document.getElementById('cadetTableBody').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:2rem;">No cadets found</td></tr>';
     }
 
     function openModal(){

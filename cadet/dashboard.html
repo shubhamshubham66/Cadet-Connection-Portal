@@ -152,13 +152,25 @@
       document.getElementById('sidebarCollege').textContent = user.college || 'My Institute';
     }
 
-    // Load notifications from admin news
+    // Load notifications from admin news (filtered by cadet's battalion)
     function loadCadetNotifications() {
       var news = JSON.parse(localStorage.getItem('co_news') || '[]');
       var container = document.getElementById('cadetNotifications');
       if (!container) return;
 
-      var latest = news.slice(0, 5);
+      // Filter: show only notices for this cadet's battalion OR notices marked for ALL
+      var myBn = '';
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      var u = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      for (var i = 0; i < cadets.length; i++) {
+        if (cadets[i].name === u.name || cadets[i].email === u.email) { myBn = cadets[i].battalion; break; }
+      }
+
+      var filtered = news.filter(function(n) {
+        return !n.battalion || n.battalion === 'ALL' || n.battalion === myBn;
+      });
+
+      var latest = filtered.slice(0, 5);
       if (latest.length === 0) {
         container.innerHTML = '<p style="color:var(--text-light);font-size:0.9rem;padding:0.5rem 0;">No announcements yet</p>';
         return;

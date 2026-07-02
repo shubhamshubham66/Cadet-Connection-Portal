@@ -12,14 +12,14 @@
 <body>
   <div class="dashboard-wrapper">
     <aside class="sidebar">
-      <div class="sidebar-header">
+      <div class="sidebar-header" id="sidebarHeader">
         <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-user-cog" style="color:var(--dark)"></i></div>
-        <div><h3>CCP Admin</h3><span>Full Access</span></div>
+        <div><h3 id="sidebarTitle">Admin</h3><span id="sidebarSubtitle">Dashboard</span></div>
       </div>
-      <nav class="sidebar-menu">
+      <nav class="sidebar-menu" id="sidebarMenu">
         <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-pie"></i> Overview</a>
-        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
-        <a href="bn-management.html"><i class="fas fa-building-flag"></i> BN Management</a>
+        <a href="../search.html" class="main-admin-only"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html" class="main-admin-only"><i class="fas fa-building-flag"></i> BN Management</a>
         <a href="college-management.html"><i class="fas fa-school"></i> Institute Management</a>
         <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
         <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
@@ -246,6 +246,21 @@
     if (user) {
       document.getElementById('userName').textContent = user.name || 'Admin';
       document.getElementById('welcomeText').textContent = 'Welcome, ' + (user.name || 'Admin');
+
+      // Role-based sidebar customization
+      if (user.role === 'BnAdmin') {
+        document.getElementById('sidebarTitle').textContent = 'BN Admin';
+        document.getElementById('sidebarSubtitle').textContent = user.assignedBattalion || user.battalion || 'Battalion';
+        // Hide Main Admin only links
+        document.querySelectorAll('.main-admin-only').forEach(function(el) { el.style.display = 'none'; });
+      } else if (user.role === 'CollegeAdmin') {
+        document.getElementById('sidebarTitle').textContent = 'College Admin';
+        document.getElementById('sidebarSubtitle').textContent = user.assignedInstitute || user.college || 'Institute';
+        document.querySelectorAll('.main-admin-only').forEach(function(el) { el.style.display = 'none'; });
+      } else {
+        document.getElementById('sidebarTitle').textContent = 'CCP Admin';
+        document.getElementById('sidebarSubtitle').textContent = 'Full Access';
+      }
     }
     initSidebarToggle();
 

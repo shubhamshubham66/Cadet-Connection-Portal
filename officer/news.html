@@ -137,8 +137,18 @@
       var content = document.getElementById('newsContent').value.trim();
       var priority = document.getElementById('newsPriority').value;
       var date = document.getElementById('newsDate').value || new Date().toISOString().split('T')[0];
+      var currentUser = JSON.parse(localStorage.getItem('ccp_user') || '{}');
       var news = getNews();
-      news.unshift({id:Date.now(),title:title,content:content,priority:priority,date:date});
+      news.unshift({
+        id: Date.now(),
+        title: title,
+        content: content,
+        priority: priority,
+        date: date,
+        battalion: currentUser.assignedBattalion || currentUser.battalion || 'ALL',
+        postedBy: currentUser.name || 'Admin',
+        role: currentUser.role || 'Admin'
+      });
       saveNews(news);
       e.target.reset();
       document.getElementById('newsDate').value = new Date().toISOString().split('T')[0];
