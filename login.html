@@ -128,6 +128,7 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="assets/js/api.js"></script>
   <script>
     function showCadetLogin() {
       document.getElementById('step1').classList.add('hide');
@@ -152,12 +153,43 @@
     }
 
     // Login Cadet
-    function loginCadet() {
+    async function loginCadet() {
       var id = document.getElementById('loginCadetId').value.trim();
       var password = document.getElementById('loginCadetPassword').value;
 
       if (!id || !password) { toast('Please fill all fields', 'error'); return; }
 
+      // Try API first (MongoDB)
+      if (typeof API !== 'undefined' && API.BASE_URL) {
+        try {
+          var result = await API.loginCadet(id, password);
+          if (result.success) {
+            API.saveSession(result.user, result.token);
+            toast('Login Successful! Redirecting...', 'success');
+            setTimeout(function() { window.location.href = 'cadet/dashboard.html'; }, 1200);
+            return;
+          } else {
+            // If API says invalid, also check localStorage as fallback
+            var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+            var found = null;
+            for (var i = 0; i < cadets.length; i++) {
+              if ((cadets[i].mobile === id || cadets[i].email === id) && cadets[i].password === password) {
+                found = cadets[i]; break;
+              }
+            }
+            if (found) {
+              localStorage.setItem('ccp_user', JSON.stringify({ name: found.name, role: 'Cadet', college: found.college || found.institute, battalion: found.battalion, loggedIn: true, loginTime: new Date().toISOString() }));
+              toast('Login Successful! Redirecting...', 'success');
+              setTimeout(function() { window.location.href = 'cadet/dashboard.html'; }, 1200);
+              return;
+            }
+            toast(result.message || 'Invalid credentials.', 'error');
+            return;
+          }
+        } catch(e) { /* API not available, try localStorage */ }
+      }
+
+      // Fallback: localStorage only
       var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
       var found = null;
 
