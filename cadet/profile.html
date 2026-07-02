@@ -8,11 +8,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/cadet.css">
+  <style>
+    .profile-photo-wrap{position:relative;width:120px;height:120px;margin:0 auto 1rem;}
+    .profile-photo{width:120px;height:120px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--primary);overflow:hidden;}
+    .profile-photo img{width:100%;height:100%;object-fit:cover;}
+    .photo-change-btn{position:absolute;bottom:0;right:0;width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;border:3px solid #fff;font-size:0.85rem;}
+    .profile-field{display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0;border-bottom:1px solid var(--border);}
+    .profile-field:last-child{border-bottom:none;}
+    .profile-field label{font-weight:600;font-size:0.85rem;color:var(--text-light);min-width:120px;}
+    .profile-field span{font-size:0.9rem;color:var(--text);}
+    .profile-field input,.profile-field select{padding:0.5rem 0.7rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;width:200px;}
+    .profile-field input:focus,.profile-field select:focus{outline:none;border-color:var(--primary);}
+    .edit-toggle{display:flex;gap:0.5rem;}
+    .btn{padding:0.6rem 1.2rem;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;transition:all 0.3s;}
+    .btn-primary{background:var(--primary);color:#fff;}
+    .btn-primary:hover{background:#1e3d1a;}
+    .btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary);}
+    .btn-outline:hover{background:var(--primary);color:#fff;}
+    .btn-sm{padding:0.4rem 0.8rem;font-size:0.8rem;}
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);padding:0.75rem 1.5rem;border-radius:8px;color:#fff;font-weight:600;font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s;}
+    .toast.show{opacity:1;}.toast-success{background:#2d5a27;}.toast-error{background:#dc3545;}
+    @media(max-width:768px){
+      .cadet-sidebar{position:fixed;left:-280px;top:0;width:270px;height:100vh;z-index:9999;transition:left 0.3s;}.cadet-sidebar.open{left:0;box-shadow:5px 0 20px rgba(0,0,0,0.3);}
+      .cadet-main{margin-left:0!important;width:100%!important;}
+      .grid-2{grid-template-columns:1fr!important;}
+      .profile-field{flex-direction:column;align-items:flex-start;gap:0.3rem;}
+      .profile-field input,.profile-field select{width:100%;}
+    }
+  </style>
 </head>
 <body>
   <div class="cadet-wrapper">
     <aside class="cadet-sidebar">
-      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name">Cdt. Rahul Das</div><div class="cadet-rank">Cadet | 15th Tripura Bn</div></div>
+      <div class="sidebar-header"><div class="cadet-avatar"><i class="fas fa-user"></i></div><div class="cadet-name" id="sidebarName">Cadet</div><div class="cadet-rank" id="sidebarRank">NCC Cadet</div></div>
       <nav class="sidebar-menu">
         <a href="dashboard.html"><i class="fas fa-home"></i> My Dashboard</a>
         <a href="profile.html" class="active"><i class="fas fa-user-circle"></i> My Profile</a>
@@ -27,58 +55,233 @@
     <main class="cadet-main">
       <header class="cadet-topbar">
         <div style="display:flex;align-items:center;gap:1rem;"><button class="sidebar-toggle" onclick="document.querySelector('.cadet-sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button><h2 style="font-size:1.1rem;">My Profile</h2></div>
+        <div class="edit-toggle">
+          <button class="btn btn-outline btn-sm" id="editBtn" onclick="toggleEdit()"><i class="fas fa-edit"></i> Edit Profile</button>
+          <button class="btn btn-primary btn-sm" id="saveBtn" style="display:none;" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+          <button class="btn btn-outline btn-sm" id="cancelBtn" style="display:none;" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
       </header>
       <div class="cadet-content">
-        <div class="grid grid-2">
+        <div class="grid grid-2" style="gap:1.5rem;">
           <!-- Personal Info -->
-          <div class="card">
-            <div class="card-header"><h4><i class="fas fa-user"></i> Personal Information</h4></div>
+          <div class="card" style="padding:1.5rem;">
+            <h4 style="margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;"><i class="fas fa-user" style="color:var(--primary);"></i> Personal Information</h4>
             <div style="text-align:center;margin-bottom:1.5rem;">
-              <div style="width:100px;height:100px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--primary);"><i class="fas fa-user"></i></div>
-              <button class="btn btn-sm btn-outline"><i class="fas fa-camera"></i> Change Photo</button>
+              <div class="profile-photo-wrap">
+                <div class="profile-photo" id="photoContainer"><i class="fas fa-user"></i></div>
+                <label class="photo-change-btn" for="photoInput" title="Change Photo"><i class="fas fa-camera"></i></label>
+                <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="changePhoto(this)">
+              </div>
             </div>
-            <div style="display:grid;gap:0.75rem;">
-              <div><strong>NCC Reg No:</strong> <span>NCC/NER/TR/15/2024/1045</span></div>
-              <div><strong>Name:</strong> <span>Rahul Das</span></div>
-              <div><strong>DOB:</strong> <span>15 Mar 2004</span></div>
-              <div><strong>Gender:</strong> <span>Male</span></div>
-              <div><strong>Mobile:</strong> <span>+91 98765 43210</span></div>
-              <div><strong>Email:</strong> <span>rahul.das@email.com</span></div>
-              <div><strong>Blood Group:</strong> <span>B+</span></div>
-              <div><strong>Address:</strong> <span>Agartala, West Tripura, Tripura</span></div>
-              <div><strong>Emergency Contact:</strong> <span>+91 97654 32100 (Father)</span></div>
+            <div id="personalFields">
+              <div class="profile-field"><label>Full Name</label><span id="fName">—</span></div>
+              <div class="profile-field"><label>Mobile</label><span id="fMobile">—</span></div>
+              <div class="profile-field"><label>Email</label><span id="fEmail">—</span></div>
+              <div class="profile-field"><label>DOB</label><span id="fDob">—</span></div>
+              <div class="profile-field"><label>Gender</label><span id="fGender">—</span></div>
             </div>
           </div>
-          <!-- NCC Info -->
-          <div class="card">
-            <div class="card-header"><h4><i class="fas fa-shield-alt"></i> NCC Information</h4></div>
-            <div style="display:grid;gap:0.75rem;">
-              <div><strong>Battalion:</strong> <span>15th Tripura Bn NCC</span></div>
-              <div><strong>Institute:</strong> <span>Tripura University</span></div>
-              <div><strong>Wing:</strong> <span class="badge badge-green">Army</span></div>
-              <div><strong>Rank:</strong> <span>Cadet</span></div>
-              <div><strong>Year:</strong> <span>2nd Year (SD)</span></div>
-              <div><strong>Enrolled:</strong> <span>Aug 2023</span></div>
-              <div><strong>A Certificate:</strong> <span class="badge badge-green">Earned</span></div>
-              <div><strong>B Certificate:</strong> <span class="badge badge-gold">Pending</span></div>
-              <div><strong>C Certificate:</strong> <span class="badge badge-red">Not Appeared</span></div>
+          <!-- NCC Info (Read Only) -->
+          <div class="card" style="padding:1.5rem;">
+            <h4 style="margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;"><i class="fas fa-shield-alt" style="color:var(--primary);"></i> NCC Information</h4>
+            <div>
+              <div class="profile-field"><label>Regiment No</label><span id="fRegNo">—</span></div>
+              <div class="profile-field"><label>Rank</label><span id="fRank">—</span></div>
+              <div class="profile-field"><label>Wing</label><span id="fWing">—</span></div>
+              <div class="profile-field"><label>Battalion</label><span id="fBattalion">—</span></div>
+              <div class="profile-field"><label>Institute</label><span id="fInstitute">—</span></div>
+              <div class="profile-field"><label>Status</label><span id="fStatus">—</span></div>
+              <div class="profile-field"><label>Registered</label><span id="fRegDate">—</span></div>
             </div>
-            <div style="margin-top:1.5rem;">
-              <h5 style="margin-bottom:0.75rem;"><i class="fas fa-trophy" style="color:var(--accent);"></i> Achievements</h5>
-              <ul style="padding-left:1.25rem;list-style:disc;color:var(--text-light);font-size:0.9rem;">
-                <li>Best Cadet — ATC 2024</li>
-                <li>Firing Competition — 2nd Place</li>
-                <li>Thal Sainik Camp Selected 2025</li>
-              </ul>
-            </div>
-            <button class="btn btn-primary btn-block mt-3"><i class="fas fa-edit"></i> Edit Profile</button>
           </div>
         </div>
       </div>
     </main>
   </div>
+  <div class="toast" id="toast"></div>
+
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/api.js"></script>
   <script src="../assets/js/main.js"></script>
-  <script>requireAuth(['Cadet']);</script>
+  <script>
+    var user = requireAuth(['Cadet']);
+    var cadetData = null;
+    var isEditing = false;
+
+    // Load profile
+    async function loadProfile() {
+      // Try API first
+      if (typeof API !== 'undefined' && API.getToken()) {
+        try {
+          var result = await API.getMe();
+          if (result.success) { cadetData = result.user; renderProfile(cadetData); return; }
+        } catch(e) {}
+      }
+      // Fallback: localStorage
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      var u = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      for (var i = 0; i < cadets.length; i++) {
+        if (cadets[i].name === u.name || cadets[i].email === u.email || cadets[i].mobile === u.mobile) {
+          cadetData = cadets[i]; break;
+        }
+      }
+      if (cadetData) renderProfile(cadetData);
+    }
+
+    function renderProfile(d) {
+      document.getElementById('sidebarName').textContent = d.name || 'Cadet';
+      document.getElementById('sidebarRank').textContent = (d.rank || 'Cadet') + ' | ' + (d.battalion || '');
+      document.getElementById('fName').textContent = d.name || '—';
+      document.getElementById('fMobile').textContent = d.mobile || '—';
+      document.getElementById('fEmail').textContent = d.email || '—';
+      document.getElementById('fDob').textContent = d.dob ? new Date(d.dob).toLocaleDateString('en-IN') : '—';
+      document.getElementById('fGender').textContent = d.gender || '—';
+      document.getElementById('fRegNo').textContent = d.regimentNo || d.regNo || '—';
+      document.getElementById('fRank').textContent = d.rank || 'Cadet';
+      document.getElementById('fWing').textContent = d.wing || '—';
+      document.getElementById('fBattalion').textContent = d.battalion || '—';
+      document.getElementById('fInstitute').textContent = d.institute || d.college || '—';
+      document.getElementById('fStatus').textContent = d.status || 'Pending';
+      document.getElementById('fRegDate').textContent = d.registeredAt ? new Date(d.registeredAt).toLocaleDateString('en-IN') : '—';
+      // Photo
+      var photoEl = document.getElementById('photoContainer');
+      if (d.photo) {
+        photoEl.innerHTML = '<img src="' + d.photo + '" alt="Profile">';
+      }
+    }
+
+    function toggleEdit() {
+      isEditing = true;
+      document.getElementById('editBtn').style.display = 'none';
+      document.getElementById('saveBtn').style.display = 'inline-flex';
+      document.getElementById('cancelBtn').style.display = 'inline-flex';
+      // Replace spans with inputs
+      var fields = document.getElementById('personalFields');
+      fields.innerHTML = `
+        <div class="profile-field"><label>Full Name</label><input type="text" id="eName" value="${cadetData.name || ''}"></div>
+        <div class="profile-field"><label>Mobile</label><input type="tel" id="eMobile" value="${cadetData.mobile || ''}" maxlength="10"></div>
+        <div class="profile-field"><label>Email</label><input type="email" id="eEmail" value="${cadetData.email || ''}"></div>
+        <div class="profile-field"><label>DOB</label><input type="date" id="eDob" value="${cadetData.dob ? cadetData.dob.split('T')[0] : ''}"></div>
+        <div class="profile-field"><label>Gender</label><select id="eGender"><option value="Male" ${cadetData.gender==='Male'?'selected':''}>Male</option><option value="Female" ${cadetData.gender==='Female'?'selected':''}>Female</option><option value="Other" ${cadetData.gender==='Other'?'selected':''}>Other</option></select></div>
+      `;
+    }
+
+    function cancelEdit() {
+      isEditing = false;
+      document.getElementById('editBtn').style.display = 'inline-flex';
+      document.getElementById('saveBtn').style.display = 'none';
+      document.getElementById('cancelBtn').style.display = 'none';
+      renderProfile(cadetData);
+      // Re-render as spans
+      var fields = document.getElementById('personalFields');
+      fields.innerHTML = `
+        <div class="profile-field"><label>Full Name</label><span id="fName">${cadetData.name || '—'}</span></div>
+        <div class="profile-field"><label>Mobile</label><span id="fMobile">${cadetData.mobile || '—'}</span></div>
+        <div class="profile-field"><label>Email</label><span id="fEmail">${cadetData.email || '—'}</span></div>
+        <div class="profile-field"><label>DOB</label><span id="fDob">${cadetData.dob ? new Date(cadetData.dob).toLocaleDateString('en-IN') : '—'}</span></div>
+        <div class="profile-field"><label>Gender</label><span id="fGender">${cadetData.gender || '—'}</span></div>
+      `;
+    }
+
+    async function saveProfile() {
+      var name = document.getElementById('eName').value.trim();
+      var mobile = document.getElementById('eMobile').value.trim();
+      var email = document.getElementById('eEmail').value.trim();
+      var dob = document.getElementById('eDob').value;
+      var gender = document.getElementById('eGender').value;
+
+      if (!name) { showToast('Name is required', 'error'); return; }
+      if (mobile && mobile.length < 10) { showToast('Enter valid 10-digit mobile', 'error'); return; }
+
+      var updates = { name: name, mobile: mobile, email: email, dob: dob, gender: gender };
+
+      // Try API
+      if (typeof API !== 'undefined' && API.getToken()) {
+        try {
+          var result = await API.updateProfile(updates);
+          if (result.success) {
+            showToast('Profile updated!', 'success');
+            cadetData = result.user || { ...cadetData, ...updates };
+            // Update session
+            var sess = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+            sess.name = name;
+            localStorage.setItem('ccp_user', JSON.stringify(sess));
+            cancelEdit();
+            return;
+          } else {
+            showToast(result.message || 'Update failed', 'error');
+            return;
+          }
+        } catch(e) {}
+      }
+
+      // Fallback localStorage
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      for (var i = 0; i < cadets.length; i++) {
+        if (cadets[i].name === cadetData.name || cadets[i].email === cadetData.email) {
+          cadets[i].name = name;
+          cadets[i].mobile = mobile;
+          cadets[i].email = email;
+          cadets[i].dob = dob;
+          cadets[i].gender = gender;
+          cadetData = cadets[i];
+          break;
+        }
+      }
+      localStorage.setItem('registered_cadets', JSON.stringify(cadets));
+      var sess = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      sess.name = name;
+      localStorage.setItem('ccp_user', JSON.stringify(sess));
+      showToast('Profile updated!', 'success');
+      cancelEdit();
+    }
+
+    // Photo Change
+    async function changePhoto(input) {
+      if (!input.files || !input.files[0]) return;
+      var file = input.files[0];
+      if (file.size > 2 * 1024 * 1024) { showToast('Photo must be under 2MB', 'error'); return; }
+
+      // Show preview immediately
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('photoContainer').innerHTML = '<img src="' + e.target.result + '" alt="Profile">';
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to Cloudinary via API
+      if (typeof API !== 'undefined' && API.getToken()) {
+        try {
+          showToast('Uploading photo...', 'success');
+          var uploadResult = await API.uploadPhoto(file);
+          if (uploadResult.success) {
+            // Update profile with new photo URL
+            var updateResult = await API.updateProfile({ photo: uploadResult.url });
+            if (updateResult.success) {
+              cadetData.photo = uploadResult.url;
+              showToast('Photo updated!', 'success');
+            } else {
+              showToast('Photo uploaded but profile update failed', 'error');
+            }
+          } else {
+            showToast('Photo upload failed', 'error');
+          }
+        } catch(e) {
+          showToast('Upload error. Try again.', 'error');
+        }
+      } else {
+        showToast('Photo preview saved (local only)', 'success');
+      }
+    }
+
+    function showToast(msg, type) {
+      var t = document.getElementById('toast');
+      t.className = 'toast toast-' + (type || 'success') + ' show';
+      t.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'times-circle') + '"></i> ' + msg;
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    loadProfile();
+  </script>
 </body>
 </html>

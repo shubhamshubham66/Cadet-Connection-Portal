@@ -108,6 +108,16 @@ const API = {
     return res.json();
   },
 
+  // ─── UPDATE PROFILE ───
+  async updateProfile(data) {
+    const res = await fetch(this.BASE_URL + '/auth/update-profile', {
+      method: 'PUT',
+      headers: this.headers(),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
   // ─── CAMPS ───
   async getCamps() {
     const res = await fetch(this.BASE_URL + '/camps', { headers: this.headers() });

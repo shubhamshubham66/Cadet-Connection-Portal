@@ -192,6 +192,32 @@ router.post('/admin-login', [
   }
 });
 
+// ─── UPDATE CADET PROFILE ───
+router.put('/update-profile', verifyToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'Cadet') {
+      return res.status(403).json({ success: false, message: 'Only cadets can update their profile.' });
+    }
+
+    const allowedFields = ['name', 'mobile', 'email', 'dob', 'gender', 'photo'];
+    const updates = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) updates[field] = req.body[field];
+    }
+
+    const cadet = await Cadet.findByIdAndUpdate(req.user.id, updates, { new: true, runValidators: true }).select('-password');
+    if (!cadet) return res.status(404).json({ success: false, message: 'Cadet not found.' });
+
+    res.json({ success: true, message: 'Profile updated successfully!', user: cadet });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ success: false, message: 'Email or mobile already in use.' });
+    }
+    console.error('Update Profile Error:', error);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 // ─── CHANGE PASSWORD ───
 router.post('/change-password', verifyToken, [
   body('currentPassword').notEmpty().withMessage('Current password is required'),
