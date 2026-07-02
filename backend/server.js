@@ -11,9 +11,11 @@ const app = express();
 connectDB();
 
 // ─── Middleware ───
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false
+}));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: '*',
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));

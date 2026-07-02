@@ -18,7 +18,7 @@ router.post('/photo', upload.single('photo'), async (req, res) => {
     });
   } catch (error) {
     console.error('Upload Error:', error);
-    res.status(500).json({ success: false, message: 'Upload failed. Please try again.' });
+    res.status(500).json({ success: false, message: 'Upload failed: ' + error.message });
   }
 });
 
