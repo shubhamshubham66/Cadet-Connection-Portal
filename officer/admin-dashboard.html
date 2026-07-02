@@ -205,8 +205,8 @@
       <!-- Change Password -->
       <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
         <h5 style="margin-bottom:0.75rem;"><i class="fas fa-lock"></i> Change Password</h5>
-        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="currentPass" placeholder="Current password"></div>
-        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newPass" placeholder="New strong password" oninput="checkAdminPwdStrength(this.value)"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="currentPass" placeholder="Current password" autocomplete="new-password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newPass" placeholder="New strong password" oninput="checkAdminPwdStrength(this.value)" autocomplete="new-password"></div>
         <div style="height:5px;border-radius:3px;background:#eee;margin-bottom:0.3rem;overflow:hidden;"><div id="adminStrengthBar" style="height:100%;border-radius:3px;transition:width 0.4s,background 0.4s;width:0%;"></div></div>
         <div id="adminStrengthLabel" style="font-size:0.75rem;font-weight:600;margin-bottom:0.4rem;"></div>
         <div id="adminPwdReqs" style="font-size:0.75rem;padding:0.5rem 0.6rem;background:#f8f9fa;border-radius:6px;margin-bottom:0.5rem;">
@@ -216,7 +216,7 @@
           <div id="aReqNum" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One number (0-9)</div>
           <div id="aReqSpecial" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One special char (!@#$%^&*)</div>
         </div>
-        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="confirmPass" placeholder="Confirm new password" autocomplete="new-password"></div>
         <button class="btn btn-sm btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Update Password</button>
       </div>
 
@@ -226,7 +226,7 @@
         <div class="form-group" style="margin-bottom:0.5rem;"><input type="text" id="newAdminName" placeholder="Admin name"></div>
         <div class="form-group" style="margin-bottom:0.5rem;"><input type="tel" id="newAdminMobile" placeholder="Mobile number" maxlength="10"></div>
         <div class="form-group" style="margin-bottom:0.5rem;"><input type="email" id="newAdminEmail" placeholder="Email (Gmail)"></div>
-        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newAdminPass" placeholder="Password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newAdminPass" placeholder="Password" autocomplete="new-password"></div>
         <button class="btn btn-sm btn-primary" onclick="addNewAdmin()"><i class="fas fa-plus"></i> Add Admin</button>
       </div>
 
