@@ -41,7 +41,7 @@ function requireAuth(allowedRoles) {
     return null;
   }
   if (allowedRoles && allowedRoles.indexOf(user.role) === -1) {
-    if (user.role === 'Admin') window.location.href = '../officer/admin-dashboard.html';
+    if (user.role === 'Admin' || user.role === 'MainAdmin' || user.role === 'BnAdmin' || user.role === 'CollegeAdmin') window.location.href = '../officer/admin-dashboard.html';
     else if (user.role === 'Cadet') window.location.href = '../cadet/dashboard.html';
     else window.location.href = '../login.html';
     return null;
