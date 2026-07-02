@@ -388,6 +388,17 @@
       // Try API first, fallback to localStorage
       if (typeof API !== 'undefined' && API.BASE_URL) {
         try {
+          // Upload photo to Cloudinary first
+          var photoFile = document.getElementById('regPhoto').files[0];
+          var photoUrl = null;
+          if (photoFile) {
+            var uploadResult = await API.uploadPhoto(photoFile);
+            if (uploadResult.success) {
+              photoUrl = uploadResult.url;
+            }
+          }
+          data.photo = photoUrl;
+
           var result = await API.registerCadet(data);
           if (result.success) {
             showToast(result.message, 'success');

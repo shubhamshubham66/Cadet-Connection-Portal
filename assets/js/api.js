@@ -108,6 +108,17 @@ const API = {
     return res.json();
   },
 
+  // ─── UPLOAD ───
+  async uploadPhoto(file) {
+    const formData = new FormData();
+    formData.append('photo', file);
+    const res = await fetch(this.BASE_URL + '/upload/photo', {
+      method: 'POST',
+      body: formData
+    });
+    return res.json();
+  },
+
   // ─── SESSION HELPERS ───
   saveSession(user, token) {
     localStorage.setItem('ccp_user', JSON.stringify({

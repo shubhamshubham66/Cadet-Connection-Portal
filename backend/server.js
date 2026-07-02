@@ -41,6 +41,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/cadets', require('./routes/cadets'));
 app.use('/api/battalions', require('./routes/battalions'));
 app.use('/api/institutes', require('./routes/institutes'));
+app.use('/api/upload', require('./routes/upload'));
 
 // ─── Health Check ───
 app.get('/api/health', (req, res) => {
