@@ -35,6 +35,24 @@
     .toast.show{opacity:1;}
     .toast-success{background:#2d5a27;}
     .toast-error{background:#dc3545;}
+
+    /* Password Strength Meter */
+    .password-wrapper{position:relative;}
+    .password-wrapper input{padding-right:2.5rem!important;}
+    .toggle-pass{position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#666;font-size:1rem;}
+    .strength-meter{height:5px;border-radius:3px;background:#eee;margin-top:0.4rem;overflow:hidden;}
+    .strength-meter .bar{height:100%;border-radius:3px;transition:width 0.4s,background 0.4s;}
+    .strength-label{font-size:0.75rem;margin-top:0.2rem;font-weight:600;}
+    .strength-label.weak{color:#dc3545;}
+    .strength-label.fair{color:#fd7e14;}
+    .strength-label.good{color:#ffc107;}
+    .strength-label.strong{color:#28a745;}
+    .strength-label.very-strong{color:#155724;}
+    .pwd-requirements{margin-top:0.5rem;padding:0.6rem 0.8rem;background:#f8f9fa;border-radius:8px;font-size:0.78rem;}
+    .pwd-requirements .req{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.25rem;color:#666;}
+    .pwd-requirements .req.pass{color:#28a745;}
+    .pwd-requirements .req.pass i{color:#28a745;}
+    .pwd-requirements .req i{font-size:0.7rem;color:#ccc;}
     
     /* Mobile Login Fix */
     @media(max-width:768px){
@@ -106,8 +124,8 @@
         <div class="form-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="regName" placeholder="Enter your full name"></div>
         <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number *</label><input type="tel" id="regMobile" placeholder="10 digit number" maxlength="10"></div>
         <div class="form-group"><label><i class="fas fa-envelope"></i> Email *</label><input type="email" id="regEmail" placeholder="your@email.com"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="regPassword" placeholder="Create a password"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Confirm Password *</label><input type="password" id="regConfirmPassword" placeholder="Confirm password"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="regPassword" placeholder="Create a strong password" oninput="checkPasswordStrength(this.value)"><button type="button" class="toggle-pass" onclick="togglePass('regPassword',this)"><i class="fas fa-eye"></i></button></div><div class="strength-meter"><div class="bar" id="strengthBar"></div></div><div class="strength-label" id="strengthLabel"></div><div class="pwd-requirements" id="pwdReqs"><div class="req" id="reqLen"><i class="fas fa-circle"></i> Minimum 8 characters</div><div class="req" id="reqUpper"><i class="fas fa-circle"></i> At least one uppercase letter (A-Z)</div><div class="req" id="reqLower"><i class="fas fa-circle"></i> At least one lowercase letter (a-z)</div><div class="req" id="reqNum"><i class="fas fa-circle"></i> At least one number (0-9)</div><div class="req" id="reqSpecial"><i class="fas fa-circle"></i> At least one special character (!@#$%^&*)</div></div></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Confirm Password *</label><div class="password-wrapper"><input type="password" id="regConfirmPassword" placeholder="Confirm password"><button type="button" class="toggle-pass" onclick="togglePass('regConfirmPassword',this)"><i class="fas fa-eye"></i></button></div></div>
         <div class="form-group"><label><i class="fas fa-id-badge"></i> Regiment No *</label><input type="text" id="regRegNo" placeholder="NCC/NER/TR/15/2024/XXXX"></div>
         <div class="form-group"><label><i class="fas fa-building-flag"></i> Battalion *</label><input type="text" id="regBattalion" placeholder="e.g., 15th Tripura Bn NCC"></div>
         <div class="form-group"><label><i class="fas fa-school"></i> Institute *</label><input type="text" id="regCollege" placeholder="Enter your institute name"></div>
@@ -122,7 +140,7 @@
       <div class="login-form-container hide" id="step3Login">
         <div class="login-form-header"><h2>Cadet Login</h2><p>Enter your credentials</p></div>
         <div class="form-group"><label><i class="fas fa-phone"></i> Mobile / Email *</label><input type="text" id="loginCadetId" placeholder="Mobile number or email"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="loginCadetPassword" placeholder="Enter your password"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="loginCadetPassword" placeholder="Enter your password"><button type="button" class="toggle-pass" onclick="togglePass('loginCadetPassword',this)"><i class="fas fa-eye"></i></button></div></div>
         <button type="button" class="btn btn-primary mt-2" onclick="loginCadet()"><i class="fas fa-sign-in-alt"></i> Login</button>
         <button type="button" class="btn btn-outline mt-2" onclick="backToCadetOptions()"><i class="fas fa-arrow-left"></i> Back</button>
       </div>
@@ -131,7 +149,7 @@
       <div class="login-form-container hide" id="step2Admin">
         <div class="login-form-header"><h2>Admin Login</h2><p>Enter admin credentials</p></div>
         <div class="form-group"><label><i class="fas fa-phone"></i> Mobile Number or Gmail *</label><input type="text" id="adminMobileEmail" placeholder="Mobile number or Gmail"></div>
-        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><input type="password" id="adminPassword" placeholder="Enter password"></div>
+        <div class="form-group"><label><i class="fas fa-lock"></i> Password *</label><div class="password-wrapper"><input type="password" id="adminPassword" placeholder="Enter password"><button type="button" class="toggle-pass" onclick="togglePass('adminPassword',this)"><i class="fas fa-eye"></i></button></div></div>
         <button type="button" class="btn btn-primary btn-block mt-2" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Login</button>
         <button type="button" class="btn btn-outline btn-block mt-2" onclick="goBack()"><i class="fas fa-arrow-left"></i> Change Role</button>
       </div>
@@ -174,6 +192,75 @@
       document.getElementById('step3Login').classList.remove('hide');
     }
 
+    // ─── Password Strength & Validation ───
+    function togglePass(id, btn) {
+      var input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '<i class="fas fa-eye"></i>';
+      }
+    }
+
+    function checkPasswordStrength(pwd) {
+      var hasLen = pwd.length >= 8;
+      var hasUpper = /[A-Z]/.test(pwd);
+      var hasLower = /[a-z]/.test(pwd);
+      var hasNum = /[0-9]/.test(pwd);
+      var hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+
+      // Update requirement indicators
+      setReq('reqLen', hasLen);
+      setReq('reqUpper', hasUpper);
+      setReq('reqLower', hasLower);
+      setReq('reqNum', hasNum);
+      setReq('reqSpecial', hasSpecial);
+
+      // Calculate score
+      var score = 0;
+      if (hasLen) score++;
+      if (hasUpper) score++;
+      if (hasLower) score++;
+      if (hasNum) score++;
+      if (hasSpecial) score++;
+      if (pwd.length >= 12) score++;
+
+      // Update strength bar
+      var bar = document.getElementById('strengthBar');
+      var label = document.getElementById('strengthLabel');
+      var levels = [
+        { width: '0%', color: '#eee', text: '', cls: '' },
+        { width: '20%', color: '#dc3545', text: 'Very Weak — Dangerous!', cls: 'weak' },
+        { width: '40%', color: '#fd7e14', text: 'Weak — Not secure', cls: 'fair' },
+        { width: '60%', color: '#ffc107', text: 'Fair — Could be stronger', cls: 'good' },
+        { width: '80%', color: '#28a745', text: 'Strong — Good security', cls: 'strong' },
+        { width: '100%', color: '#155724', text: 'Very Strong — Excellent!', cls: 'very-strong' }
+      ];
+
+      var lvl = pwd.length === 0 ? 0 : Math.min(score, 5);
+      bar.style.width = levels[lvl].width;
+      bar.style.background = levels[lvl].color;
+      label.textContent = levels[lvl].text;
+      label.className = 'strength-label ' + levels[lvl].cls;
+    }
+
+    function setReq(id, pass) {
+      var el = document.getElementById(id);
+      if (pass) {
+        el.classList.add('pass');
+        el.querySelector('i').className = 'fas fa-check-circle';
+      } else {
+        el.classList.remove('pass');
+        el.querySelector('i').className = 'fas fa-circle';
+      }
+    }
+
+    function isPasswordStrong(pwd) {
+      return pwd.length >= 8 && /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+    }
+
     // Register Cadet
     function registerCadet() {
       var name = document.getElementById('regName').value.trim();
@@ -193,7 +280,7 @@
         return;
       }
       if (mobile.length < 10) { toast('Enter valid 10-digit mobile', 'error'); return; }
-      if (password.length < 4) { toast('Password must be at least 4 characters', 'error'); return; }
+      if (!isPasswordStrong(password)) { toast('Password must have 8+ chars, uppercase, lowercase, number & special character', 'error'); return; }
       if (password !== confirmPassword) { toast('Passwords do not match', 'error'); return; }
 
       var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
