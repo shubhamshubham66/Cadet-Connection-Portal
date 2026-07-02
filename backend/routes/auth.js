@@ -192,6 +192,47 @@ router.post('/admin-login', [
   }
 });
 
+// ─── CHANGE PASSWORD ───
+router.post('/change-password', verifyToken, [
+  body('currentPassword').notEmpty().withMessage('Current password is required'),
+  body('newPassword').isLength({ min: 8 }).withMessage('New password must be at least 8 characters')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, message: errors.array()[0].msg });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    // Find user based on role
+    let user;
+    if (req.user.role === 'Cadet') {
+      user = await Cadet.findById(req.user.id);
+    } else {
+      user = await Admin.findById(req.user.id);
+    }
+
+    if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(12);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.json({ success: true, message: 'Password changed successfully!' });
+  } catch (error) {
+    console.error('Change Password Error:', error);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 // ─── GET CURRENT USER ───
 router.get('/me', verifyToken, async (req, res) => {
   try {

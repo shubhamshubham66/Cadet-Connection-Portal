@@ -108,6 +108,16 @@ const API = {
     return res.json();
   },
 
+  // ─── CHANGE PASSWORD ───
+  async changePassword(currentPassword, newPassword) {
+    const res = await fetch(this.BASE_URL + '/auth/change-password', {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    return res.json();
+  },
+
   // ─── UPLOAD ───
   async uploadPhoto(file) {
     const formData = new FormData();
