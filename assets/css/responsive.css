@@ -1,0 +1,185 @@
+/* ═══════════════════════════════════════════
+   RESPONSIVE FIXES — Mobile, Tablet, Desktop
+   Cadet Connection Portal
+   ═══════════════════════════════════════════ */
+
+/* ─── Tablet (max-width: 992px) ─── */
+@media (max-width: 992px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Homepage hero */
+  .hero-content h1 { font-size: 2rem; }
+  .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+
+  /* Section padding */
+  section { padding: 3rem 1.5rem; }
+}
+
+/* ─── Mobile (max-width: 768px) ─── */
+@media (max-width: 768px) {
+  /* General */
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  section { padding: 2rem 1rem; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.2rem; }
+
+  /* Homepage */
+  .hero-content { padding: 1.5rem; }
+  .hero-content h1 { font-size: 1.6rem; }
+  .hero-content p { font-size: 0.9rem; }
+  .hero-stats { gap: 1rem; }
+  .hero-stat .num { font-size: 1.5rem; }
+
+  /* Feature grid */
+  .features-grid { grid-template-columns: 1fr !important; gap: 1rem; }
+  .feature-card { padding: 1.5rem 1rem; }
+
+  /* Cards */
+  .card { margin-bottom: 1rem; }
+  .card-header { padding: 0.75rem 1rem; }
+  .card-body { padding: 1rem; }
+
+  /* Stats */
+  .stat-card { padding: 1rem; }
+  .stat-number { font-size: 1.5rem; }
+
+  /* Cadet Dashboard */
+  .cadet-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 270px;
+    height: 100vh;
+    z-index: 9999;
+    transition: left 0.3s ease;
+  }
+  .cadet-sidebar.open {
+    left: 0;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+  }
+  .cadet-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .cadet-topbar {
+    padding: 0.75rem 1rem;
+  }
+  .cadet-content {
+    padding: 1rem;
+  }
+  .sidebar-toggle {
+    display: flex !important;
+  }
+  .quick-card-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+  .quick-card {
+    padding: 0.75rem !important;
+  }
+  .qc-icon { width: 35px; height: 35px; font-size: 0.9rem; }
+  .qc-label { font-size: 0.7rem; }
+  .welcome-banner { padding: 1.25rem; }
+  .welcome-banner h2 { font-size: 1.2rem; }
+
+  /* Officer Dashboard */
+  .dashboard-wrapper .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 270px;
+    height: 100vh;
+    z-index: 9999;
+    transition: left 0.3s ease;
+  }
+  .dashboard-wrapper .sidebar.open {
+    left: 0;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+  }
+  .dashboard-wrapper .dashboard-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .dashboard-topbar {
+    padding: 0.75rem 1rem;
+  }
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  /* Tables */
+  .table-container {
+    font-size: 0.8rem;
+  }
+  .table-container th,
+  .table-container td {
+    padding: 0.5rem 0.6rem;
+  }
+
+  /* Forms on mobile */
+  .form-row { grid-template-columns: 1fr !important; }
+  .modal { padding: 1.5rem; width: 95%; }
+
+  /* Camp cards */
+  .camp-card { margin-bottom: 1rem; }
+
+  /* About page */
+  .about-hero { padding: 2rem 1rem; }
+
+  /* Gallery grid */
+  .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.5rem; }
+
+  /* Footer */
+  .footer { padding: 2rem 1rem; }
+  .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+/* ─── Small Mobile (max-width: 480px) ─── */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+
+  .quick-card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 0.75rem;
+  }
+  .stat-number { font-size: 1.3rem; }
+  .stat-label { font-size: 0.7rem; }
+
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .navbar-brand h1 {
+    font-size: 0.85rem !important;
+  }
+
+  .login-form-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ─── Sidebar Overlay (for mobile) ─── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+.sidebar-overlay.show {
+  display: block;
+}
