@@ -206,7 +206,16 @@
       <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
         <h5 style="margin-bottom:0.75rem;"><i class="fas fa-lock"></i> Change Password</h5>
         <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="currentPass" placeholder="Current password"></div>
-        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newPass" placeholder="New password"></div>
+        <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="newPass" placeholder="New strong password" oninput="checkAdminPwdStrength(this.value)"></div>
+        <div style="height:5px;border-radius:3px;background:#eee;margin-bottom:0.3rem;overflow:hidden;"><div id="adminStrengthBar" style="height:100%;border-radius:3px;transition:width 0.4s,background 0.4s;width:0%;"></div></div>
+        <div id="adminStrengthLabel" style="font-size:0.75rem;font-weight:600;margin-bottom:0.4rem;"></div>
+        <div id="adminPwdReqs" style="font-size:0.75rem;padding:0.5rem 0.6rem;background:#f8f9fa;border-radius:6px;margin-bottom:0.5rem;">
+          <div id="aReqLen" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>Min 8 characters</div>
+          <div id="aReqUpper" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One uppercase (A-Z)</div>
+          <div id="aReqLower" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One lowercase (a-z)</div>
+          <div id="aReqNum" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One number (0-9)</div>
+          <div id="aReqSpecial" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One special char (!@#$%^&*)</div>
+        </div>
         <div class="form-group" style="margin-bottom:0.5rem;"><input type="password" id="confirmPass" placeholder="Confirm new password"></div>
         <button class="btn btn-sm btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Update Password</button>
       </div>
@@ -317,14 +326,18 @@
       var admins = getAdmins();
       var idx = getCurrentAdmin();
       if (current !== admins[idx].password) { showToast('Current password wrong!', 'error'); return; }
-      if (!newP || newP.length < 4) { showToast('Min 4 characters needed', 'error'); return; }
+      if (!newP || newP.length < 8) { showToast('Minimum 8 characters required', 'error'); return; }
+      if (!/[A-Z]/.test(newP)) { showToast('Need at least one uppercase letter (A-Z)', 'error'); return; }
+      if (!/[a-z]/.test(newP)) { showToast('Need at least one lowercase letter (a-z)', 'error'); return; }
+      if (!/[0-9]/.test(newP)) { showToast('Need at least one number (0-9)', 'error'); return; }
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newP)) { showToast('Need at least one special character (!@#$%^&*)', 'error'); return; }
       if (newP !== confirm) { showToast('Passwords do not match!', 'error'); return; }
       admins[idx].password = newP;
       saveAdmins(admins);
       document.getElementById('currentPass').value = '';
       document.getElementById('newPass').value = '';
       document.getElementById('confirmPass').value = '';
-      showToast('Password changed!', 'success');
+      showToast('Password changed successfully!', 'success');
     }
 
     function addNewAdmin() {
@@ -372,6 +385,22 @@
           '</div>';
       }
       document.getElementById('adminsList').innerHTML = html;
+    }
+
+    function checkAdminPwdStrength(pwd) {
+      var hasLen = pwd.length >= 8;
+      var hasUpper = /[A-Z]/.test(pwd);
+      var hasLower = /[a-z]/.test(pwd);
+      var hasNum = /[0-9]/.test(pwd);
+      var hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+      function setR(id,pass){var el=document.getElementById(id);if(pass){el.style.color='#28a745';el.querySelector('i').className='fas fa-check-circle';}else{el.style.color='#666';el.querySelector('i').className='fas fa-circle';}}
+      setR('aReqLen',hasLen);setR('aReqUpper',hasUpper);setR('aReqLower',hasLower);setR('aReqNum',hasNum);setR('aReqSpecial',hasSpecial);
+      var score=0;if(hasLen)score++;if(hasUpper)score++;if(hasLower)score++;if(hasNum)score++;if(hasSpecial)score++;if(pwd.length>=12)score++;
+      var levels=[{w:'0%',c:'#eee',t:'',cl:''},{w:'20%',c:'#dc3545',t:'Very Weak',cl:'color:#dc3545'},{w:'40%',c:'#fd7e14',t:'Weak',cl:'color:#fd7e14'},{w:'60%',c:'#ffc107',t:'Fair',cl:'color:#ffc107'},{w:'80%',c:'#28a745',t:'Strong',cl:'color:#28a745'},{w:'100%',c:'#155724',t:'Very Strong',cl:'color:#155724'}];
+      var lvl=pwd.length===0?0:Math.min(score,5);
+      document.getElementById('adminStrengthBar').style.width=levels[lvl].w;
+      document.getElementById('adminStrengthBar').style.background=levels[lvl].c;
+      var lbl=document.getElementById('adminStrengthLabel');lbl.textContent=levels[lvl].t;lbl.style.cssText=levels[lvl].cl;
     }
 
     loadSettings();

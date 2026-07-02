@@ -25,6 +25,7 @@
         <a href="camps.html"><i class="fas fa-campground"></i> Camps</a>
         <a href="certificates.html"><i class="fas fa-scroll"></i> My Certificates</a>
         <div class="sidebar-divider" style="border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0;"></div>
+        <a href="#" onclick="openCadetSettings()"><i class="fas fa-cog"></i> Settings</a>
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </nav>
     </aside>
@@ -112,6 +113,32 @@
     </main>
   </div>
 
+  <!-- Cadet Settings Modal -->
+  <div id="cadetSettingsModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;padding:2rem;width:90%;max-width:500px;max-height:85vh;overflow-y:auto;position:relative;">
+      <button onclick="closeCadetSettings()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#666;">&times;</button>
+      <h3 style="margin-bottom:1.5rem;color:#1c1c1c;"><i class="fas fa-cog" style="color:#2d5a27;"></i> Settings</h3>
+
+      <!-- Change Password -->
+      <div style="margin-bottom:1.5rem;">
+        <h5 style="margin-bottom:0.75rem;color:#2d5a27;"><i class="fas fa-shield-alt"></i> Change Password</h5>
+        <div style="margin-bottom:0.5rem;"><input type="password" id="cadetCurrentPass" placeholder="Current password" style="width:100%;padding:0.6rem 0.8rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;"></div>
+        <div style="margin-bottom:0.5rem;"><input type="password" id="cadetNewPass" placeholder="New strong password" oninput="checkCadetPwdStrength(this.value)" style="width:100%;padding:0.6rem 0.8rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;"></div>
+        <div style="height:5px;border-radius:3px;background:#eee;margin-bottom:0.3rem;overflow:hidden;"><div id="cadetStrengthBar" style="height:100%;border-radius:3px;transition:width 0.4s,background 0.4s;width:0%;"></div></div>
+        <div id="cadetStrengthLabel" style="font-size:0.75rem;font-weight:600;margin-bottom:0.4rem;"></div>
+        <div style="font-size:0.75rem;padding:0.5rem 0.6rem;background:#f8f9fa;border-radius:6px;margin-bottom:0.5rem;">
+          <div id="cReqLen" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>Min 8 characters</div>
+          <div id="cReqUpper" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One uppercase (A-Z)</div>
+          <div id="cReqLower" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One lowercase (a-z)</div>
+          <div id="cReqNum" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One number (0-9)</div>
+          <div id="cReqSpecial" style="margin-bottom:0.15rem;color:#666;"><i class="fas fa-circle" style="font-size:0.6rem;margin-right:0.3rem;"></i>One special char (!@#$%^&*)</div>
+        </div>
+        <div style="margin-bottom:0.5rem;"><input type="password" id="cadetConfirmPass" placeholder="Confirm new password" style="width:100%;padding:0.6rem 0.8rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;"></div>
+        <button onclick="changeCadetPassword()" style="width:100%;padding:0.7rem;background:#2d5a27;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem;"><i class="fas fa-save"></i> Update Password</button>
+      </div>
+    </div>
+  </div>
+
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
@@ -180,6 +207,63 @@
     }
 
     loadCadetNotifications();
+
+    // ─── Cadet Settings ───
+    function openCadetSettings() {
+      document.getElementById('cadetSettingsModal').style.display = 'flex';
+    }
+    function closeCadetSettings() {
+      document.getElementById('cadetSettingsModal').style.display = 'none';
+    }
+    document.getElementById('cadetSettingsModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCadetSettings();
+    });
+
+    function checkCadetPwdStrength(pwd) {
+      var hasLen = pwd.length >= 8;
+      var hasUpper = /[A-Z]/.test(pwd);
+      var hasLower = /[a-z]/.test(pwd);
+      var hasNum = /[0-9]/.test(pwd);
+      var hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+      function setR(id,pass){var el=document.getElementById(id);if(pass){el.style.color='#28a745';el.querySelector('i').className='fas fa-check-circle';}else{el.style.color='#666';el.querySelector('i').className='fas fa-circle';}}
+      setR('cReqLen',hasLen);setR('cReqUpper',hasUpper);setR('cReqLower',hasLower);setR('cReqNum',hasNum);setR('cReqSpecial',hasSpecial);
+      var score=0;if(hasLen)score++;if(hasUpper)score++;if(hasLower)score++;if(hasNum)score++;if(hasSpecial)score++;if(pwd.length>=12)score++;
+      var levels=[{w:'0%',c:'#eee',t:''},{w:'20%',c:'#dc3545',t:'Very Weak'},{w:'40%',c:'#fd7e14',t:'Weak'},{w:'60%',c:'#ffc107',t:'Fair'},{w:'80%',c:'#28a745',t:'Strong'},{w:'100%',c:'#155724',t:'Very Strong'}];
+      var lvl=pwd.length===0?0:Math.min(score,5);
+      document.getElementById('cadetStrengthBar').style.width=levels[lvl].w;
+      document.getElementById('cadetStrengthBar').style.background=levels[lvl].c;
+      var lbl=document.getElementById('cadetStrengthLabel');lbl.textContent=levels[lvl].t;lbl.style.color=levels[lvl].c;
+    }
+
+    function changeCadetPassword() {
+      var current = document.getElementById('cadetCurrentPass').value;
+      var newP = document.getElementById('cadetNewPass').value;
+      var confirm = document.getElementById('cadetConfirmPass').value;
+      if (!current) { showToast('Enter current password', 'error'); return; }
+
+      var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
+      var u = JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      var idx = -1;
+      for (var i = 0; i < cadets.length; i++) {
+        if (cadets[i].name === u.name || cadets[i].email === u.email) { idx = i; break; }
+      }
+      if (idx === -1) { showToast('Account not found!', 'error'); return; }
+      if (current !== cadets[idx].password) { showToast('Current password is wrong!', 'error'); return; }
+      if (!newP || newP.length < 8) { showToast('Minimum 8 characters required', 'error'); return; }
+      if (!/[A-Z]/.test(newP)) { showToast('Need at least one uppercase letter (A-Z)', 'error'); return; }
+      if (!/[a-z]/.test(newP)) { showToast('Need at least one lowercase letter (a-z)', 'error'); return; }
+      if (!/[0-9]/.test(newP)) { showToast('Need at least one number (0-9)', 'error'); return; }
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newP)) { showToast('Need at least one special character', 'error'); return; }
+      if (newP !== confirm) { showToast('Passwords do not match!', 'error'); return; }
+
+      cadets[idx].password = newP;
+      localStorage.setItem('registered_cadets', JSON.stringify(cadets));
+      document.getElementById('cadetCurrentPass').value = '';
+      document.getElementById('cadetNewPass').value = '';
+      document.getElementById('cadetConfirmPass').value = '';
+      showToast('Password changed successfully!', 'success');
+      setTimeout(function() { closeCadetSettings(); }, 1500);
+    }
   </script>
 </body>
 </html>
