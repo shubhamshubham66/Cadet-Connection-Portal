@@ -108,6 +108,58 @@ const API = {
     return res.json();
   },
 
+  // ─── CAMPS ───
+  async getCamps() {
+    const res = await fetch(this.BASE_URL + '/camps', { headers: this.headers() });
+    return res.json();
+  },
+
+  async createCamp(data) {
+    const res = await fetch(this.BASE_URL + '/camps', {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  async registerForCamp(campId, cadetData) {
+    const res = await fetch(this.BASE_URL + '/camps/' + campId + '/register', {
+      method: 'POST',
+      headers: this.headers(),
+      body: JSON.stringify(cadetData)
+    });
+    return res.json();
+  },
+
+  async getCampRegistrations(campId) {
+    const res = await fetch(this.BASE_URL + '/camps/' + campId + '/registrations', { headers: this.headers() });
+    return res.json();
+  },
+
+  async exportCampCSV(campId) {
+    const res = await fetch(this.BASE_URL + '/camps/' + campId + '/export', { headers: this.headers() });
+    if (res.ok) {
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'camp_registrations.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      return { success: true };
+    }
+    return { success: false, message: 'Export failed' };
+  },
+
+  async deleteCamp(campId) {
+    const res = await fetch(this.BASE_URL + '/camps/' + campId, {
+      method: 'DELETE',
+      headers: this.headers()
+    });
+    return res.json();
+  },
+
   // ─── CHANGE PASSWORD ───
   async changePassword(currentPassword, newPassword) {
     const res = await fetch(this.BASE_URL + '/auth/change-password', {
