@@ -5,7 +5,7 @@
 
 const API = {
   // Change this to your deployed backend URL
-  BASE_URL: 'https://ccp-backend.onrender.com/api',
+  BASE_URL: 'https://cadet-connection-portal.onrender.com/api',
   // For local development: 'http://localhost:5000/api'
 
   // Get stored token
