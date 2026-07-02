@@ -48,12 +48,11 @@
     <div class="admin-footer"><i class="fas fa-shield-alt" style="color:#c8a951;"></i> Unauthorized access is prohibited and monitored.</div>
   </div>
   <div class="toast" id="toast"></div>
+  <script src="assets/js/api.js"></script>
   <script>
-    function loginMainAdmin(e){e.preventDefault();var id=document.getElementById('aId').value.trim();var pwd=document.getElementById('aPwd').value;if(!id||!pwd){t('Fill all fields','error');return false;}
-    var admins=JSON.parse(localStorage.getItem('admin_accounts')||'[]');if(admins.length===0){admins=[{name:'Admin',mobile:'9876543210',email:'admin@ccp.com',password:'admin123',role:'MainAdmin'}];localStorage.setItem('admin_accounts',JSON.stringify(admins));}
-    var found=null;for(var i=0;i<admins.length;i++){if((admins[i].mobile===id||admins[i].email===id)&&admins[i].password===pwd){found=admins[i];break;}}
-    if(found){localStorage.setItem('ccp_user',JSON.stringify({name:found.name,role:'MainAdmin',email:found.email,mobile:found.mobile,loggedIn:true,loginTime:new Date().toISOString()}));t('Access granted! Redirecting...','success');setTimeout(function(){window.location.href='officer/admin-dashboard.html';},1200);}
-    else{t('Invalid credentials.','error');}return false;}
+    async function loginMainAdmin(e){e.preventDefault();var id=document.getElementById('aId').value.trim();var pwd=document.getElementById('aPwd').value;if(!id||!pwd){t('Fill all fields','error');return false;}
+    document.getElementById('aBtn').innerHTML='<i class="fas fa-spinner fa-spin"></i> Authenticating...';document.getElementById('aBtn').disabled=true;
+    try{var result=await API.loginAdmin(id,pwd);if(result.success){API.saveSession(result.user,result.token);t('Access granted! Redirecting...','success');setTimeout(function(){window.location.href='officer/admin-dashboard.html';},1200);}else{t(result.message||'Invalid credentials.','error');document.getElementById('aBtn').innerHTML='<i class="fas fa-sign-in-alt"></i> Authenticate';document.getElementById('aBtn').disabled=false;}}catch(err){t('Server error. Try again.','error');document.getElementById('aBtn').innerHTML='<i class="fas fa-sign-in-alt"></i> Authenticate';document.getElementById('aBtn').disabled=false;}return false;}
     function t(msg,type){var el=document.getElementById('toast');el.className='toast toast-'+(type||'success')+' show';el.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+'"></i> '+msg;setTimeout(function(){el.classList.remove('show');},3000);}
   </script>
 </body>

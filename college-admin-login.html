@@ -46,12 +46,10 @@
     <div class="admin-footer"><i class="fas fa-school" style="color:#2d5a27;"></i> Access restricted to assigned college/institute admins only.</div>
   </div>
   <div class="toast" id="toast"></div>
+  <script src="assets/js/api.js"></script>
   <script>
-    function loginCollegeAdmin(e){e.preventDefault();var id=document.getElementById('cId').value.trim();var pwd=document.getElementById('cPwd').value;if(!id||!pwd){t('Fill all fields','error');return false;}
-    var cadmins=JSON.parse(localStorage.getItem('college_admin_accounts')||'[]');if(cadmins.length===0){cadmins=[{name:'College Admin',mobile:'9876543212',email:'collegeadmin@ccp.com',password:'College@1',college:'Tripura University',battalion:'13 Tripura BN NCC'}];localStorage.setItem('college_admin_accounts',JSON.stringify(cadmins));}
-    var found=null;for(var i=0;i<cadmins.length;i++){if((cadmins[i].mobile===id||cadmins[i].email===id)&&cadmins[i].password===pwd){found=cadmins[i];break;}}
-    if(found){localStorage.setItem('ccp_user',JSON.stringify({name:found.name,role:'CollegeAdmin',email:found.email,mobile:found.mobile,college:found.college,battalion:found.battalion,loggedIn:true,loginTime:new Date().toISOString()}));t('Login successful!','success');setTimeout(function(){window.location.href='officer/admin-dashboard.html';},1200);}
-    else{t('Invalid credentials.','error');}return false;}
+    async function loginCollegeAdmin(e){e.preventDefault();var id=document.getElementById('cId').value.trim();var pwd=document.getElementById('cPwd').value;if(!id||!pwd){t('Fill all fields','error');return false;}
+    try{var result=await API.loginAdmin(id,pwd);if(result.success){API.saveSession(result.user,result.token);t('Login successful!','success');setTimeout(function(){window.location.href='officer/admin-dashboard.html';},1200);}else{t(result.message||'Invalid credentials.','error');}}catch(err){t('Server error. Try again.','error');}return false;}
     function t(msg,type){var el=document.getElementById('toast');el.className='toast toast-'+(type||'success')+' show';el.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+'"></i> '+msg;setTimeout(function(){el.classList.remove('show');},3000);}
   </script>
 </body>
