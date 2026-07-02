@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Admin Login | CCP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a3a16 0%,#2a4a3a 100%);margin:0;padding:1.5rem;}
+    .admin-card{background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.3);width:100%;max-width:420px;overflow:hidden;}
+    .admin-top{background:linear-gradient(135deg,#1a3a5c,#2d5a27);padding:2rem;text-align:center;border-bottom:3px solid #c8a951;}
+    .admin-top .shield{width:60px;height:60px;border-radius:12px;background:rgba(200,169,81,0.12);border:2px solid #c8a951;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+    .admin-top .shield i{font-size:1.5rem;color:#c8a951;}
+    .admin-top h2{color:#fff;font-size:1.25rem;margin:0 0 0.25rem;}
+    .admin-top p{color:rgba(255,255,255,0.6);font-size:0.8rem;margin:0;}
+    .admin-top .badge{display:inline-flex;align-items:center;gap:0.3rem;margin-top:0.75rem;padding:0.25rem 0.7rem;background:rgba(200,169,81,0.15);border:1px solid rgba(200,169,81,0.3);border-radius:20px;font-size:0.65rem;color:#c8a951;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+    .admin-body{padding:2rem;}
+    .admin-body .form-group{margin-bottom:1.25rem;}
+    .admin-body .form-group label{display:block;font-weight:600;font-size:0.85rem;margin-bottom:0.4rem;color:#333;}
+    .admin-body .form-group input{width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:8px;font-size:0.9rem;}
+    .admin-body .form-group input:focus{outline:none;border-color:#2d5a27;}
+    .admin-body .btn{width:100%;padding:0.8rem;background:#2d5a27;color:#fff;border:none;border-radius:8px;font-size:0.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:all 0.3s;}
+    .admin-body .btn:hover{background:#1e3d1a;transform:translateY(-1px);}
+    .admin-footer{text-align:center;padding:1rem 2rem 1.5rem;border-top:1px solid #eee;background:#fafafa;font-size:0.75rem;color:#999;}
+    .pwd-wrap{position:relative;}.pwd-wrap input{padding-right:2.5rem!important;}.pwd-wrap .eye{position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#999;font-size:0.9rem;}
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);padding:0.75rem 1.5rem;border-radius:8px;color:#fff;font-weight:600;font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s;}.toast.show{opacity:1;}.toast-success{background:#2d5a27;}.toast-error{background:#dc3545;}
+  </style>
+</head>
+<body>
+  <div class="admin-card">
+    <div class="admin-top">
+      <div class="shield"><i class="fas fa-school"></i></div>
+      <h2>College / Institute Admin</h2>
+      <p>CTO / ANO Administration Access</p>
+      <div class="badge"><i class="fas fa-lock"></i> Institute Personnel Only</div>
+    </div>
+    <div class="admin-body">
+      <form onsubmit="return loginCollegeAdmin(event)">
+        <div class="form-group"><label>Email or Mobile *</label><input type="text" id="cId" placeholder="College admin email or mobile" required></div>
+        <div class="form-group"><label>Password *</label><div class="pwd-wrap"><input type="password" id="cPwd" placeholder="Enter password" required><button type="button" class="eye" onclick="var i=document.getElementById('cPwd');i.type=i.type==='password'?'text':'password';this.innerHTML=i.type==='password'?'<i class=\'fas fa-eye\'></i>':'<i class=\'fas fa-eye-slash\'></i>';"><i class="fas fa-eye"></i></button></div></div>
+        <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      </form>
+    </div>
+    <div class="admin-footer"><i class="fas fa-school" style="color:#2d5a27;"></i> Access restricted to assigned college/institute admins only.</div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script>
+    function loginCollegeAdmin(e){e.preventDefault();var id=document.getElementById('cId').value.trim();var pwd=document.getElementById('cPwd').value;if(!id||!pwd){t('Fill all fields','error');return false;}
+    var cadmins=JSON.parse(localStorage.getItem('college_admin_accounts')||'[]');if(cadmins.length===0){cadmins=[{name:'College Admin',mobile:'9876543212',email:'collegeadmin@ccp.com',password:'College@1',college:'Tripura University',battalion:'13 Tripura BN NCC'}];localStorage.setItem('college_admin_accounts',JSON.stringify(cadmins));}
+    var found=null;for(var i=0;i<cadmins.length;i++){if((cadmins[i].mobile===id||cadmins[i].email===id)&&cadmins[i].password===pwd){found=cadmins[i];break;}}
+    if(found){localStorage.setItem('ccp_user',JSON.stringify({name:found.name,role:'CollegeAdmin',email:found.email,mobile:found.mobile,college:found.college,battalion:found.battalion,loggedIn:true,loginTime:new Date().toISOString()}));t('Login successful!','success');setTimeout(function(){window.location.href='officer/admin-dashboard.html';},1200);}
+    else{t('Invalid credentials.','error');}return false;}
+    function t(msg,type){var el=document.getElementById('toast');el.className='toast toast-'+(type||'success')+' show';el.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+'"></i> '+msg;setTimeout(function(){el.classList.remove('show');},3000);}
+  </script>
+</body>
+</html>
