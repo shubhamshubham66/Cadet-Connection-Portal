@@ -117,8 +117,12 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
         try {
           const dbExists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
           if (dbExists) {
-            skipped++;
-            errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: `[Sheet: ${sheetName}] Already exists in the pre-approval list.` });
+            // Update the existing pre-approved record so it floats to the top of the list
+            dbExists.name = name;
+            dbExists.uploadedAt = new Date();
+            dbExists.uploadedBy = req.user.id;
+            await dbExists.save();
+            inserted++;
             continue;
           }
 
@@ -168,7 +172,12 @@ router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), as
     // Check if duplicate
     const exists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
     if (exists) {
-      return res.status(409).json({ success: false, message: 'This regimental number is already pre-approved.' });
+      // Update details and save so it floats to the top of the list
+      exists.name = name.trim();
+      exists.uploadedAt = new Date();
+      exists.uploadedBy = req.user.id;
+      await exists.save();
+      return res.status(200).json({ success: true, message: 'Cadet pre-approval updated successfully.', cadet: exists });
     }
 
     const newPreApproved = new PreApprovedCadet({
@@ -204,7 +213,7 @@ router.get('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), asy
     const [list, total] = await Promise.all([
       PreApprovedCadet.find(filter)
         .populate('uploadedBy', 'name email')
-        .sort({ createdAt: -1 })
+        .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit),
       PreApprovedCadet.countDocuments(filter)
