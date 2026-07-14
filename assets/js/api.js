@@ -191,6 +191,97 @@ const API = {
     return res.json();
   },
 
+  // ─── CADET ELIGIBILITY & SELF-REGISTRATION ───
+  async verifyEligibility(name, regimentalNumber) {
+    const res = await fetch(this.BASE_URL + '/cadet/verify-eligibility', {
+      method: 'POST',
+      headers: this.headers(false),
+      body: JSON.stringify({ name, regimentalNumber })
+    });
+    return res.json();
+  },
+
+  async sendOtp(identifier, purpose) {
+    const res = await fetch(this.BASE_URL + '/cadet/send-otp', {
+      method: 'POST',
+      headers: this.headers(false),
+      body: JSON.stringify({ identifier, purpose })
+    });
+    return res.json();
+  },
+
+  async verifyOtp(identifier, otp, purpose) {
+    const res = await fetch(this.BASE_URL + '/cadet/verify-otp', {
+      method: 'POST',
+      headers: this.headers(false),
+      body: JSON.stringify({ identifier, otp, purpose })
+    });
+    return res.json();
+  },
+
+  async registerVerifiedCadet(data) {
+    const res = await fetch(this.BASE_URL + '/cadet/register', {
+      method: 'POST',
+      headers: this.headers(false),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  // ─── ADMIN PRE-APPROVED & REGISTERED CADETS ───
+  async getPreApprovedTemplate() {
+    const res = await fetch(this.BASE_URL + '/admin/preapproved/template', {
+      headers: this.headers()
+    });
+    if (res.ok) {
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cadet_pre_approval_template.xlsx';
+      a.click();
+      URL.revokeObjectURL(url);
+      return { success: true };
+    }
+    return { success: false, message: 'Template download failed' };
+  },
+
+  async uploadPreApprovedExcel(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(this.BASE_URL + '/admin/preapproved/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + this.getToken()
+      },
+      body: formData
+    });
+    return res.json();
+  },
+
+  async getPreApprovedCadets(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(this.BASE_URL + '/admin/preapproved?' + query, {
+      headers: this.headers()
+    });
+    return res.json();
+  },
+
+  async getAdminRegisteredCadets(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(this.BASE_URL + '/admin/cadets?' + query, {
+      headers: this.headers()
+    });
+    return res.json();
+  },
+
+  async getAdminRegisteredCadetById(id) {
+    const res = await fetch(this.BASE_URL + '/admin/cadets/' + id, {
+      headers: this.headers()
+    });
+    return res.json();
+  },
+
   // ─── SESSION HELPERS ───
   saveSession(user, token) {
     localStorage.setItem('ccp_user', JSON.stringify({

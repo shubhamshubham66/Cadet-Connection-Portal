@@ -84,9 +84,37 @@ const cadetSchema = new mongoose.Schema({
   approvedAt: {
     type: Date,
     default: null
+  },
+  isMobileVerified: {
+    type: Boolean,
+    default: false
+  },
+  isEmailVerified: {
+    type: Boolean,
+    default: false
+  },
+  digitalIdCardUrl: {
+    type: String,
+    default: null
+  },
+  regimentalNumber: {
+    type: String,
+    uppercase: true,
+    trim: true,
+    index: true
   }
 }, {
   timestamps: true
+});
+
+// Pre-save hook to sync regimentNo and regimentalNumber
+cadetSchema.pre('save', function(next) {
+  if (this.regimentalNumber && !this.regimentNo) {
+    this.regimentNo = this.regimentalNumber;
+  } else if (this.regimentNo && !this.regimentalNumber) {
+    this.regimentalNumber = this.regimentNo;
+  }
+  next();
 });
 
 // Compound indexes for role-based queries
