@@ -198,7 +198,7 @@
           </div>
 
           <div class="page-header" style="margin-top:2rem;">
-            <h3>Pre-Approved List</h3>
+            <h3>Pre-Approved List (<span id="totalPreApprovedCount">0</span> Cadets)</h3>
             <input type="text" id="preapprovedSearch" placeholder="Search pre-approved..." style="padding:0.4rem 0.8rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;" oninput="fetchPreApproved(1)">
           </div>
 
@@ -433,7 +433,8 @@
           if (res.success) {
             renderPreApprovedTable(res.list);
             preapprovedTotalPages = res.pagination.totalPages;
-            document.getElementById('preapprovedPageInfo').textContent = `Showing page ${preapprovedPage} of ${preapprovedTotalPages || 1}`;
+            document.getElementById('preapprovedPageInfo').textContent = `Showing page ${preapprovedPage} of ${preapprovedTotalPages || 1} (Total: ${res.pagination.total} cadets)`;
+            document.getElementById('totalPreApprovedCount').textContent = res.pagination.total || 0;
             document.getElementById('preprevBtn').disabled = preapprovedPage === 1;
             document.getElementById('prenextBtn').disabled = preapprovedPage === preapprovedTotalPages || preapprovedTotalPages === 0;
           }
@@ -685,6 +686,7 @@
     // Init onload
     initFilters();
     fetchRegisteredCadets(1);
+    fetchPreApproved(1);
   </script>
 
   <!-- Manual Pre-Approval Modal -->
