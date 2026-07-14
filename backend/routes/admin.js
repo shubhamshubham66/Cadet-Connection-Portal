@@ -59,93 +59,91 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 
     // Read workbook from memory buffer
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet);
-
-    if (rows.length === 0) {
-      return res.status(400).json({ success: false, message: 'The uploaded file is empty.' });
-    }
-
     let inserted = 0;
     let skipped = 0;
     const errors = [];
-
-    // Track duplicates within the same batch upload
     const batchRegNumbers = new Set();
+    let totalRowsScanned = 0;
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const rowNum = i + 2; // Row number in Excel sheet (including header)
+    for (const sheetName of workbook.SheetNames) {
+      const sheet = workbook.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(sheet);
+      
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const rowNum = i + 2; // Row number in this sheet
+        totalRowsScanned++;
 
-      // Normalize headers: find values for 'name' and 'regimental number'
-      let nameVal = '';
-      let regNoVal = '';
+        // Normalize headers: strip all spaces, punctuation, and casing
+        let nameVal = '';
+        let regNoVal = '';
 
-      for (const key of Object.keys(row)) {
-        const normalizedKey = key.trim().toLowerCase();
-        if (['name', 'fullname', 'full name', 'cadet name'].includes(normalizedKey)) {
-          nameVal = row[key];
+        for (const key of Object.keys(row)) {
+          const normalizedKey = key.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (['name', 'fullname', 'cadetname', 'names'].includes(normalizedKey)) {
+            nameVal = row[key];
+          }
+          if (['regimentalnumber', 'regimentno', 'regno', 'regnumber', 'regnum', 'regimentalno'].includes(normalizedKey)) {
+            regNoVal = row[key];
+          }
         }
-        if (['regimental number', 'regimentalnumber', 'regiment no', 'regNo', 'regimentno', 'regimental_number', 'regiment number'].includes(normalizedKey)) {
-          regNoVal = row[key];
-        }
-      }
 
-      // Check missing columns
-      if (!nameVal || !regNoVal) {
-        skipped++;
-        errors.push({ row: rowNum, reason: 'Missing Name or Regimental Number column values.' });
-        continue;
-      }
-
-      const name = String(nameVal).trim();
-      const regNo = String(regNoVal).trim().toUpperCase();
-
-      // Check format/empty values
-      if (!name || !regNo) {
-        skipped++;
-        errors.push({ row: rowNum, reason: 'Empty Name or Regimental Number value.' });
-        continue;
-      }
-
-      // Check duplicate in same batch
-      if (batchRegNumbers.has(regNo)) {
-        skipped++;
-        errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: 'Duplicate regimental number in the uploaded batch.' });
-        continue;
-      }
-
-      // Add to batch set
-      batchRegNumbers.add(regNo);
-
-      try {
-        // Check duplicate in database
-        const dbExists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
-        if (dbExists) {
+        // Check missing columns
+        if (!nameVal || !regNoVal) {
           skipped++;
-          errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: 'Already exists in the pre-approval list.' });
+          if (nameVal || regNoVal) {
+            errors.push({ row: rowNum, reason: `[Sheet: ${sheetName}] Missing Name or Regimental Number values.` });
+          }
           continue;
         }
 
-        // Insert pre-approved cadet
-        const newPreApproved = new PreApprovedCadet({
-          name: name,
-          regimentalNumber: regNo,
-          uploadedBy: req.user.id
-        });
-        await newPreApproved.save();
-        inserted++;
-      } catch (rowErr) {
-        skipped++;
-        errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: rowErr.message });
+        const name = String(nameVal).trim();
+        const regNo = String(regNoVal).trim().toUpperCase();
+
+        if (!name || !regNo) {
+          skipped++;
+          errors.push({ row: rowNum, reason: `[Sheet: ${sheetName}] Empty Name or Regimental Number value.` });
+          continue;
+        }
+
+        if (batchRegNumbers.has(regNo)) {
+          skipped++;
+          errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: `[Sheet: ${sheetName}] Duplicate regimental number in the uploaded batch.` });
+          continue;
+        }
+
+        batchRegNumbers.add(regNo);
+
+        try {
+          const dbExists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
+          if (dbExists) {
+            skipped++;
+            errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: `[Sheet: ${sheetName}] Already exists in the pre-approval list.` });
+            continue;
+          }
+
+          const newPreApproved = new PreApprovedCadet({
+            name: name,
+            regimentalNumber: regNo,
+            uploadedBy: req.user.id
+          });
+          await newPreApproved.save();
+          inserted++;
+        } catch (rowErr) {
+          skipped++;
+          errors.push({ row: rowNum, cadet: `${name} (${regNo})`, reason: `[Sheet: ${sheetName}] ${rowErr.message}` });
+        }
       }
+    }
+
+    if (totalRowsScanned === 0) {
+      return res.status(400).json({ success: false, message: 'The uploaded workbook contains no data rows.' });
     }
 
     res.json({
       success: true,
       summary: {
-        totalRows: rows.length,
+        totalRows: totalRowsScanned,
         inserted: inserted,
         skipped: skipped,
         errors: errors
