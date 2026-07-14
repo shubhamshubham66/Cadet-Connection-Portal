@@ -157,6 +157,36 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
   }
 });
 
+// ─── ADD SINGLE PRE-APPROVED CADET (MANUAL) ───
+router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
+  try {
+    const { name, regimentalNumber } = req.body;
+    if (!name || !regimentalNumber) {
+      return res.status(400).json({ success: false, message: 'Name and Regimental Number are required.' });
+    }
+
+    const regNo = regimentalNumber.trim().toUpperCase();
+
+    // Check if duplicate
+    const exists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
+    if (exists) {
+      return res.status(409).json({ success: false, message: 'This regimental number is already pre-approved.' });
+    }
+
+    const newPreApproved = new PreApprovedCadet({
+      name: name.trim(),
+      regimentalNumber: regNo,
+      uploadedBy: req.user.id
+    });
+
+    await newPreApproved.save();
+    res.status(201).json({ success: true, message: 'Cadet pre-approved successfully.', cadet: newPreApproved });
+  } catch (error) {
+    console.error('Add single pre-approved cadet error:', error);
+    res.status(500).json({ success: false, message: 'Server error adding pre-approved cadet.' });
+  }
+});
+
 // ─── 3. LIST PRE-APPROVED CADETS (PAGINATED) ───
 router.get('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
   try {

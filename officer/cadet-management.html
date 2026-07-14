@@ -129,7 +129,6 @@
         <div id="registeredTab" class="tab-content active">
           <div class="page-header">
             <h2><i class="fas fa-users"></i> Fully Registered Cadets</h2>
-            <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-user-plus"></i> Add Cadet</button>
           </div>
 
           <div class="search-bar">
@@ -180,7 +179,10 @@
         <div id="preapprovedTab" class="tab-content">
           <div class="page-header">
             <h2><i class="fas fa-upload"></i> Pre-Approval List & Bulk Upload</h2>
-            <button class="btn btn-outline" onclick="downloadTemplate()"><i class="fas fa-file-download"></i> Download Template</button>
+            <div style="display:flex;gap:0.5rem;">
+              <button class="btn btn-outline" onclick="downloadTemplate()"><i class="fas fa-file-download"></i> Download Template</button>
+              <button class="btn btn-primary" onclick="openPreApprovedManualModal()"><i class="fas fa-user-plus"></i> Add Cadet Manually</button>
+            </div>
           </div>
 
           <div class="upload-zone" id="uploadZone" onclick="document.getElementById('excelFile').click()">
@@ -204,11 +206,8 @@
             <table>
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Name</th>
                   <th>Regimental Number</th>
-                  <th>Registered State</th>
-                  <th>Uploaded Date</th>
                 </tr>
               </thead>
               <tbody id="preapprovedTableBody"></tbody>
@@ -456,18 +455,11 @@
       let html = '';
       list.forEach((c, idx) => {
         html += `<tr>
-          <td>${(preapprovedPage - 1) * 15 + idx + 1}</td>
           <td><strong>${c.name}</strong></td>
           <td>${c.regimentalNumber}</td>
-          <td>
-            <span class="badge ${c.isRegistered ? 'badge-success' : 'badge-warning'}">
-              ${c.isRegistered ? 'Registered' : 'Pending Verification'}
-            </span>
-          </td>
-          <td>${new Date(c.createdAt || c.uploadedAt || Date.now()).toLocaleDateString()}</td>
         </tr>`;
       });
-      document.getElementById('preapprovedTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;padding:2rem;">No pre-approved records found</td></tr>';
+      document.getElementById('preapprovedTableBody').innerHTML = html || '<tr><td colspan="2" style="text-align:center;padding:2rem;">No pre-approved records found</td></tr>';
     }
 
     function changePrePage(offset) {
@@ -646,9 +638,72 @@
       setTimeout(function () { t.remove(); }, 3500);
     }
 
+    // Manual Pre-approval Modal actions
+    function openPreApprovedManualModal() {
+      document.getElementById('preApprovedManualForm').reset();
+      document.getElementById('preApprovedManualModal').classList.add('active');
+    }
+
+    function closePreApprovedManualModal() {
+      document.getElementById('preApprovedManualModal').classList.remove('active');
+    }
+
+    async function savePreApprovedManual(e) {
+      e.preventDefault();
+      const name = document.getElementById('manualName').value.trim();
+      const regNo = document.getElementById('manualRegNo').value.trim();
+
+      if (!name || !regNo) {
+        showToast('Please fill all fields', 'error');
+        return;
+      }
+
+      if (typeof API !== 'undefined' && API.BASE_URL) {
+        try {
+          const res = await API.addSinglePreApprovedCadet(name, regNo);
+          if (res.success) {
+            showToast('Cadet pre-approved successfully!', 'success');
+            closePreApprovedManualModal();
+            fetchPreApproved(1);
+          } else {
+            showToast(res.message || 'Failed to pre-approve cadet.', 'error');
+          }
+        } catch (err) {
+          showToast('Server error pre-approving cadet', 'error');
+        }
+      } else {
+        showToast('Demo Mode: Cadet pre-approved!', 'success');
+        closePreApprovedManualModal();
+      }
+    }
+
+    // Add overlay click listener for manual modal
+    document.getElementById('preApprovedManualModal').addEventListener('click', function(e) {
+      if (e.target === this) closePreApprovedManualModal();
+    });
+
     // Init onload
     initFilters();
     fetchRegisteredCadets(1);
   </script>
+
+  <!-- Manual Pre-Approval Modal -->
+  <div class="modal-overlay" id="preApprovedManualModal">
+    <div class="modal" style="max-width:400px;">
+      <button class="modal-close" onclick="closePreApprovedManualModal()">&times;</button>
+      <h3>Add Pre-Approved Cadet</h3>
+      <form id="preApprovedManualForm" onsubmit="savePreApprovedManual(event)">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="manualName" placeholder="Enter full name" required>
+        </div>
+        <div class="form-group">
+          <label>Regimental Number *</label>
+          <input type="text" id="manualRegNo" placeholder="e.g. NCC/NER/TR/24/10001" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem"><i class="fas fa-save"></i> Pre-Approve Cadet</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
