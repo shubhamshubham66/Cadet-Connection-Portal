@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,87 +10,392 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/login.css">
   <style>
-    html,body{min-height:100vh;margin:0;padding:0;overflow-x:hidden;}
-    .login-right{overflow-y:auto!important;height:auto!important;min-height:100vh;padding:2rem 3rem 3rem!important;}
-    .back-home{position:relative!important;top:auto!important;left:auto!important;margin-bottom:1.5rem;}
-    .form-group{margin-bottom:1rem;}
-    .form-group label{display:block;margin-bottom:0.4rem;font-weight:600;font-size:0.85rem;}
-    .form-group input,.form-group select,.form-group textarea{width:100%;padding:0.6rem 0.8rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;}
-    .form-group input:focus,.form-group select:focus{outline:none;border-color:#2d5a27;}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-    .btn{padding:0.75rem 1.5rem;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;width:100%;transition:all 0.3s;}
-    .btn-primary{background:#2d5a27;color:#fff;}
-    .btn-primary:hover{background:#1e3d1a;transform:translateY(-1px);}
-    .btn-outline{background:transparent;border:2px solid #2d5a27;color:#2d5a27;}
-    .btn-outline:hover{background:#2d5a27;color:#fff;}
-    .btn-sm{padding:0.45rem 0.9rem;font-size:0.8rem;width:auto;}
-    .btn-half{width:48%;}
-    .mt-2{margin-top:1rem;}
-    .section-title{font-size:0.8rem;font-weight:700;color:#2d5a27;text-transform:uppercase;letter-spacing:0.05em;margin:1.5rem 0 0.75rem;padding-bottom:0.4rem;border-bottom:2px solid #e8e8e8;display:flex;align-items:center;gap:0.4rem;}
-    .verified-badge{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#28a745;font-weight:600;margin-left:0.5rem;}
-    .input-with-btn{display:flex;gap:0.5rem;}
-    .input-with-btn input{flex:1;}
-    .input-with-btn .btn-sm{flex-shrink:0;white-space:nowrap;}
+    html,
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .login-right {
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100vh;
+      padding: 2rem 3rem 3rem !important;
+    }
+
+    .back-home {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #2d5a27;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #2d5a27;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1e3d1a;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #2d5a27;
+      color: #2d5a27;
+    }
+
+    .btn-outline:hover {
+      background: #2d5a27;
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      width: auto;
+    }
+
+    .btn-half {
+      width: 48%;
+    }
+
+    .mt-2 {
+      margin-top: 1rem;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #2d5a27;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 1.5rem 0 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #e8e8e8;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      color: #28a745;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .input-with-btn {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .input-with-btn input {
+      flex: 1;
+    }
+
+    .input-with-btn .btn-sm {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
 
     /* Password */
-    .password-wrapper{position:relative;}
-    .password-wrapper input{padding-right:2.5rem!important;}
-    .toggle-pass{position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#666;font-size:1rem;}
-    .strength-meter{height:5px;border-radius:3px;background:#eee;margin-top:0.4rem;overflow:hidden;}
-    .strength-meter .bar{height:100%;border-radius:3px;transition:width 0.4s,background 0.4s;}
-    .strength-label{font-size:0.72rem;margin-top:0.2rem;font-weight:600;}
-    .pwd-requirements{margin-top:0.4rem;padding:0.5rem 0.7rem;background:#f8f9fa;border-radius:8px;font-size:0.75rem;}
-    .pwd-requirements .req{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.2rem;color:#666;}
-    .pwd-requirements .req.pass{color:#28a745;}
-    .pwd-requirements .req.pass i{color:#28a745;}
-    .pwd-requirements .req i{font-size:0.6rem;color:#ccc;}
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 2.5rem !important;
+    }
+
+    .toggle-pass {
+      position: absolute;
+      right: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .strength-meter {
+      height: 5px;
+      border-radius: 3px;
+      background: #eee;
+      margin-top: 0.4rem;
+      overflow: hidden;
+    }
+
+    .strength-meter .bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s, background 0.4s;
+    }
+
+    .strength-label {
+      font-size: 0.72rem;
+      margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    .pwd-requirements {
+      margin-top: 0.4rem;
+      padding: 0.5rem 0.7rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 0.75rem;
+    }
+
+    .pwd-requirements .req {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.2rem;
+      color: #666;
+    }
+
+    .pwd-requirements .req.pass {
+      color: #28a745;
+    }
+
+    .pwd-requirements .req.pass i {
+      color: #28a745;
+    }
+
+    .pwd-requirements .req i {
+      font-size: 0.6rem;
+      color: #ccc;
+    }
 
     /* Photo Upload */
-    .photo-drop{border:2px dashed #ddd;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.3s;background:#fafafa;}
-    .photo-drop:hover,.photo-drop.dragover{border-color:#2d5a27;background:rgba(45,90,39,0.02);}
-    .photo-drop i{font-size:2rem;color:#999;margin-bottom:0.5rem;}
-    .photo-drop p{font-size:0.82rem;color:#666;margin:0;}
-    .photo-drop .hint{font-size:0.7rem;color:#999;margin-top:0.3rem;}
-    .photo-preview{max-width:100px;max-height:100px;border-radius:8px;margin:0.75rem auto 0;display:none;object-fit:cover;border:2px solid #2d5a27;}
+    .photo-drop {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+
+    .photo-drop:hover,
+    .photo-drop.dragover {
+      border-color: #2d5a27;
+      background: rgba(45, 90, 39, 0.02);
+    }
+
+    .photo-drop i {
+      font-size: 2rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    .photo-drop p {
+      font-size: 0.82rem;
+      color: #666;
+      margin: 0;
+    }
+
+    .photo-drop .hint {
+      font-size: 0.7rem;
+      color: #999;
+      margin-top: 0.3rem;
+    }
+
+    .photo-preview {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 8px;
+      margin: 0.75rem auto 0;
+      display: none;
+      object-fit: cover;
+      border: 2px solid #2d5a27;
+    }
 
     /* Declaration */
-    .declaration{display:flex;align-items:center;gap:0.5rem;margin:1.5rem 0 1rem;font-size:0.75rem;color:#555;}
-    .declaration input{flex-shrink:0;width:16px;height:16px;}
-    .declaration span{line-height:1.3;}
+    .declaration {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1rem;
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    .declaration input {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+
+    .declaration span {
+      line-height: 1.3;
+    }
 
     /* reCAPTCHA placeholder */
-    .recaptcha-box{margin:1rem 0;padding:1rem;border:1px solid #ddd;border-radius:8px;background:#fafafa;display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:#555;}
-    .recaptcha-box input{width:18px;height:18px;}
+    .recaptcha-box {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .recaptcha-box input {
+      width: 18px;
+      height: 18px;
+    }
 
     /* Bottom actions */
-    .form-actions{display:flex;gap:1rem;margin-top:1.5rem;}
-    .form-actions .btn{flex:1;}
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
 
-    .login-link{text-align:center;margin-top:1.25rem;font-size:0.85rem;color:#666;}
-    .login-link a{color:#2d5a27;font-weight:700;}
-    .login-link a:hover{text-decoration:underline;}
+    .form-actions .btn {
+      flex: 1;
+    }
 
-    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);padding:0.75rem 1.5rem;border-radius:8px;color:#fff;font-weight:600;font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s;}
-    .toast.show{opacity:1;}
-    .toast-success{background:#2d5a27;}
-    .toast-error{background:#dc3545;}
+    .login-link {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: #666;
+    }
 
-    @media(max-width:768px){
-      .login-wrapper{grid-template-columns:1fr!important;}
-      .login-left{display:none!important;}
-      .login-right{padding:1.5rem!important;}
-      .form-row{grid-template-columns:1fr!important;}
-      .form-actions{flex-direction:column;}
-      .form-actions .btn{width:100%;}
+    .login-link a {
+      color: #2d5a27;
+      font-weight: 700;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast-success {
+      background: #2d5a27;
+    }
+
+    .toast-error {
+      background: #dc3545;
+    }
+
+    @media(max-width:768px) {
+      .login-wrapper {
+        grid-template-columns: 1fr !important;
+      }
+
+      .login-left {
+        display: none !important;
+      }
+
+      .login-right {
+        padding: 1.5rem !important;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .form-actions .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
+
 <body style="margin:0;padding:0;">
   <div class="login-wrapper" style="display:grid;grid-template-columns:1fr 1fr;min-height:100vh;">
     <!-- Left Panel (same as login) -->
     <div class="login-left">
       <div class="login-left-content">
-        <div class="login-emblem"><img src="assets/images/ncc-logo.jpg" alt="NCC" style="width:70px;height:70px;object-fit:contain;"></div>
+        <div class="login-emblem"><img src="assets/images/ncc-logo.jpg" alt="NCC"
+            style="width:70px;height:70px;object-fit:contain;"></div>
         <h1>Cadet Connection Portal</h1>
         <p class="login-motto">"Unity and Discipline"</p>
         <p class="login-desc">Official NCC NER Region Digital Platform<br>Create Your Cadet Account</p>
@@ -117,7 +423,8 @@
           <!-- Personal Information -->
           <div class="section-title"><i class="fas fa-user"></i> Personal Information</div>
 
-          <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Enter your full name" required></div>
+          <div class="form-group"><label>Full Name *</label><input type="text" id="regName"
+              placeholder="Enter your full name" required></div>
 
           <div class="form-row">
             <div class="form-group">
@@ -144,17 +451,19 @@
             </div>
           </div>
 
-          <div class="form-group"><label>Regiment Number *</label><input type="text" id="regRegNo" placeholder="e.g., NCC/NER/TR/15/2024/XXXX" required></div>
+          <div class="form-group"><label>Regiment Number *</label><input type="text" id="regRegNo"
+              placeholder="e.g., NCC/NER/TR/15/2024/XXXX" required></div>
 
           <div class="form-group">
             <label>Battalion *</label>
-            <input type="text" id="regBattalion" list="bnList" placeholder="Search or type battalion name..." required autocomplete="off">
+            <input type="text" id="regBattalion" list="bnList" placeholder="Search or type battalion name..." required
+              autocomplete="off">
             <datalist id="bnList">
               <option value="1 Assam BN NCC">
               <option value="2 Assam BN NCC">
               <option value="3 Assam BN NCC">
               <option value="13 Tripura BN NCC">
-              <option value="15 Tripura (I) Company NCC">
+              <option value="15 Tripura BN NCC">
               <option value="14 Manipur BN NCC">
               <option value="2 Meghalaya BN NCC">
               <option value="20 Mizo BN NCC">
@@ -173,7 +482,8 @@
 
           <div class="form-group">
             <label>Institute / College / School *</label>
-            <input type="text" id="regInstitute" list="instList" placeholder="Search or type institute name..." required autocomplete="off">
+            <input type="text" id="regInstitute" list="instList" placeholder="Search or type institute name..." required
+              autocomplete="off">
             <datalist id="instList">
               <option value="ABC Government College">
               <option value="XYZ Degree College">
@@ -192,18 +502,22 @@
           <div class="section-title"><i class="fas fa-phone"></i> Contact Information</div>
 
           <div class="form-group">
-            <label>Mobile Number * <span class="verified-badge hide" id="mobileBadge"><i class="fas fa-check-circle"></i> Verified</span></label>
+            <label>Mobile Number * <span class="verified-badge hide" id="mobileBadge"><i
+                  class="fas fa-check-circle"></i> Verified</span></label>
             <div class="input-with-btn">
               <input type="tel" id="regMobile" placeholder="+91 XXXXXXXXXX" maxlength="10" required>
-              <button type="button" class="btn btn-primary btn-sm" onclick="sendOTP('mobile')"><i class="fas fa-paper-plane"></i> Send OTP</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="sendOTP('mobile')"><i
+                  class="fas fa-paper-plane"></i> Send OTP</button>
             </div>
           </div>
 
           <div class="form-group">
-            <label>Email Address * <span class="verified-badge hide" id="emailBadge"><i class="fas fa-check-circle"></i> Verified</span></label>
+            <label>Email Address * <span class="verified-badge hide" id="emailBadge"><i class="fas fa-check-circle"></i>
+                Verified</span></label>
             <div class="input-with-btn">
               <input type="email" id="regEmail" placeholder="your@email.com" required>
-              <button type="button" class="btn btn-primary btn-sm" onclick="sendOTP('email')"><i class="fas fa-envelope"></i> Verify Email</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="sendOTP('email')"><i
+                  class="fas fa-envelope"></i> Verify Email</button>
             </div>
           </div>
 
@@ -213,10 +527,14 @@
           <div class="form-group">
             <label>Password *</label>
             <div class="password-wrapper">
-              <input type="password" id="regPassword" placeholder="Create a strong password" oninput="checkStrength(this.value)" required>
-              <button type="button" class="toggle-pass" onclick="togglePwd('regPassword',this)"><i class="fas fa-eye"></i></button>
+              <input type="password" id="regPassword" placeholder="Create a strong password"
+                oninput="checkStrength(this.value)" required>
+              <button type="button" class="toggle-pass" onclick="togglePwd('regPassword',this)"><i
+                  class="fas fa-eye"></i></button>
             </div>
-            <div class="strength-meter"><div class="bar" id="sBar"></div></div>
+            <div class="strength-meter">
+              <div class="bar" id="sBar"></div>
+            </div>
             <div class="strength-label" id="sLabel"></div>
             <div class="pwd-requirements">
               <div class="req" id="rLen"><i class="fas fa-circle"></i> Minimum 8 characters</div>
@@ -231,7 +549,8 @@
             <label>Confirm Password *</label>
             <div class="password-wrapper">
               <input type="password" id="regConfirmPwd" placeholder="Re-enter password" required>
-              <button type="button" class="toggle-pass" onclick="togglePwd('regConfirmPwd',this)"><i class="fas fa-eye"></i></button>
+              <button type="button" class="toggle-pass" onclick="togglePwd('regConfirmPwd',this)"><i
+                  class="fas fa-eye"></i></button>
             </div>
           </div>
 
@@ -265,19 +584,22 @@
           <!-- Declaration & reCAPTCHA -->
           <div class="declaration">
             <input type="checkbox" id="regDeclare" required>
-            <span>I hereby declare that all information provided is true and correct. False information may result in rejection.</span>
+            <span>I hereby declare that all information provided is true and correct. False information may result in
+              rejection.</span>
           </div>
 
           <div class="recaptcha-box">
             <input type="checkbox" id="regCaptcha">
             <span>I'm not a robot</span>
-            <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" style="width:28px;height:28px;margin-left:auto;">
+            <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA"
+              style="width:28px;height:28px;margin-left:auto;">
           </div>
 
           <!-- Buttons -->
           <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Create Account</button>
-            <button type="reset" class="btn btn-outline" onclick="resetForm()"><i class="fas fa-redo"></i> Reset Form</button>
+            <button type="reset" class="btn btn-outline" onclick="resetForm()"><i class="fas fa-redo"></i> Reset
+              Form</button>
           </div>
         </form>
 
@@ -302,7 +624,7 @@
       var c = { len: pwd.length >= 8, up: /[A-Z]/.test(pwd), low: /[a-z]/.test(pwd), num: /[0-9]/.test(pwd), spc: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd) };
       setR('rLen', c.len); setR('rUp', c.up); setR('rLow', c.low); setR('rNum', c.num); setR('rSpc', c.spc);
       var score = Object.values(c).filter(Boolean).length; if (pwd.length >= 12) score++;
-      var lvls = [{w:'0%',c:'#eee',t:''},{w:'20%',c:'#dc3545',t:'Very Weak'},{w:'40%',c:'#fd7e14',t:'Weak'},{w:'60%',c:'#ffc107',t:'Fair'},{w:'80%',c:'#28a745',t:'Strong'},{w:'100%',c:'#155724',t:'Very Strong'}];
+      var lvls = [{ w: '0%', c: '#eee', t: '' }, { w: '20%', c: '#dc3545', t: 'Very Weak' }, { w: '40%', c: '#fd7e14', t: 'Weak' }, { w: '60%', c: '#ffc107', t: 'Fair' }, { w: '80%', c: '#28a745', t: 'Strong' }, { w: '100%', c: '#155724', t: 'Very Strong' }];
       var l = pwd.length === 0 ? 0 : Math.min(score, 5);
       document.getElementById('sBar').style.width = lvls[l].w;
       document.getElementById('sBar').style.background = lvls[l].c;
@@ -316,13 +638,13 @@
 
     // Photo
     var dropZone = document.getElementById('photoDrop');
-    dropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
-    dropZone.addEventListener('dragleave', function() { this.classList.remove('dragover'); });
-    dropZone.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); if (e.dataTransfer.files.length) { document.getElementById('regPhoto').files = e.dataTransfer.files; previewPhoto(document.getElementById('regPhoto')); } });
+    dropZone.addEventListener('dragover', function (e) { e.preventDefault(); this.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', function () { this.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', function (e) { e.preventDefault(); this.classList.remove('dragover'); if (e.dataTransfer.files.length) { document.getElementById('regPhoto').files = e.dataTransfer.files; previewPhoto(document.getElementById('regPhoto')); } });
     function previewPhoto(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
-        reader.onload = function(e) { var img = document.getElementById('photoPreview'); img.src = e.target.result; img.style.display = 'block'; };
+        reader.onload = function (e) { var img = document.getElementById('photoPreview'); img.src = e.target.result; img.style.display = 'block'; };
         reader.readAsDataURL(input.files[0]);
       }
     }
@@ -333,12 +655,12 @@
         var m = document.getElementById('regMobile').value.trim();
         if (!m || m.length < 10) { showToast('Enter valid 10-digit mobile', 'error'); return; }
         showToast('OTP sent to +91 ' + m + ' (Demo: Auto-verified)', 'success');
-        setTimeout(function() { document.getElementById('mobileBadge').classList.remove('hide'); }, 1000);
+        setTimeout(function () { document.getElementById('mobileBadge').classList.remove('hide'); }, 1000);
       } else {
         var e = document.getElementById('regEmail').value.trim();
         if (!e || !e.includes('@')) { showToast('Enter valid email', 'error'); return; }
         showToast('Verification link sent to ' + e + ' (Demo: Auto-verified)', 'success');
-        setTimeout(function() { document.getElementById('emailBadge').classList.remove('hide'); }, 1000);
+        setTimeout(function () { document.getElementById('emailBadge').classList.remove('hide'); }, 1000);
       }
     }
 
@@ -402,13 +724,13 @@
           var result = await API.registerCadet(data);
           if (result.success) {
             showToast(result.message, 'success');
-            setTimeout(function() { window.location.href = 'login.html'; }, 2000);
+            setTimeout(function () { window.location.href = 'login.html'; }, 2000);
             return false;
           } else {
             showToast(result.message || 'Registration failed', 'error');
             return false;
           }
-        } catch(e) {
+        } catch (e) {
           // API not available, fallback to localStorage
           console.log('API not available, using localStorage');
         }
@@ -416,11 +738,11 @@
 
       // localStorage fallback
       var cadets = JSON.parse(localStorage.getItem('registered_cadets') || '[]');
-      cadets.push({...data, registeredAt: new Date().toISOString()});
+      cadets.push({ ...data, registeredAt: new Date().toISOString() });
       localStorage.setItem('registered_cadets', JSON.stringify(cadets));
 
       showToast('Registration successful! Redirecting to login...', 'success');
-      setTimeout(function() { window.location.href = 'login.html'; }, 2000);
+      setTimeout(function () { window.location.href = 'login.html'; }, 2000);
       return false;
     }
 
@@ -428,7 +750,7 @@
       document.getElementById('photoPreview').style.display = 'none';
       document.getElementById('sBar').style.width = '0%';
       document.getElementById('sLabel').textContent = '';
-      document.querySelectorAll('.pwd-requirements .req').forEach(function(el) { el.classList.remove('pass'); el.querySelector('i').className = 'fas fa-circle'; });
+      document.querySelectorAll('.pwd-requirements .req').forEach(function (el) { el.classList.remove('pass'); el.querySelector('i').className = 'fas fa-circle'; });
       document.getElementById('mobileBadge').classList.add('hide');
       document.getElementById('emailBadge').classList.add('hide');
     }
@@ -437,8 +759,9 @@
       var t = document.getElementById('toast');
       t.className = 'toast toast-' + (type || 'success') + ' show';
       t.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'times-circle') + '"></i> ' + msg;
-      setTimeout(function() { t.classList.remove('show'); }, 3500);
+      setTimeout(function () { t.classList.remove('show'); }, 3500);
     }
   </script>
 </body>
+
 </html>
