@@ -208,7 +208,6 @@
                 <tr>
                   <th>Name</th>
                   <th>Regimental Number</th>
-                  <th>Battalion</th>
                 </tr>
               </thead>
               <tbody id="preapprovedTableBody"></tbody>
@@ -459,10 +458,9 @@
         html += `<tr>
           <td><strong>${c.name}</strong></td>
           <td>${c.regimentalNumber}</td>
-          <td>${c.battalion || 'N/A'}</td>
         </tr>`;
       });
-      document.getElementById('preapprovedTableBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center;padding:2rem;">No pre-approved records found</td></tr>';
+      document.getElementById('preapprovedTableBody').innerHTML = html || '<tr><td colspan="2" style="text-align:center;padding:2rem;">No pre-approved records found</td></tr>';
     }
 
     function changePrePage(offset) {
@@ -655,16 +653,15 @@
       e.preventDefault();
       const name = document.getElementById('manualName').value.trim();
       const regNo = document.getElementById('manualRegNo').value.trim();
-      const battalion = document.getElementById('manualBn').value.trim();
 
-      if (!name || !regNo || !battalion) {
+      if (!name || !regNo) {
         showToast('Please fill all fields', 'error');
         return;
       }
 
       if (typeof API !== 'undefined' && API.BASE_URL) {
         try {
-          const res = await API.addSinglePreApprovedCadet(name, regNo, battalion);
+          const res = await API.addSinglePreApprovedCadet(name, regNo);
           if (res.success) {
             showToast('Cadet pre-approved successfully!', 'success');
             closePreApprovedManualModal();
@@ -705,10 +702,6 @@
         <div class="form-group">
           <label>Regimental Number *</label>
           <input type="text" id="manualRegNo" placeholder="e.g. NCC/NER/TR/24/10001" required>
-        </div>
-        <div class="form-group">
-          <label>Battalion Name *</label>
-          <input type="text" id="manualBn" placeholder="e.g. 15 Tripura (I) Company NCC" required>
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem"><i class="fas fa-save"></i> Pre-Approve Cadet</button>
       </form>

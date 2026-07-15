@@ -27,7 +27,8 @@ if (process.env.SMTP_HOST && process.env.SMTP_USER) {
 // ─── 1. VERIFY ELIGIBILITY ───
 router.post('/verify-eligibility', [
   body('name').trim().notEmpty().withMessage('Name is required'),
-  body('regimentalNumber').trim().notEmpty().withMessage('Regimental number is required')
+  body('regimentalNumber').trim().notEmpty().withMessage('Regimental number is required'),
+  body('battalion').trim().notEmpty().withMessage('Battalion name is required')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -35,7 +36,7 @@ router.post('/verify-eligibility', [
       return res.status(400).json({ success: false, message: errors.array()[0].msg });
     }
 
-    const { name, regimentalNumber } = req.body;
+    const { name, regimentalNumber, battalion } = req.body;
     const formattedRegNo = regimentalNumber.trim().toUpperCase();
 
     // Check if pre-approved
@@ -49,6 +50,11 @@ router.post('/verify-eligibility', [
       return res.status(404).json({ success: false, message: 'Name does not match our pre-approved records. Contact your BN CO.' });
     }
 
+    // Check case-insensitive match on battalion (if set in pre-approved list)
+    if (preApproved.battalion && preApproved.battalion.trim().toLowerCase() !== battalion.trim().toLowerCase()) {
+      return res.status(404).json({ success: false, message: 'Battalion does not match our pre-approved records.' });
+    }
+
     // Check if already registered
     if (preApproved.isRegistered) {
       return res.status(409).json({ success: false, message: 'This cadet is already registered.' });
@@ -56,7 +62,7 @@ router.post('/verify-eligibility', [
 
     // Emit temporary eligibility token (15 mins)
     const eligibilityToken = jwt.sign(
-      { regimentalNumber: preApproved.regimentalNumber, name: preApproved.name },
+      { regimentalNumber: preApproved.regimentalNumber, name: preApproved.name, battalion: battalion.trim() },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
@@ -67,7 +73,7 @@ router.post('/verify-eligibility', [
       eligibilityToken,
       name: preApproved.name,
       regimentalNumber: preApproved.regimentalNumber,
-      battalion: preApproved.battalion || ''
+      battalion: battalion.trim()
     });
   } catch (error) {
     console.error('Verify Eligibility Error:', error);

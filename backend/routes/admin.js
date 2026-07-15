@@ -103,7 +103,8 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 
         const name = String(nameVal).trim();
         const regNo = String(regNoVal).trim().toUpperCase();
-        const battalion = bnVal ? String(bnVal).trim() : '';
+        // Auto-assign the uploading admin's battalion!
+        const battalion = req.user.assignedBattalion || '';
 
         if (!name || !regNo) {
           skipped++;
@@ -124,7 +125,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
           if (dbExists) {
             // Update the existing pre-approved record so it floats to the top of the list
             dbExists.name = name;
-            if (battalion) dbExists.battalion = battalion;
+            dbExists.battalion = battalion;
             dbExists.uploadedAt = new Date();
             dbExists.uploadedBy = req.user.id;
             await dbExists.save();
@@ -169,19 +170,20 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 // ─── ADD SINGLE PRE-APPROVED CADET (MANUAL) ───
 router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
   try {
-    const { name, regimentalNumber, battalion } = req.body;
+    const { name, regimentalNumber } = req.body;
     if (!name || !regimentalNumber) {
       return res.status(400).json({ success: false, message: 'Name and Regimental Number are required.' });
     }
 
     const regNo = regimentalNumber.trim().toUpperCase();
+    const battalion = req.user.assignedBattalion || '';
 
     // Check if duplicate
     const exists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
     if (exists) {
       // Update details and save so it floats to the top of the list
       exists.name = name.trim();
-      if (battalion !== undefined) exists.battalion = String(battalion).trim();
+      exists.battalion = battalion;
       exists.uploadedAt = new Date();
       exists.uploadedBy = req.user.id;
       await exists.save();
@@ -191,7 +193,7 @@ router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), as
     const newPreApproved = new PreApprovedCadet({
       name: name.trim(),
       regimentalNumber: regNo,
-      battalion: battalion ? String(battalion).trim() : '',
+      battalion: battalion,
       uploadedBy: req.user.id
     });
 

@@ -177,6 +177,10 @@
             <label>Regimental Number *</label>
             <input type="text" id="regRegNo" placeholder="e.g., NCC/NER/TR/24/10001" required>
           </div>
+          <div class="form-group">
+            <label>Battalion Name *</label>
+            <input type="text" id="regBattalionStep1" list="bnList" placeholder="Select or type battalion name..." required autocomplete="off">
+          </div>
           <div class="form-actions" style="margin-top:2rem;">
             <button type="button" class="btn btn-primary" onclick="verifyPreApproval()"><i class="fas fa-check-circle"></i> Check Eligibility</button>
           </div>
@@ -445,8 +449,9 @@
     async function verifyPreApproval() {
       const name = document.getElementById('regName').value.trim();
       const regNo = document.getElementById('regRegNo').value.trim();
+      const battalion = document.getElementById('regBattalionStep1').value.trim();
 
-      if (!name || !regNo) {
+      if (!name || !regNo || !battalion) {
         showToast('Please fill all pre-approval fields.', 'error');
         return;
       }
@@ -454,7 +459,7 @@
       // Try API first
       if (typeof API !== 'undefined' && API.BASE_URL) {
         try {
-          const result = await API.verifyEligibility(name, regNo);
+          const result = await API.verifyEligibility(name, regNo, battalion);
           if (result.success) {
             eligibilityToken = result.eligibilityToken;
             eligibleName = result.name;
@@ -479,12 +484,12 @@
 
       // Fallback Demo: checks local storage
       const preApprovedDemo = [
-        { name: 'Rahul Das', regimentalNumber: 'NCC/NER/TR/24/10001' },
-        { name: 'Priya Sharma', regimentalNumber: 'NCC/NER/TR/24/10002' },
-        { name: 'Amit Deb', regimentalNumber: 'NCC/NER/TR/24/10003' }
+        { name: 'Rahul Das', regimentalNumber: 'NCC/NER/TR/24/10001', battalion: '15 Tripura (I) Company NCC' },
+        { name: 'Priya Sharma', regimentalNumber: 'NCC/NER/TR/24/10002', battalion: '15 Tripura (I) Company NCC' },
+        { name: 'Amit Deb', regimentalNumber: 'NCC/NER/TR/24/10003', battalion: '15 Tripura (I) Company NCC' }
       ];
 
-      const match = preApprovedDemo.find(c => c.regimentalNumber.toUpperCase() === regNo.toUpperCase() && c.name.toLowerCase() === name.toLowerCase());
+      const match = preApprovedDemo.find(c => c.regimentalNumber.toUpperCase() === regNo.toUpperCase() && c.name.toLowerCase() === name.toLowerCase() && c.battalion.toLowerCase() === battalion.toLowerCase());
       if (match) {
         eligibilityToken = 'demo-token-' + Date.now();
         eligibleName = match.name;
