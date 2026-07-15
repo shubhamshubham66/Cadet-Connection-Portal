@@ -391,6 +391,7 @@
     let verifiedEmail = '';
     let eligibleName = '';
     let eligibleRegNo = '';
+    let eligibleBattalion = '';
 
     // Step navigation helpers
     function setStepIndicator(step) {
@@ -458,6 +459,7 @@
             eligibilityToken = result.eligibilityToken;
             eligibleName = result.name;
             eligibleRegNo = result.regimentalNumber;
+            eligibleBattalion = result.battalion || '';
             showToast('Eligibility verified! Proceeding to verification.', 'success');
             
             // Advance to Step 2
@@ -487,6 +489,7 @@
         eligibilityToken = 'demo-token-' + Date.now();
         eligibleName = match.name;
         eligibleRegNo = match.regimentalNumber;
+        eligibleBattalion = match.battalion || '';
         showToast('Demo Mode: Eligibility verified!', 'success');
         document.getElementById('panelStep1').classList.add('hide');
         document.getElementById('panelStep2').classList.remove('hide');
@@ -614,10 +617,23 @@
       document.getElementById('panelStep3').classList.remove('hide');
       setStepIndicator(3);
       document.getElementById('stepDescription').textContent = 'Fill in profile details to complete registration';
-
+ 
       // Set readonly fields from step 1
       document.getElementById('regNameFinal').value = eligibleName;
       document.getElementById('regRegNoFinal').value = eligibleRegNo;
+
+      const bnInput = document.getElementById('regBattalion');
+      if (eligibleBattalion) {
+        bnInput.value = eligibleBattalion;
+        bnInput.readOnly = true;
+        bnInput.style.background = '#f0f0f0';
+        bnInput.style.cursor = 'not-allowed';
+      } else {
+        bnInput.value = '';
+        bnInput.readOnly = false;
+        bnInput.style.background = '';
+        bnInput.style.cursor = '';
+      }
     }
 
     function backToStep2() {

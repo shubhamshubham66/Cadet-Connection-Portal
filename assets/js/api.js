@@ -259,11 +259,11 @@ const API = {
     return res.json();
   },
 
-  async addSinglePreApprovedCadet(name, regimentalNumber) {
+  async addSinglePreApprovedCadet(name, regimentalNumber, battalion) {
     const res = await fetch(this.BASE_URL + '/admin/preapproved', {
       method: 'POST',
       headers: this.headers(),
-      body: JSON.stringify({ name, regimentalNumber })
+      body: JSON.stringify({ name, regimentalNumber, battalion })
     });
     return res.json();
   },

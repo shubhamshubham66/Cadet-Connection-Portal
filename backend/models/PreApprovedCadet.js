@@ -17,6 +17,11 @@ const preApprovedCadetSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  battalion: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   uploadedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Admin',

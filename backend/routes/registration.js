@@ -66,7 +66,8 @@ router.post('/verify-eligibility', [
       message: 'Eligibility verified! You may proceed with registration.',
       eligibilityToken,
       name: preApproved.name,
-      regimentalNumber: preApproved.regimentalNumber
+      regimentalNumber: preApproved.regimentalNumber,
+      battalion: preApproved.battalion || ''
     });
   } catch (error) {
     console.error('Verify Eligibility Error:', error);

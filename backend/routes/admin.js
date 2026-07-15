@@ -77,6 +77,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
         // Normalize headers: strip all spaces, punctuation, and casing
         let nameVal = '';
         let regNoVal = '';
+        let bnVal = '';
 
         for (const key of Object.keys(row)) {
           const normalizedKey = key.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -85,6 +86,9 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
           }
           if (['regimentalnumber', 'regimentno', 'regno', 'regnumber', 'regnum', 'regimentalno'].includes(normalizedKey)) {
             regNoVal = row[key];
+          }
+          if (['battalion', 'battalionname', 'bn', 'unit'].includes(normalizedKey)) {
+            bnVal = row[key];
           }
         }
 
@@ -99,6 +103,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 
         const name = String(nameVal).trim();
         const regNo = String(regNoVal).trim().toUpperCase();
+        const battalion = bnVal ? String(bnVal).trim() : '';
 
         if (!name || !regNo) {
           skipped++;
@@ -119,6 +124,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
           if (dbExists) {
             // Update the existing pre-approved record so it floats to the top of the list
             dbExists.name = name;
+            if (battalion) dbExists.battalion = battalion;
             dbExists.uploadedAt = new Date();
             dbExists.uploadedBy = req.user.id;
             await dbExists.save();
@@ -129,6 +135,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
           const newPreApproved = new PreApprovedCadet({
             name: name,
             regimentalNumber: regNo,
+            battalion: battalion,
             uploadedBy: req.user.id
           });
           await newPreApproved.save();
@@ -162,7 +169,7 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 // ─── ADD SINGLE PRE-APPROVED CADET (MANUAL) ───
 router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
   try {
-    const { name, regimentalNumber } = req.body;
+    const { name, regimentalNumber, battalion } = req.body;
     if (!name || !regimentalNumber) {
       return res.status(400).json({ success: false, message: 'Name and Regimental Number are required.' });
     }
@@ -174,6 +181,7 @@ router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), as
     if (exists) {
       // Update details and save so it floats to the top of the list
       exists.name = name.trim();
+      if (battalion !== undefined) exists.battalion = String(battalion).trim();
       exists.uploadedAt = new Date();
       exists.uploadedBy = req.user.id;
       await exists.save();
@@ -183,6 +191,7 @@ router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), as
     const newPreApproved = new PreApprovedCadet({
       name: name.trim(),
       regimentalNumber: regNo,
+      battalion: battalion ? String(battalion).trim() : '',
       uploadedBy: req.user.id
     });
 
