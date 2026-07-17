@@ -385,7 +385,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="assets/js/api.js"></script>
+  <script src="assets/js/api.js?v=2"></script>
   <script>
     // State management for multi-step registration
     let eligibilityToken = '';
@@ -634,7 +634,9 @@
         bnInput.style.background = '#f0f0f0';
         bnInput.style.cursor = 'not-allowed';
       } else {
-        bnInput.value = '';
+        // Keep whatever the user typed in Step 1 as a hint, but allow editing
+        var step1Val = document.getElementById('regBattalionStep1').value.trim();
+        bnInput.value = step1Val;
         bnInput.readOnly = false;
         bnInput.style.background = '';
         bnInput.style.cursor = '';
@@ -663,12 +665,16 @@
       var captcha = document.getElementById('regCaptcha').checked;
 
       // Validate password strength
-      var strong = pwd.length >= 8 && /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+      var strong = pwd.length >= 8 && /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?]/.test(pwd);
       if (!strong) { showToast('Password must meet all security requirements', 'error'); return false; }
       if (pwd !== confirmPwd) { showToast('Passwords do not match', 'error'); return false; }
       if (!declare) { showToast('Please accept the declaration', 'error'); return false; }
       if (!captcha) { showToast('Please verify the reCAPTCHA', 'error'); return false; }
       if (!document.getElementById('regPhoto').files.length) { showToast('Please upload a profile photo', 'error'); return false; }
+
+      // Resolve battalion: prefer DOM value, fall back to eligibleBattalion variable
+      var battalionVal = document.getElementById('regBattalion').value.trim() || eligibleBattalion.trim();
+      if (!battalionVal) { showToast('Please enter your battalion name.', 'error'); return false; }
 
       var data = {
         eligibilityToken: eligibilityToken,
@@ -677,7 +683,7 @@
         regimentalNumber: eligibleRegNo,
         rank: document.getElementById('regRank').value,
         wing: document.getElementById('regWing').value,
-        battalion: document.getElementById('regBattalion').value.trim(),
+        battalion: battalionVal,
         institute: document.getElementById('regInstitute').value.trim(),
         mobile: verifiedMobile,
         email: verifiedEmail,

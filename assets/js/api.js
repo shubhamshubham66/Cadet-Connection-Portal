@@ -192,11 +192,11 @@ const API = {
   },
 
   // ─── CADET ELIGIBILITY & SELF-REGISTRATION ───
-  async verifyEligibility(name, regimentalNumber) {
+  async verifyEligibility(name, regimentalNumber, battalion) {
     const res = await fetch(this.BASE_URL + '/cadet/verify-eligibility', {
       method: 'POST',
       headers: this.headers(false),
-      body: JSON.stringify({ name, regimentalNumber })
+      body: JSON.stringify({ name, regimentalNumber, battalion })
     });
     return res.json();
   },
