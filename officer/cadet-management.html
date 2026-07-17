@@ -642,6 +642,12 @@
     // Manual Pre-approval Modal actions
     function openPreApprovedManualModal() {
       document.getElementById('preApprovedManualForm').reset();
+      // Auto-fill battalion from logged-in admin's session
+      var u = API.getSession ? API.getSession() : JSON.parse(localStorage.getItem('ccp_user') || '{}');
+      var adminBattalion = u.battalion || u.assignedBattalion || '';
+      if (adminBattalion) {
+        document.getElementById('manualBattalion').value = adminBattalion;
+      }
       document.getElementById('preApprovedManualModal').classList.add('active');
     }
 
@@ -652,16 +658,17 @@
     async function savePreApprovedManual(e) {
       e.preventDefault();
       const name = document.getElementById('manualName').value.trim();
-      const regNo = document.getElementById('manualRegNo').value.trim();
+      const regNo = document.getElementById('manualRegNo').value.trim().toUpperCase();
+      const battalion = document.getElementById('manualBattalion').value.trim();
 
-      if (!name || !regNo) {
-        showToast('Please fill all fields', 'error');
+      if (!name || !regNo || !battalion) {
+        showToast('Please fill all fields including Battalion', 'error');
         return;
       }
 
       if (typeof API !== 'undefined' && API.BASE_URL) {
         try {
-          const res = await API.addSinglePreApprovedCadet(name, regNo);
+          const res = await API.addSinglePreApprovedCadet(name, regNo, battalion);
           if (res.success) {
             showToast('Cadet pre-approved successfully!', 'success');
             closePreApprovedManualModal();
@@ -701,7 +708,11 @@
         </div>
         <div class="form-group">
           <label>Regimental Number *</label>
-          <input type="text" id="manualRegNo" placeholder="e.g. NCC/NER/TR/24/10001" required>
+          <input type="text" id="manualRegNo" placeholder="e.g. TR2024SDIA488048" required>
+        </div>
+        <div class="form-group">
+          <label>Battalion *</label>
+          <input type="text" id="manualBattalion" placeholder="e.g. 15 Tripura BN NCC" required>
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem"><i class="fas fa-save"></i> Pre-Approve Cadet</button>
       </form>

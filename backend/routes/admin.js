@@ -170,13 +170,18 @@ router.post('/preapproved/upload', verifyToken, requireRole('MainAdmin', 'BnAdmi
 // ─── ADD SINGLE PRE-APPROVED CADET (MANUAL) ───
 router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
   try {
-    const { name, regimentalNumber } = req.body;
+    const { name, regimentalNumber, battalion: bodyBattalion } = req.body;
     if (!name || !regimentalNumber) {
       return res.status(400).json({ success: false, message: 'Name and Regimental Number are required.' });
     }
 
     const regNo = regimentalNumber.trim().toUpperCase();
-    const battalion = req.user.assignedBattalion || '';
+    // Use battalion from body first, then fall back to admin's assigned battalion from JWT
+    const battalion = (bodyBattalion && bodyBattalion.trim()) || req.user.assignedBattalion || '';
+
+    if (!battalion) {
+      return res.status(400).json({ success: false, message: 'Battalion is required.' });
+    }
 
     // Check if duplicate
     const exists = await PreApprovedCadet.findOne({ regimentalNumber: regNo });
@@ -204,6 +209,7 @@ router.post('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), as
     res.status(500).json({ success: false, message: 'Server error adding pre-approved cadet.' });
   }
 });
+
 
 // ─── 3. LIST PRE-APPROVED CADETS (PAGINATED) ───
 router.get('/preapproved', verifyToken, requireRole('MainAdmin', 'BnAdmin'), async (req, res) => {
