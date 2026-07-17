@@ -71,7 +71,7 @@ async function seed() {
         { name: '2 Assam BN NCC', state: 'Assam', city: 'Dibrugarh', wing: 'Army' },
         { name: '3 Assam BN NCC', state: 'Assam', city: 'Silchar', wing: 'Army' },
         { name: '13 Tripura BN NCC', state: 'Tripura', city: 'Agartala', wing: 'Army' },
-        { name: '15 Tripura (I) Company NCC', state: 'Tripura', city: 'Agartala', wing: 'Army' },
+        { name: '15 Tripura BN NCC', state: 'Tripura', city: 'Agartala', wing: 'Army' },
         { name: '14 Manipur BN NCC', state: 'Manipur', city: 'Imphal', wing: 'Army' },
         { name: '2 Meghalaya BN NCC', state: 'Meghalaya', city: 'Shillong', wing: 'Army' },
         { name: '20 Mizo BN NCC', state: 'Mizoram', city: 'Aizawl', wing: 'Army' },
