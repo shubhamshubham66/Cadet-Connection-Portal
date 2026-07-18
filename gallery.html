@@ -202,7 +202,7 @@
             itemDiv.onclick = function() { openLightbox(this); };
 
             itemDiv.innerHTML = `
-              <img src="${item.imageUrl}" alt="${item.title}">
+              <img src="${item.imageUrl}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;">
               <span class="category-badge">${categoryConfig[cat].title}</span>
               <div class="gallery-caption">${item.title}</div>
             `;
