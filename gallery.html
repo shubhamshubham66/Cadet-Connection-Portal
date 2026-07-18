@@ -39,15 +39,13 @@
         <button class="btn btn-outline btn-sm filter-btn" onclick="filterGallery('achievements',this)">Achievements</button>
       </div>
 
-      <div class="gallery-grid" data-aos="fade-up">
-        <div class="gallery-item" data-category="activities"><img src="assets/images/gallery/gallery-1.jpeg" alt="NCC Activity" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Activity — 15th Tripura Bn</div></div>
-        <div class="gallery-item" data-category="camps"><img src="assets/images/gallery/gallery-2.jpeg" alt="NCC Camp" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Camp — Training Session</div></div>
-        <div class="gallery-item" data-category="parades"><img src="assets/images/gallery/gallery-3.jpeg" alt="NCC Parade" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Parade — Drill Practice</div></div>
-        <div class="gallery-item" data-category="activities"><img src="assets/images/gallery/gallery-4.jpeg" alt="NCC Event" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Event — Battalion Meet</div></div>
-        <div class="gallery-item" data-category="achievements"><img src="assets/images/gallery/gallery-5.jpeg" alt="NCC Achievement" style="width:100%;height:100%;object-fit:contain;background:#f5f5f0;"><div class="gallery-caption">NCC Achievement — Award Ceremony</div></div>
-        <div class="gallery-item" data-category="camps"><img src="assets/images/gallery/gallery-6.jpeg" alt="NCC Training" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Training — Field Exercise</div></div>
-        <div class="gallery-item" data-category="parades"><img src="assets/images/gallery/gallery-7.jpeg" alt="NCC Cultural" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Cultural Programme</div></div>
-        <div class="gallery-item" data-category="camps"><img src="assets/images/gallery/gallery-8.jpeg" alt="NCC Group" style="width:100%;height:100%;object-fit:cover;"><div class="gallery-caption">NCC Group — Cadets Together</div></div>
+      <!-- Dynamic Gallery Container -->
+      <div id="dynamic-gallery-container">
+        <!-- Categories and items will be injected here via JavaScript -->
+        <div style="text-align: center; padding: 3rem; color: #fff;">
+          <i class="fas fa-spinner fa-spin fa-3x"></i>
+          <p style="margin-top: 1rem;">Loading Gallery...</p>
+        </div>
       </div>
 
       <div class="section-title mt-4" data-aos="fade-up"><h2>Videos</h2></div>
@@ -58,6 +56,13 @@
       </div>
     </div>
   </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <span id="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="Gallery Image">
+    <div id="lightbox-caption"></div>
+  </div>
 
   <!-- Footer -->
   <footer class="footer">
@@ -105,23 +110,128 @@
   </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/api.js"></script>
   <script>
+    // Category config
+    const categoryConfig = {
+      camps: { title: 'Camps', icon: 'fa-campground' },
+      parades: { title: 'Parades', icon: 'fa-flag' },
+      activities: { title: 'Activities', icon: 'fa-running' },
+      events: { title: 'Events', icon: 'fa-calendar-star' },
+      achievements: { title: 'Achievements', icon: 'fa-medal' }
+    };
+
+    let galleryItems = [];
+
+    // Fallback data (includes WhatsApp images)
+    const fallbackData = [
+      { title: 'Guard of Honor Drill — NCC Camp, Aizawl', category: 'camps', imageUrl: 'assets/images/gallery/wa-camp-1.jpeg' },
+      { title: 'NCC Camp — Training Session', category: 'camps', imageUrl: 'assets/images/gallery/gallery-2.jpeg' },
+      { title: 'NCC Training — Field Exercise', category: 'camps', imageUrl: 'assets/images/gallery/gallery-6.jpeg' },
+      { title: 'NCC Group — Cadets Together', category: 'camps', imageUrl: 'assets/images/gallery/gallery-8.jpeg' },
+      { title: 'Senior Cadets — Ceremonial Uniform & Medals', category: 'parades', imageUrl: 'assets/images/gallery/wa-parade-1.jpeg' },
+      { title: 'Cadet Contingent — Group Photo, Aizawl', category: 'parades', imageUrl: 'assets/images/gallery/wa-parade-2.jpeg' },
+      { title: 'NCC Parade — Drill Practice', category: 'parades', imageUrl: 'assets/images/gallery/gallery-3.jpeg' },
+      { title: 'NCC Cultural Programme', category: 'parades', imageUrl: 'assets/images/gallery/gallery-7.jpeg' },
+      { title: 'Drone Training Capsule — NCC DTE NER, Aizawl', category: 'activities', imageUrl: 'assets/images/gallery/wa-activity-1.jpeg' },
+      { title: 'NCC Activity — 15th Tripura Bn', category: 'activities', imageUrl: 'assets/images/gallery/gallery-1.jpeg' },
+      { title: 'NCC Event — Battalion Meet', category: 'activities', imageUrl: 'assets/images/gallery/gallery-4.jpeg' },
+      { title: 'Cadets at Govt. Zirtiri Residential Science College', category: 'events', imageUrl: 'assets/images/gallery/wa-event-1.jpeg' },
+      { title: 'NCC Achievement — Award Ceremony', category: 'achievements', imageUrl: 'assets/images/gallery/gallery-5.jpeg' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchGalleryData();
+    });
+
+    async function fetchGalleryData() {
+      try {
+        const apiUrl = (typeof API !== 'undefined' ? API.BASE_URL : 'http://localhost:5000/api') + '/gallery';
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('API not reachable');
+        const result = await response.json();
+        
+        if (result.success && result.data.length > 0) {
+          galleryItems = result.data;
+        } else {
+          throw new Error('API returned empty or failed');
+        }
+      } catch (err) {
+        console.warn('Using fallback gallery data due to API error:', err);
+        galleryItems = fallbackData;
+      }
+      renderGallery('all');
+    }
+
+    function renderGallery(filterCategory) {
+      const container = document.getElementById('dynamic-gallery-container');
+      container.innerHTML = '';
+
+      let activeCategories = Object.keys(categoryConfig);
+      if (filterCategory !== 'all') {
+        activeCategories = [filterCategory];
+      }
+
+      let itemsFound = false;
+
+      activeCategories.forEach(cat => {
+        const itemsInCat = galleryItems.filter(item => item.category === cat);
+        
+        if (itemsInCat.length > 0) {
+          itemsFound = true;
+          
+          const header = document.createElement('div');
+          header.className = 'cat-divider cat-section';
+          header.innerHTML = \`<h3><i class="fas \${categoryConfig[cat].icon}"></i>&nbsp; \${categoryConfig[cat].title}</h3>\`;
+          container.appendChild(header);
+
+          const grid = document.createElement('div');
+          grid.className = 'gallery-grid';
+
+          itemsInCat.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'gallery-item';
+            itemDiv.onclick = function() { openLightbox(this); };
+
+            itemDiv.innerHTML = \`
+              <img src="\${item.imageUrl}" alt="\${item.title}">
+              <span class="category-badge">\${categoryConfig[cat].title}</span>
+              <div class="gallery-caption">\${item.title}</div>
+            \`;
+            grid.appendChild(itemDiv);
+          });
+          container.appendChild(grid);
+        }
+      });
+
+      if (!itemsFound) {
+        container.innerHTML = '<p style="color:#fff; text-align:center; padding:2rem;">No images found.</p>';
+      }
+
+      if (typeof AOS !== 'undefined') AOS.refresh();
+    }
+
     function filterGallery(category, btn) {
-      // Update active button
-      document.querySelectorAll('.filter-btn').forEach(function(b) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
         b.className = 'btn btn-outline btn-sm filter-btn';
       });
       btn.className = 'btn btn-primary btn-sm filter-btn active';
-
-      // Filter gallery items
-      document.querySelectorAll('.gallery-item').forEach(function(item) {
-        if (category === 'all' || item.getAttribute('data-category') === category) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
+      renderGallery(category);
     }
+
+    function openLightbox(element) {
+      document.getElementById('lightbox-img').src = element.querySelector('img').src;
+      document.getElementById('lightbox-caption').textContent = element.querySelector('.gallery-caption').textContent;
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target.id === 'lightbox') closeLightbox();
+    });
   </script>
 </body>
 </html>
