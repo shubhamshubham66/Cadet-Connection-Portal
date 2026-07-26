@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Management | Cadet Connection Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/officer.css">
+  <style>
+    .payment-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+    .pay-stat{background:var(--white);border-radius:var(--radius-lg);padding:1.25rem;text-align:center;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .pay-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+    .pay-stat.total::before{background:var(--primary)}
+    .pay-stat.paid::before{background:#28a745}
+    .pay-stat.unpaid::before{background:#dc3545}
+    .pay-stat.collected::before{background:var(--accent)}
+    .pay-stat .ps-number{font-size:1.8rem;font-weight:800;color:var(--dark)}
+    .pay-stat .ps-label{font-size:0.8rem;color:var(--text-light);margin-top:0.25rem}
+    .filter-bar{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
+    .filter-bar input,.filter-bar select{padding:0.6rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;max-width:280px}
+    .filter-bar select{max-width:220px}
+    .status-badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase}
+    .status-paid{background:rgba(40,167,69,0.1);color:#28a745}
+    .status-unpaid{background:rgba(220,53,69,0.1);color:#dc3545}
+    .fee-override-btn{background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.85rem;text-decoration:underline}
+    .fee-override-btn:hover{color:var(--dark)}
+    .bn-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem}
+    .bn-summary-card{background:var(--white);border-radius:var(--radius-lg);padding:1.25rem;box-shadow:var(--shadow);border-left:4px solid var(--primary);cursor:pointer;transition:var(--transition)}
+    .bn-summary-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+    .bn-summary-card h4{font-size:0.9rem;margin-bottom:0.75rem;color:var(--dark)}
+    .bn-summary-card .bn-stats{display:flex;justify-content:space-between;font-size:0.8rem}
+    .bn-summary-card .bn-stats span{color:var(--text-light)}
+    .bn-summary-card .bn-stats strong{color:var(--dark)}
+    .global-fee-card{background:var(--white);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:2rem;border-left:4px solid var(--accent)}
+    .global-fee-card h4{margin-bottom:1rem}
+    .global-fee-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .global-fee-row input{max-width:200px}
+    @media(max-width:768px){
+      .payment-stats{grid-template-columns:repeat(2,1fr)}
+      .filter-bar{flex-direction:column;align-items:stretch}
+      .filter-bar input,.filter-bar select{max-width:100%}
+    }
+    @media(max-width:480px){
+      .payment-stats{grid-template-columns:1fr 1fr}
+      .pay-stat .ps-number{font-size:1.3rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header" id="sidebarHeader">
+        <div style="width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-user-cog" style="color:var(--dark)"></i></div>
+        <div><h3 id="sidebarTitle">Admin</h3><span id="sidebarSubtitle">Dashboard</span></div>
+      </div>
+      <nav class="sidebar-menu" id="sidebarMenu">
+        <a href="admin-dashboard.html"><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="../search.html"><i class="fas fa-search"></i> BN Search</a>
+        <a href="bn-management.html" class="main-admin-only"><i class="fas fa-building-flag"></i> BN Management</a>
+        <a href="college-management.html"><i class="fas fa-school"></i> Institute Management</a>
+        <a href="cadet-management.html"><i class="fas fa-users"></i> Cadet Management</a>
+        <a href="attendance.html"><i class="fas fa-clipboard-list"></i> Attendance</a>
+        <a href="camps.html"><i class="fas fa-campground"></i> Camp Management</a>
+        <a href="payments.html" class="active"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+        <a href="news.html"><i class="fas fa-newspaper"></i> News & Announcements</a>
+        <a href="gallery-manage.html"><i class="fas fa-images"></i> Gallery</a>
+        <a href="documents.html"><i class="fas fa-file-alt"></i> Documents</a>
+        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+        <a href="events-manage.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="certificates.html"><i class="fas fa-scroll"></i> Certificate Generator</a>
+        <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+        <div class="sidebar-divider"></div>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h2>Payment Management</h2>
+            <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="admin-dashboard.html">Dashboard</a> / <span>Payments</span></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span id="userName" style="font-size:0.85rem;font-weight:600;">Admin</span>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+
+        <!-- Global Fee Setting (MainAdmin only) -->
+        <div class="global-fee-card" id="globalFeeSection" style="display:none;">
+          <h4><i class="fas fa-cog" style="color:var(--accent);margin-right:0.5rem;"></i> Global Registration Fee Setting</h4>
+          <div class="global-fee-row">
+            <label style="font-size:0.9rem;font-weight:600;">Default Fee (&#8377;):</label>
+            <input type="number" id="globalFeeInput" min="0" step="1" placeholder="e.g. 500" style="max-width:160px;">
+            <button class="btn btn-primary btn-sm" onclick="updateGlobalFee()"><i class="fas fa-save"></i> Save</button>
+            <span id="currentFeeLabel" style="font-size:0.85rem;color:var(--text-light);"></span>
+          </div>
+        </div>
+
+        <!-- Battalion-wise Summary (MainAdmin only) -->
+        <div id="bnSummarySection" style="display:none;">
+          <h3 style="margin-bottom:1rem;"><i class="fas fa-building-flag" style="color:var(--primary);margin-right:0.5rem;"></i> Battalion-wise Payment Summary</h3>
+          <div class="bn-summary-grid" id="bnSummaryGrid">
+            <!-- Dynamically filled -->
+          </div>
+        </div>
+
+        <!-- Payment Stats -->
+        <div class="payment-stats">
+          <div class="pay-stat total"><div class="ps-number" id="statTotal">-</div><div class="ps-label">Total Cadets</div></div>
+          <div class="pay-stat paid"><div class="ps-number" id="statPaid">-</div><div class="ps-label">Fee Paid</div></div>
+          <div class="pay-stat unpaid"><div class="ps-number" id="statUnpaid">-</div><div class="ps-label">Fee Unpaid</div></div>
+          <div class="pay-stat collected"><div class="ps-number" id="statCollected">-</div><div class="ps-label">Total Collected (&#8377;)</div></div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <input type="text" id="searchInput" placeholder="Search by name or regiment no..." oninput="debounceLoad()">
+          <select id="statusFilter" onchange="loadPayments()">
+            <option value="">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+          <select id="battalionFilter" onchange="loadPayments()" style="display:none;">
+            <option value="">All Battalions</option>
+          </select>
+        </div>
+
+        <!-- Payments Table -->
+        <div class="table-container">
+          <table class="table-responsive-cards">
+            <thead>
+              <tr>
+                <th>Cadet Name</th>
+                <th>Regiment No</th>
+                <th>Battalion</th>
+                <th>Institute</th>
+                <th>Fee (&#8377;)</th>
+                <th>Status</th>
+                <th>Payment Date</th>
+                <th>Payment ID</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTableBody">
+              <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-light);">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex;justify-content:center;gap:0.5rem;margin-top:1.5rem;" id="paginationBar"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Fee Override Modal -->
+  <div class="modal-overlay" id="overrideModal">
+    <div class="modal" style="max-width:400px;">
+      <button class="modal-close" onclick="closeOverrideModal()">&times;</button>
+      <h3 style="margin-bottom:1rem;"><i class="fas fa-edit" style="color:var(--accent);"></i> Override Fee</h3>
+      <p style="font-size:0.9rem;margin-bottom:0.5rem;">Cadet: <strong id="overrideCadetName"></strong></p>
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.85rem;font-weight:600;margin-bottom:0.25rem;display:block;">Custom Fee Amount (&#8377;)</label>
+        <input type="number" id="overrideFeeInput" min="0" step="1" placeholder="Enter amount">
+      </div>
+      <button class="btn btn-primary" onclick="submitFeeOverride()"><i class="fas fa-save"></i> Save Override</button>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script>
+    var currentUser = requireAuth(['MainAdmin', 'BnAdmin']);
+    if (!currentUser) window.location.href = '../login.html';
+
+    var isMainAdmin = currentUser && currentUser.role === 'MainAdmin';
+    var currentPage = 1;
+    var debounceTimer = null;
+    var overrideCadetId = null;
+
+    // Setup UI based on role
+    (function init() {
+      document.getElementById('userName').textContent = currentUser.name || 'Admin';
+      document.getElementById('sidebarTitle').textContent = currentUser.name || 'Admin';
+      document.getElementById('sidebarSubtitle').textContent = isMainAdmin ? 'Main Admin' : 'BN Admin';
+
+      if (isMainAdmin) {
+        document.getElementById('globalFeeSection').style.display = 'block';
+        document.getElementById('bnSummarySection').style.display = 'block';
+        document.getElementById('battalionFilter').style.display = 'block';
+        loadGlobalFee();
+        loadBattalionSummary();
+        loadBattalionDropdown();
+      }
+
+      // Hide MainAdmin-only sidebar items for BnAdmin
+      if (!isMainAdmin) {
+        var mainOnly = document.querySelectorAll('.main-admin-only');
+        for (var i = 0; i < mainOnly.length; i++) mainOnly[i].style.display = 'none';
+      }
+
+      loadPayments();
+    })();
+
+    // ─── Load Global Fee ───
+    function loadGlobalFee() {
+      fetch(API.BASE_URL + '/payments/settings/fee', { headers: API.headers() })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            document.getElementById('globalFeeInput').value = data.defaultRegistrationFee || '';
+            document.getElementById('currentFeeLabel').textContent = 'Current: \u20B9' + (data.defaultRegistrationFee || 0);
+          }
+        });
+    }
+
+    // ─── Update Global Fee ───
+    function updateGlobalFee() {
+      var amount = parseFloat(document.getElementById('globalFeeInput').value);
+      if (isNaN(amount) || amount < 0) { showToast('Enter a valid amount', 'error'); return; }
+
+      fetch(API.BASE_URL + '/payments/settings/fee', {
+        method: 'PUT',
+        headers: API.headers(),
+        body: JSON.stringify({ amount: amount })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          showToast('Global fee updated to \u20B9' + amount, 'success');
+          document.getElementById('currentFeeLabel').textContent = 'Current: \u20B9' + amount;
+        } else {
+          showToast(data.message || 'Update failed', 'error');
+        }
+      });
+    }
+
+    // ─── Load Battalion Summary (MainAdmin) ───
+    function loadBattalionSummary() {
+      fetch(API.BASE_URL + '/payments/admin/payments/summary', { headers: API.headers() })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.success) return;
+          var grid = document.getElementById('bnSummaryGrid');
+          var html = '';
+          data.battalions.forEach(function(bn) {
+            html += '<div class="bn-summary-card" onclick="filterByBattalion(\'' + (bn.battalion || '').replace(/'/g, "\\'") + '\')">' +
+              '<h4>' + (bn.battalion || 'Unknown') + '</h4>' +
+              '<div class="bn-stats"><span>Total: <strong>' + bn.totalCadets + '</strong></span><span style="color:#28a745;">Paid: <strong>' + bn.paidCount + '</strong></span><span style="color:#dc3545;">Unpaid: <strong>' + bn.unpaidCount + '</strong></span></div>' +
+              '<div style="margin-top:0.5rem;font-size:0.8rem;color:var(--accent);font-weight:600;">\u20B9' + (bn.totalCollected || 0).toLocaleString('en-IN') + ' collected</div>' +
+            '</div>';
+          });
+          grid.innerHTML = html || '<p style="color:var(--text-light);">No data available.</p>';
+        });
+    }
+
+    // ─── Load Battalion Dropdown (MainAdmin) ───
+    function loadBattalionDropdown() {
+      fetch(API.BASE_URL + '/battalions', { headers: API.headers(false) })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.success || !data.battalions) return;
+          var select = document.getElementById('battalionFilter');
+          data.battalions.forEach(function(bn) {
+            var opt = document.createElement('option');
+            opt.value = bn.name || bn;
+            opt.textContent = bn.name || bn;
+            select.appendChild(opt);
+          });
+        });
+    }
+
+    // ─── Filter by Battalion (click on summary card) ───
+    function filterByBattalion(bn) {
+      document.getElementById('battalionFilter').value = bn;
+      loadPayments();
+      // Scroll to table
+      document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ─── Load Payments Table ───
+    function loadPayments(page) {
+      currentPage = page || 1;
+      var params = new URLSearchParams();
+      params.set('page', currentPage);
+      params.set('limit', 30);
+
+      var search = document.getElementById('searchInput').value.trim();
+      var status = document.getElementById('statusFilter').value;
+      var battalion = document.getElementById('battalionFilter').value;
+
+      if (search) params.set('search', search);
+      if (status) params.set('paymentStatus', status);
+      if (battalion) params.set('battalion', battalion);
+
+      fetch(API.BASE_URL + '/payments/admin/payments?' + params.toString(), { headers: API.headers() })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.success) { showToast(data.message || 'Failed to load', 'error'); return; }
+
+          // Update stats
+          document.getElementById('statTotal').textContent = data.summary.totalCadets;
+          document.getElementById('statPaid').textContent = data.summary.paidCount;
+          document.getElementById('statUnpaid').textContent = data.summary.unpaidCount;
+          document.getElementById('statCollected').textContent = '\u20B9' + (data.summary.totalCollected || 0).toLocaleString('en-IN');
+
+          // Build table
+          var tbody = document.getElementById('paymentsTableBody');
+          if (!data.cadets || data.cadets.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-light);">No cadets found.</td></tr>';
+            document.getElementById('paginationBar').innerHTML = '';
+            return;
+          }
+
+          var html = '';
+          data.cadets.forEach(function(c) {
+            var isPaid = c.registrationFeePaid;
+            var statusHtml = isPaid
+              ? '<span class="status-badge status-paid"><i class="fas fa-check-circle"></i> Paid</span>'
+              : '<span class="status-badge status-unpaid"><i class="fas fa-times-circle"></i> Unpaid</span>';
+            var paidDate = c.paidAt ? new Date(c.paidAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '-';
+            var feeAmt = c.registrationFeeAmount ? '\u20B9' + c.registrationFeeAmount : '-';
+
+            html += '<tr>' +
+              '<td data-label="Name">' + c.name + '</td>' +
+              '<td data-label="Reg No">' + (c.regimentNo || '-') + '</td>' +
+              '<td data-label="Battalion">' + (c.battalion || '-') + '</td>' +
+              '<td data-label="Institute">' + (c.institute || '-') + '</td>' +
+              '<td data-label="Fee">' + feeAmt + '</td>' +
+              '<td data-label="Status">' + statusHtml + '</td>' +
+              '<td data-label="Paid On">' + paidDate + '</td>' +
+              '<td data-label="Payment ID" style="font-size:0.75rem;">' + (c.razorpayPaymentId || '-') + '</td>' +
+              '<td data-label="Actions">' +
+                (!isPaid ? '<button class="fee-override-btn" onclick="openOverrideModal(\'' + c._id + '\',\'' + c.name.replace(/'/g, "\\'") + '\')"><i class="fas fa-edit"></i> Override Fee</button>' : '') +
+              '</td>' +
+            '</tr>';
+          });
+          tbody.innerHTML = html;
+
+          // Pagination
+          var totalPages = data.pagination.totalPages;
+          var pagHtml = '';
+          if (totalPages > 1) {
+            for (var p = 1; p <= totalPages; p++) {
+              pagHtml += '<button class="btn btn-sm ' + (p === currentPage ? 'btn-primary' : 'btn-outline') + '" onclick="loadPayments(' + p + ')">' + p + '</button>';
+            }
+          }
+          document.getElementById('paginationBar').innerHTML = pagHtml;
+        })
+        .catch(function(err) {
+          console.error('Load payments error:', err);
+          showToast('Network error loading payments', 'error');
+        });
+    }
+
+    // ─── Debounce search ───
+    function debounceLoad() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function() { loadPayments(); }, 400);
+    }
+
+    // ─── Fee Override Modal ───
+    function openOverrideModal(cadetId, cadetName) {
+      overrideCadetId = cadetId;
+      document.getElementById('overrideCadetName').textContent = cadetName;
+      document.getElementById('overrideFeeInput').value = '';
+      document.getElementById('overrideModal').classList.add('active');
+    }
+
+    function closeOverrideModal() {
+      document.getElementById('overrideModal').classList.remove('active');
+      overrideCadetId = null;
+    }
+
+    function submitFeeOverride() {
+      if (!overrideCadetId) return;
+      var amount = parseFloat(document.getElementById('overrideFeeInput').value);
+      if (isNaN(amount) || amount < 0) { showToast('Enter valid amount', 'error'); return; }
+
+      fetch(API.BASE_URL + '/payments/cadet/' + overrideCadetId + '/fee-override', {
+        method: 'PATCH',
+        headers: API.headers(),
+        body: JSON.stringify({ amount: amount })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          showToast(data.message, 'success');
+          closeOverrideModal();
+          loadPayments(currentPage);
+        } else {
+          showToast(data.message || 'Override failed', 'error');
+        }
+      });
+    }
+
+    // Close modal on overlay click
+    document.getElementById('overrideModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOverrideModal();
+    });
+  </script>
+</body>
+</html>

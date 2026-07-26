@@ -48,6 +48,7 @@ app.use('/api/camps', require('./routes/camps'));
 app.use('/api/cadet', require('./routes/registration'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/gallery', require('./routes/gallery'));
+app.use('/api/payments', require('./routes/payments'));
 
 // ─── Health Check ───
 app.get('/api/health', (req, res) => {
