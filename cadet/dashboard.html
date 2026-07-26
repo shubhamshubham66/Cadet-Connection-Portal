@@ -84,6 +84,16 @@
           <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div class="stat-number">5</div><div class="stat-label">Events This Month</div></div>
         </div>
 
+        <!-- Registration Fee Payment Card -->
+        <div class="card mb-4" id="paymentCard" style="display:none;border-left:4px solid var(--accent);">
+          <div class="card-header" style="border-bottom:none;padding-bottom:0;">
+            <h4><i class="fas fa-indian-rupee-sign" style="color:var(--accent);"></i> Registration Fee</h4>
+          </div>
+          <div id="paymentContent" style="padding:1rem 0 0;">
+            <!-- Dynamically filled by JS -->
+          </div>
+        </div>
+
         <div class="grid grid-2">
           <div class="card">
             <div class="card-header"><h4><i class="fas fa-calendar-day"></i> Today's Schedule</h4></div>
@@ -140,7 +150,9 @@
     </div>
   </div>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/api.js"></script>
   <script src="../assets/js/main.js"></script>
   <script>
     const user = requireAuth(['Cadet']);
@@ -220,6 +232,163 @@
     }
 
     loadCadetNotifications();
+
+    // ═══════════════════════════════════════════
+    // REGISTRATION FEE PAYMENT
+    // ═══════════════════════════════════════════
+    (function initPaymentCard() {
+      var paymentCard = document.getElementById('paymentCard');
+      var paymentContent = document.getElementById('paymentContent');
+
+      // Fetch payment status from backend
+      fetch(API.BASE_URL + '/payments/my-status', { headers: API.headers() })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (!data.success) return;
+
+          var payment = data.payment;
+          paymentCard.style.display = 'block';
+
+          if (payment.isPaid) {
+            // Already paid — show success state
+            paymentContent.innerHTML =
+              '<div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">' +
+                '<div style="width:48px;height:48px;border-radius:50%;background:rgba(45,90,39,0.1);display:flex;align-items:center;justify-content:center;"><i class="fas fa-check-circle" style="color:var(--primary);font-size:1.5rem;"></i></div>' +
+                '<div>' +
+                  '<h4 style="color:var(--primary);margin-bottom:0.25rem;font-size:1rem;">&#10003; Fee Paid</h4>' +
+                  '<p style="margin:0;font-size:0.85rem;color:var(--text-light);">' +
+                    '&#8377;' + payment.amount + ' paid on ' + new Date(payment.paidAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
+                  '</p>' +
+                  (payment.paymentId ? '<p style="margin:0.25rem 0 0;font-size:0.75rem;color:var(--text-light);">Payment ID: ' + payment.paymentId + '</p>' : '') +
+                '</div>' +
+              '</div>';
+          } else if (payment.amount > 0) {
+            // Fee pending — show pay button
+            paymentContent.innerHTML =
+              '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">' +
+                '<div>' +
+                  '<p style="margin:0 0 0.25rem;font-size:0.9rem;color:var(--text);">Your registration fee is pending.</p>' +
+                  '<p style="margin:0;font-size:0.85rem;color:var(--text-light);">Amount: <strong style="color:var(--dark);">&#8377;' + payment.amount + '</strong></p>' +
+                '</div>' +
+                '<button class="btn btn-secondary" id="payFeeBtn" onclick="initiatePayment()">' +
+                  '<i class="fas fa-indian-rupee-sign"></i> Pay Registration Fee (&#8377;' + payment.amount + ')' +
+                '</button>' +
+              '</div>';
+          } else {
+            // Fee not configured — hide card
+            paymentCard.style.display = 'none';
+          }
+        })
+        .catch(function(err) {
+          console.error('Payment status fetch error:', err);
+          // Silently hide if network error
+          paymentCard.style.display = 'none';
+        });
+    })();
+
+    function initiatePayment() {
+      var btn = document.getElementById('payFeeBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+      fetch(API.BASE_URL + '/payments/create-order', {
+        method: 'POST',
+        headers: API.headers()
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (!data.success) {
+          showToast(data.message || 'Failed to create order', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-indian-rupee-sign"></i> Pay Registration Fee';
+          return;
+        }
+
+        var options = {
+          key: data.key_id,
+          amount: data.order.amount,
+          currency: data.order.currency,
+          name: 'Cadet Connection Portal',
+          description: 'NCC Registration Fee',
+          order_id: data.order.id,
+          prefill: {
+            name: data.cadet.name,
+            email: data.cadet.email,
+            contact: data.cadet.mobile
+          },
+          theme: {
+            color: '#2d5a27'
+          },
+          handler: function(response) {
+            verifyPayment(response);
+          },
+          modal: {
+            ondismiss: function() {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-indian-rupee-sign"></i> Pay Registration Fee';
+            }
+          }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function(response) {
+          showToast('Payment failed: ' + (response.error.description || 'Unknown error'), 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-indian-rupee-sign"></i> Pay Registration Fee';
+        });
+        rzp.open();
+      })
+      .catch(function(err) {
+        console.error('Create order error:', err);
+        showToast('Network error. Please try again.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-indian-rupee-sign"></i> Pay Registration Fee';
+      });
+    }
+
+    function verifyPayment(response) {
+      var paymentContent = document.getElementById('paymentContent');
+      paymentContent.innerHTML =
+        '<div style="text-align:center;padding:1rem;"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;color:var(--primary);"></i><p style="margin-top:0.5rem;">Verifying payment...</p></div>';
+
+      fetch(API.BASE_URL + '/payments/verify-payment', {
+        method: 'POST',
+        headers: API.headers(),
+        body: JSON.stringify({
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          showToast('Payment successful! Registration fee paid.', 'success');
+          paymentContent.innerHTML =
+            '<div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">' +
+              '<div style="width:48px;height:48px;border-radius:50%;background:rgba(45,90,39,0.1);display:flex;align-items:center;justify-content:center;"><i class="fas fa-check-circle" style="color:var(--primary);font-size:1.5rem;"></i></div>' +
+              '<div>' +
+                '<h4 style="color:var(--primary);margin-bottom:0.25rem;font-size:1rem;">&#10003; Fee Paid</h4>' +
+                '<p style="margin:0;font-size:0.85rem;color:var(--text-light);">' +
+                  '&#8377;' + data.payment.amount + ' paid on ' + new Date(data.payment.paidAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
+                '</p>' +
+                '<p style="margin:0.25rem 0 0;font-size:0.75rem;color:var(--text-light);">Payment ID: ' + data.payment.paymentId + '</p>' +
+              '</div>' +
+            '</div>';
+        } else {
+          showToast(data.message || 'Verification failed', 'error');
+          paymentContent.innerHTML =
+            '<div style="text-align:center;padding:1rem;">' +
+              '<p style="color:#dc3545;font-weight:600;">Verification failed. Contact admin with your payment details.</p>' +
+              '<p style="font-size:0.8rem;color:var(--text-light);">Payment ID: ' + response.razorpay_payment_id + '</p>' +
+            '</div>';
+        }
+      })
+      .catch(function(err) {
+        console.error('Verify payment error:', err);
+        showToast('Verification error. Contact admin.', 'error');
+      });
+    }
 
     // ─── Cadet Settings ───
     function openCadetSettings() {

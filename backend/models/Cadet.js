@@ -102,6 +102,32 @@ const cadetSchema = new mongoose.Schema({
     uppercase: true,
     trim: true,
     index: true
+  },
+  // ─── Registration Fee Payment Fields ───
+  registrationFeePaid: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  registrationFeeAmount: {
+    type: Number,
+    default: null
+  },
+  razorpayOrderId: {
+    type: String,
+    default: null
+  },
+  razorpayPaymentId: {
+    type: String,
+    default: null
+  },
+  razorpaySignature: {
+    type: String,
+    default: null
+  },
+  paidAt: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
